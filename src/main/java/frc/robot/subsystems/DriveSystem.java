@@ -2,9 +2,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Constants.DriveConstants;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -14,9 +11,11 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import com.analog.adis16470.frc.ADIS16470_IMU;
+//import com.analog.adis16470.frc.ADIS16470_IMU;
 import com.revrobotics.CANEncoder;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.networktables.EntryListenerFlags;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -42,8 +41,13 @@ public class DriveSystem extends SubsystemBase {
   static final CANEncoder leftLeaderEncoder = leftMotorLeader.getEncoder();
   static final CANEncoder rightLeaderEncoder = rightMotorLeader.getEncoder();
 
+<<<<<<< HEAD
   // The gyroscope for position monitoring
   private final static ADIS16470_IMU m_gyro = new ADIS16470_IMU();
+=======
+  // The gyro sensor
+  private final static edu.wpi.first.wpilibj.ADIS16470_IMU m_gyro = new edu.wpi.first.wpilibj.ADIS16470_IMU();
+>>>>>>> Updated Code from Last Year
 
   // Control constants that govern the robot's movement 
   private double maxVelocity;
@@ -59,7 +63,7 @@ public class DriveSystem extends SubsystemBase {
   public static boolean back = false, driverControl = true, canAutoCenter = true;
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem() {
+  public DriveSystem() {
     speedEntry = NetworkTableInstance.getDefault().getTable("Mimicking").getEntry("Drive_Speed");
     curvatureEntry = NetworkTableInstance.getDefault().getTable("Mimicking").getEntry("Drive_Quick_Turn");
     isArcadeEntry = NetworkTableInstance.getDefault().getTable("Mimicking").getEntry("Drive_Arcade?");
@@ -95,7 +99,7 @@ public class DriveSystem extends SubsystemBase {
     // Initializes the odometry equipment
     m_gyro.calibrate();
     resetEncoders();
-    m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
+    //m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
 
     // Initializes control constants
     maxVelocity = DriveConstants.INITIAL_MAX_VELOCITY;
@@ -126,8 +130,13 @@ public class DriveSystem extends SubsystemBase {
 
   @Override
   public void periodic() {
+<<<<<<< HEAD
     // Update the odometry position every robot tick
     m_odometry.update(m_gyro.getRotation2d(), leftLeaderEncoder.getPosition(), rightLeaderEncoder.getPosition());
+=======
+    // Update the odometry in the periodic block
+    //m_odometry.update(m_gyro.getRotation2d(), leftLeaderEncoder.getPosition(), rightLeaderEncoder.getPosition());
+>>>>>>> Updated Code from Last Year
   }
 
   /**
@@ -276,12 +285,12 @@ public class DriveSystem extends SubsystemBase {
    *
    * @param pose The pose to which to set the odometry.
    */
-  public static void resetOdometry(Pose2d pose) {
+  /**public static void resetOdometry(Pose2d pose) {
     resetEncoders();
     zeroHeading();
     m_odometry.resetPosition(pose, m_gyro.getRotation2d());
   }
-
+  */
   /**
    * Sets the value of the right motor's inverted boolean to the input value
    */
@@ -316,9 +325,9 @@ public class DriveSystem extends SubsystemBase {
    *
    * @return The pose.
    */
-  public Pose2d getPose() {
+  /**public Pose2d getPose() {
     return m_odometry.getPoseMeters();
-  }
+  }*/
 
   /**
    * Gets the average distance of the two encoders.
@@ -360,10 +369,10 @@ public class DriveSystem extends SubsystemBase {
    * Returns the heading of the robot.
    *
    * @return the robot's heading in degrees, from -180 to 180
-   */
+   
   public double getHeading() {
     return m_gyro.getRotation2d().getDegrees();
-  }
+  }*/
 
   /**
    * Returns the turn rate of the robot.
