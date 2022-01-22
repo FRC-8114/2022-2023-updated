@@ -35,17 +35,17 @@ public class DriveSystem extends SubsystemBase {
   // The robot's drive
   private static final DifferentialDrive m_drive = new DifferentialDrive(leftMotorLeader, rightMotorLeader);
 
-  // The left-side drive encoder
-  static final CANEncoder leftLeaderEncoder = leftMotorLeader.getEncoder();
+  // Odometry class for tracking robot position
+  private static DifferentialDriveOdometry m_odometry;
 
-  // The right-side drive encoder
+  // Drivetrain encoders for position tracking
+  static final CANEncoder leftLeaderEncoder = leftMotorLeader.getEncoder();
   static final CANEncoder rightLeaderEncoder = rightMotorLeader.getEncoder();
 
-  // The gyro sensor
+  // The gyroscope for position monitoring
   private final static ADIS16470_IMU m_gyro = new ADIS16470_IMU();
 
-  // Odometry class for tracking robot pose
-  private static DifferentialDriveOdometry m_odometry;
+  // Control constants that govern the robot's movement 
   private double maxVelocity;
   private static double curvatureMaxCurvature;
   private static double arcadeMaxCurvature;
@@ -64,25 +64,25 @@ public class DriveSystem extends SubsystemBase {
     curvatureEntry = NetworkTableInstance.getDefault().getTable("Mimicking").getEntry("Drive_Quick_Turn");
     isArcadeEntry = NetworkTableInstance.getDefault().getTable("Mimicking").getEntry("Drive_Arcade?");
 
-    // Initialize the drivetrain motors
+    /* Initialize the drivetrain motors */
 
-    // Left
+    // Left Leader Initialization
     leftMotorLeader.restoreFactoryDefaults();
     leftMotorLeader.setIdleMode(IdleMode.kCoast);
     leftMotorLeader.setInverted(DriveConstants.LEFT_MOTORS_INVERSED);
 
-    // Left Follower
+    // Left Follower Initialization
     leftMotorFollower.restoreFactoryDefaults();
     leftMotorFollower.setIdleMode(IdleMode.kCoast);
     leftMotorFollower.setInverted(DriveConstants.LEFT_MOTORS_INVERSED);
     leftMotorFollower.follow(leftMotorLeader, false);
 
-    // Right Leader
+    // Right Leader Initialization
     rightMotorLeader.restoreFactoryDefaults();
     rightMotorLeader.setIdleMode(IdleMode.kCoast);
     rightMotorLeader.setInverted(DriveConstants.RIGHT_MOTORS_INVERSED);
 
-    // Right Follower
+    // Right Follower Initialization
     rightMotorFollower.restoreFactoryDefaults();
     rightMotorFollower.setIdleMode(IdleMode.kCoast);
     rightMotorFollower.setInverted(DriveConstants.RIGHT_MOTORS_INVERSED);
@@ -92,17 +92,19 @@ public class DriveSystem extends SubsystemBase {
     leftLeaderEncoder.setPositionConversionFactor(DriveConstants.ENCODER_DISTANCE_PER_PULSE);
     rightLeaderEncoder.setPositionConversionFactor(DriveConstants.ENCODER_DISTANCE_PER_PULSE);
 
+    // Initializes the odometry equipment
     m_gyro.calibrate();
-
     resetEncoders();
     m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
 
+    // Initializes control constants
     maxVelocity = DriveConstants.INITIAL_MAX_VELOCITY;
     curvatureMaxCurvature = DriveConstants.INITIAL_CURVATURE_MAX_CURVATURE;
     arcadeMaxCurvature = DriveConstants.INITIAL_ARCADE_MAX_CURVATURE;
     setMaxOutput();
     setRampRate(DriveConstants.INITIAL_RAMP_RATE);
 
+    // Allows for live debugging and development through Shuffleboard
     Shuffleboard.getTab("Robot Control").add("Drive/Speed Control", DriveConstants.INITIAL_MAX_VELOCITY)
         .withWidget(BuiltInWidgets.kNumberSlider).getEntry().addListener(event -> {
           maxVelocity = event.value.getDouble();
@@ -124,10 +126,15 @@ public class DriveSystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // Update the odometry in the periodic block
+    // Update the odometry position every robot tick
     m_odometry.update(m_gyro.getRotation2d(), leftLeaderEncoder.getPosition(), rightLeaderEncoder.getPosition());
   }
 
+  /**
+   * Emergency stopps the robot by running the motors backwards before stopping
+   * 
+   * @param time how long to run backwards for 
+   */
   public void emergencyStop(double time) {
     double startLeft = -currentSpeeds[0] / 5, startRight = -currentSpeeds[1] / 5;
     // double signLeft = startLeft/Math.abs(startLeft), signRight =
@@ -148,6 +155,9 @@ public class DriveSystem extends SubsystemBase {
 
   /**
    * Drives the robot using cheesy drive controls.
+   * 
+   * Cheesy drive allows the driver to swap between arcade drive and curvature drive mid-match
+   * this allows for the benefits of both.
    *
    * @param fwd the commanded forward movement
    * @param rot the commanded rotation
