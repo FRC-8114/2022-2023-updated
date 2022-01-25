@@ -4,10 +4,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-//import com.analog.adis16470.frc.ADIS16470_IMU;
-import com.revrobotics.CANEncoder;
+import com.revrobotics.RelativeEncoder;
 
 public class ClimberSystem extends SubsystemBase {
     final CANSparkMax climberController = new CANSparkMax(21, MotorType.kBrushed);

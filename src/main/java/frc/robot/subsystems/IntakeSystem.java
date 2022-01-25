@@ -2,10 +2,9 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-//import com.analog.adis16470.frc.ADIS16470_IMU;
-import com.revrobotics.CANEncoder;
 
 import frc.robot.Constants.IntakeConstants;
 
@@ -14,7 +13,7 @@ public class IntakeSystem extends SubsystemBase {
     final CANSparkMax intakeController = new CANSparkMax(IntakeConstants.INTAKE_CONTROLLER_PORT, MotorType.kBrushless);
 
     //the intake motor controller encoder
-    final CANEncoder intakeControllerEncoder = intakeController.getEncoder();
+    final RelativeEncoder intakeControllerEncoder = intakeController.getEncoder();
 
     //Creates the IntakeSubsystem
     public IntakeSystem() {

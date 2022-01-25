@@ -2,16 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide
- * numerical or boolean constants. This class should not be used for any other
- * purpose. All constants should be declared globally (i.e. public static). Do
- * not put anything functional in this class.
- *
- * <p>
- * It is advised to statically import this class (or one of its inner classes)
- * wherever the constants are needed, to reduce verbosity.
- */
 public final class Constants {
   public static final class DriveConstants {
     public static final int LEFT_MOTOR_1_PORT = 2;
@@ -31,20 +21,15 @@ public final class Constants {
 
     public static final int kEncoderCPR = 1024;
     public static final double kWheelDiameterMeters = 0.15;
-    public static final double ENCODER_DISTANCE_PER_PULSE = 0;
+    public static final double ENCODER_DISTANCE_PER_PULSE = 1;
 
     public static final double INITIAL_MAX_VELOCITY = 0;
     public static final double INITIAL_CURVATURE_MAX_CURVATURE = 0;
     public static final double INITIAL_ARCADE_MAX_CURVATURE = 0;
     public static final double INITIAL_RAMP_RATE = 0;
         // Assumes the encoders are directly mounted on the wheel shafts
-        (kWheelDiameterMeters * Math.PI) / (double) kEncoderCPR;
+        //(kWheelDiameterMeters * Math.PI) / (double) kEncoderCPR;
 
-    // These are example values only - DO NOT USE THESE FOR YOUR OWN ROBOT!
-    // These characterization values MUST be determined either experimentally or theoretically
-    // for *your* robot's drive.
-    // The Robot Characterization Toolsuite provides a convenient tool for obtaining these
-    // values for your robot.
     public static final double ksVolts = 0.087;
     public static final double kvVoltSecondsPerMeter = 2.91;
     public static final double kaVoltSecondsSquaredPerMeter = 0.303;

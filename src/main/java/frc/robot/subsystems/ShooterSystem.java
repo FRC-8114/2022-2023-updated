@@ -15,7 +15,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import java.security.KeyStore.Entry;
 
-import com.revrobotics.CANEncoder;
+import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Constants.ShooterConstants;
 
@@ -27,8 +27,8 @@ public class ShooterSystem extends SubsystemBase {
     
 
     // Shooter motor controller encoders
-    final CANEncoder leftShooterControllerEncoder = leftShooterController.getEncoder();
-    final CANEncoder rightShooterControllerEncoder = rightShooterController.getEncoder();
+    final RelativeEncoder leftShooterControllerEncoder = leftShooterController.getEncoder();
+    final RelativeEncoder rightShooterControllerEncoder = rightShooterController.getEncoder();
     //final CANEncoder kickerControllerEncoder = kickerController.getEncoder();
 	public static final double ShooterRPM = 0;
 

@@ -2,8 +2,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.Constants.DriveConstants;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -11,8 +9,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-//import com.analog.adis16470.frc.ADIS16470_IMU;
-import com.revrobotics.CANEncoder;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
@@ -38,16 +35,8 @@ public class DriveSystem extends SubsystemBase {
   private static DifferentialDriveOdometry m_odometry;
 
   // Drivetrain encoders for position tracking
-  static final CANEncoder leftLeaderEncoder = leftMotorLeader.getEncoder();
-  static final CANEncoder rightLeaderEncoder = rightMotorLeader.getEncoder();
-
-<<<<<<< HEAD
-  // The gyroscope for position monitoring
-  private final static ADIS16470_IMU m_gyro = new ADIS16470_IMU();
-=======
-  // The gyro sensor
-  private final static edu.wpi.first.wpilibj.ADIS16470_IMU m_gyro = new edu.wpi.first.wpilibj.ADIS16470_IMU();
->>>>>>> Updated Code from Last Year
+  static final RelativeEncoder leftLeaderEncoder = leftMotorLeader.getEncoder();
+  static final RelativeEncoder rightLeaderEncoder = rightMotorLeader.getEncoder();
 
   // Control constants that govern the robot's movement 
   private double maxVelocity;
@@ -96,10 +85,7 @@ public class DriveSystem extends SubsystemBase {
     leftLeaderEncoder.setPositionConversionFactor(DriveConstants.ENCODER_DISTANCE_PER_PULSE);
     rightLeaderEncoder.setPositionConversionFactor(DriveConstants.ENCODER_DISTANCE_PER_PULSE);
 
-    // Initializes the odometry equipment
-    m_gyro.calibrate();
     resetEncoders();
-    //m_odometry = new DifferentialDriveOdometry(m_gyro.getRotation2d());
 
     // Initializes control constants
     maxVelocity = DriveConstants.INITIAL_MAX_VELOCITY;
@@ -108,46 +94,13 @@ public class DriveSystem extends SubsystemBase {
     setMaxOutput();
     setRampRate(DriveConstants.INITIAL_RAMP_RATE);
 
-    // Allows for live debugging and development through Shuffleboard
-    Shuffleboard.getTab("Robot Control").add("Drive/Speed Control", DriveConstants.INITIAL_MAX_VELOCITY)
-        .withWidget(BuiltInWidgets.kNumberSlider).getEntry().addListener(event -> {
-          maxVelocity = event.value.getDouble();
-          setMaxOutput();
-        }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
-    Shuffleboard.getTab("Robot Control").add("Drive/Curvature Max Curvature", DriveConstants.INITIAL_CURVATURE_MAX_CURVATURE)
-        .withWidget(BuiltInWidgets.kNumberSlider).getEntry().addListener(event -> {
-          curvatureMaxCurvature = event.value.getDouble();
-        }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
-    Shuffleboard.getTab("Robot Control").add("Drive/Arcade Max Curvature", DriveConstants.INITIAL_ARCADE_MAX_CURVATURE)
-        .withWidget(BuiltInWidgets.kNumberSlider).getEntry().addListener(event -> {
-          arcadeMaxCurvature = event.value.getDouble();
-        }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
-    Shuffleboard.getTab("Robot Control").add("Drive/Ramp Rate", DriveConstants.INITIAL_RAMP_RATE)
-        .withWidget(BuiltInWidgets.kTextView).getEntry().addListener(event -> {
-          setRampRate(event.value.getDouble());
-        }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
   }
 
   @Override
-  public void periodic() {
-<<<<<<< HEAD
-    // Update the odometry position every robot tick
-    m_odometry.update(m_gyro.getRotation2d(), leftLeaderEncoder.getPosition(), rightLeaderEncoder.getPosition());
-=======
-    // Update the odometry in the periodic block
-    //m_odometry.update(m_gyro.getRotation2d(), leftLeaderEncoder.getPosition(), rightLeaderEncoder.getPosition());
->>>>>>> Updated Code from Last Year
-  }
+  public void periodic() {}
 
-  /**
-   * Emergency stopps the robot by running the motors backwards before stopping
-   * 
-   * @param time how long to run backwards for 
-   */
   public void emergencyStop(double time) {
     double startLeft = -currentSpeeds[0] / 5, startRight = -currentSpeeds[1] / 5;
-    // double signLeft = startLeft/Math.abs(startLeft), signRight =
-    // startRight/Math.abs(startRight);
 
     tankDrive(0, 0);
     Timer timer = new Timer();
@@ -195,7 +148,7 @@ public class DriveSystem extends SubsystemBase {
    * @param fwd the commanded forward movement
    * @param rot the commanded rotation
    */
-  public static void tankDrive(double leftSpeed, double rightSpeed) {
+  public void tankDrive(double leftSpeed, double rightSpeed) {
     m_drive.tankDrive(leftSpeed, rightSpeed);
   }
 
@@ -210,28 +163,6 @@ public class DriveSystem extends SubsystemBase {
     rightMotorLeader.setVoltage(-rightVolts);
     m_drive.feed();
   }
-
-  /**                              **/
-  /** Shuffleboard Methods **/
-  /**                              **/
-
-  /**
-   * Sends encoder positions and velocities to SmartDashboard
-   */
-  public void sendOdometryToShuffleboard() {
-    SmartDashboard.putNumber("left_encoder_position", leftLeaderEncoder.getPosition());
-    SmartDashboard.putNumber("left_encoder_velocity", leftLeaderEncoder.getVelocity());
-    SmartDashboard.putNumber("right_encoder_position", rightLeaderEncoder.getPosition());
-    SmartDashboard.putNumber("right_encoder_velocity", rightLeaderEncoder.getVelocity());
-    SmartDashboard.putNumber("average_encoder_position", getAverageEncoderDistance());
-
-    SmartDashboard.putNumber("gyro_angle", m_gyro.getAngle());
-    SmartDashboard.putNumber("gyro_angle_rate", m_gyro.getRate());
-  }
-
-  /**                 **/
-  /** Setters **/
-  /**                 **/
 
   /**
    * Sets the max output of the drive to the value of maxOutput;
@@ -270,9 +201,7 @@ public class DriveSystem extends SubsystemBase {
   }
 
   /** Zeroes the heading of the robot. */
-  public static void zeroHeading() {
-    m_gyro.reset();
-  }
+  public static void zeroHeading() {}
 
   /** Resets the drive encoders to currently read a position of 0. */
   public static void resetEncoders() {
@@ -285,12 +214,7 @@ public class DriveSystem extends SubsystemBase {
    *
    * @param pose The pose to which to set the odometry.
    */
-  /**public static void resetOdometry(Pose2d pose) {
-    resetEncoders();
-    zeroHeading();
-    m_odometry.resetPosition(pose, m_gyro.getRotation2d());
-  }
-  */
+
   /**
    * Sets the value of the right motor's inverted boolean to the input value
    */
@@ -306,10 +230,6 @@ public class DriveSystem extends SubsystemBase {
     leftMotorLeader.setInverted(inverted);
     leftMotorFollower.setInverted(inverted);
   }
-
-  /**                 **/
-  /** Getters **/
-  /**                 **/
 
   /**
    * Returns the current wheel speeds of the robot.
@@ -352,7 +272,7 @@ public class DriveSystem extends SubsystemBase {
    *
    * @return the left drive encoder
    */
-  public CANEncoder getLeftEncoder() {
+  public RelativeEncoder getLeftEncoder() {
     return leftLeaderEncoder;
   }
 
@@ -361,26 +281,8 @@ public class DriveSystem extends SubsystemBase {
    *
    * @return the right drive encoder
    */
-  public CANEncoder getRightEncoder() {
+  public RelativeEncoder getRightEncoder() {
     return rightLeaderEncoder;
-  }
-
-  /**
-   * Returns the heading of the robot.
-   *
-   * @return the robot's heading in degrees, from -180 to 180
-   
-  public double getHeading() {
-    return m_gyro.getRotation2d().getDegrees();
-  }*/
-
-  /**
-   * Returns the turn rate of the robot.
-   *
-   * @return The turn rate of the robot, in degrees per second
-   */
-  public double getTurnRate() {
-    return -m_gyro.getRate();
   }
 
   public static void reverseDirection() {
