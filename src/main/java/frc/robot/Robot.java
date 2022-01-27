@@ -55,7 +55,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    m_robotContainer.getDriveSystem().tankDrive(.1, .1);
+  }
 
   @Override
   public void testInit() {
