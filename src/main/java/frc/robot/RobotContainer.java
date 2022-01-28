@@ -8,6 +8,8 @@ import frc.robot.subsystems.DriveSystem;
 public class RobotContainer {
   public DriveSystem m_driveSystem = new DriveSystem();
 
+  public XboxController controller = new XboxController(0);
+
   // The container for the robot. Contains subsystems, OI devices, and commands.
   public RobotContainer() {
     configureButtonBindings();
@@ -19,7 +21,13 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a {@link
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {}
+  private void configureButtonBindings() {
+    
+  }
+
+  public XboxController getXboxController() {
+    return controller;
+  }
 
   public DriveSystem getDriveSystem() {
     return m_driveSystem;

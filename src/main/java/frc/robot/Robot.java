@@ -1,5 +1,6 @@
 package frc.robot;
 
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -56,7 +57,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    m_robotContainer.getDriveSystem().tankDrive(.1, .1);
+    m_robotContainer.getDriveSystem().tankDrive(m_robotContainer.getXboxController().getRightY(), m_robotContainer.getXboxController().getLeftY());
+    
   }
 
   @Override
