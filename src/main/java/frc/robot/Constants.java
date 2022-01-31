@@ -8,7 +8,7 @@ public final class Constants {
     public static final int LEFT_MOTOR_2_PORT = 1;
     public static final int RIGHT_MOTOR_1_PORT = 3;
     public static final int RIGHT_MOTOR_2_PORT = 4;
-    public static final boolean RIGHT_MOTORS_INVERSED = false;
+    public static final boolean RIGHT_MOTORS_INVERSED = true;
     public static final boolean LEFT_MOTORS_INVERSED = false;
 
     public static final int[] kLeftEncoderPorts = new int[] {2, 1};
