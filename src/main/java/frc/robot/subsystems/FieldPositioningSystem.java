@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class FieldPositioningSystem extends SubsystemBase {
     private DriveSystem drive;
@@ -29,11 +30,20 @@ public class FieldPositioningSystem extends SubsystemBase {
     }
 
     /**
+     * Converts motor shaft rotations into distance, accounts for both the
+     * gearbox and wheel size.
+     */
+    public double rotationsToDistance(double rotations) {
+        return rotations * Constants.PositioningConstants.GEAR_RATIO * Constants.PositioningConstants.WHEEL_CIRCUMFRENCE;
+    }
+
+    /**
      * Updates the values for the current displacement vector before applying
      * it to the robot's current position
      */
     public void updatePosition() {
-        double distanceCovered = averageEncoderDistance();
+        double rotations = averageEncoderDistance();
+        double distanceCovered = rotationsToDistance(rotations);
         double xDisplacement = distanceCovered * Math.cos(angle);
         double yDisplacement = distanceCovered * Math.sin(angle);
 
