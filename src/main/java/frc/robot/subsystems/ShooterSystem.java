@@ -23,18 +23,17 @@ public class ShooterSystem extends SubsystemBase {
     // Shooter motor controllers
     public final static CANSparkMax leftShooterController = new CANSparkMax(ShooterConstants.LEFT_SHOOTER_CONTROLLER_PORT, MotorType.kBrushless);
     final CANSparkMax rightShooterController = new CANSparkMax(ShooterConstants.RIGHT_SHOOTER_CONTROLLER_PORT, MotorType.kBrushless);
-    //public final CANSparkMax kickerController = new CANSparkMax(ShooterConstants.KICKER_CONTROLLER_PORT, MotorType.kBrushless);
+    public final static CANSparkMax kickerController = new CANSparkMax(ShooterConstants.KICKER_CONTROLLER_PORT, MotorType.kBrushless);
     
 
     // Shooter motor controller encoders
     final RelativeEncoder leftShooterControllerEncoder = leftShooterController.getEncoder();
     final RelativeEncoder rightShooterControllerEncoder = rightShooterController.getEncoder();
-    //final CANEncoder kickerControllerEncoder = kickerController.getEncoder();
+    final RelativeEncoder kickerControllerEncoder = kickerController.getEncoder();
 	public static final double ShooterRPM = 0;
 
 
-    private double current_angle = 0;
-    public double angle = 0, velocity = 0;
+    public double velocity = 0;
     public static double speed = leftShooterController.getAppliedOutput();
 
     // Creates the ShooterSubsystem
@@ -91,5 +90,11 @@ public class ShooterSystem extends SubsystemBase {
         return inches / 39.37;
     }
 
+    public static void KickerRun(double speed) {
+        kickerController.set(speed);
+    }
     
+    public static void KickerStop() {
+        kickerController.set(0);
+    }
 }
