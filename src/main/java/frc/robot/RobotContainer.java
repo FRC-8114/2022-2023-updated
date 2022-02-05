@@ -3,8 +3,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.FieldPositioningSystem;
+import frc.robot.subsystems.IntakeSystem;
+import frc.robot.subsystems.ShooterSystem;
 
 public class RobotContainer {
   public DriveSystem m_driveSystem = new DriveSystem();
@@ -24,7 +27,16 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    new JoystickButton(controller, 6)
+        .whenPressed(() -> ShooterSystem.LowerKickerRun(.5))
+        .whenReleased(() -> ShooterSystem.LowerKickerStop());
     
+    new JoystickButton(controller, 5) 
+      .whenPressed(() -> ShooterSystem.UpperKickerRun(.5))
+      .whenReleased(() -> ShooterSystem.UpperKickerStop());
+    
+
+
   }
 
   public XboxController getXboxController() {
@@ -33,6 +45,21 @@ public class RobotContainer {
 
   public DriveSystem getDriveSystem() {
     return m_driveSystem;
+  }
+
+  public void periodic() {
+    if(controller.getLeftTriggerAxis() == 1) {
+      IntakeSystem.IntakeRunnerRun(.5);
+    }
+    else {
+      IntakeSystem.IntakeRunnerStop();
+    }
+    if(controller.getRightTriggerAxis() == 1) {
+      ShooterSystem.ShooterRun(.5);
+    }
+    else {
+      ShooterSystem.ShooterStop();
+    }
   }
 
   /**
