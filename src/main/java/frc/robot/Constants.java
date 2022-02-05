@@ -10,6 +10,7 @@ public final class Constants {
     public static final int RIGHT_MOTOR_2_PORT = 4;
     public static final boolean RIGHT_MOTORS_INVERSED = true;
     public static final boolean LEFT_MOTORS_INVERSED = false;
+<<<<<<< HEAD
 
     public static final int[] kLeftEncoderPorts = new int[] {2, 1};
     public static final int[] kRightEncoderPorts = new int[] {3, 4};
@@ -62,5 +63,7 @@ public final class Constants {
     // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
     public static final double kRamseteB = 2;
     public static final double kRamseteZeta = 0.7;
+=======
+>>>>>>> 5961f51 (Removed unused constants.)
   }
 }
