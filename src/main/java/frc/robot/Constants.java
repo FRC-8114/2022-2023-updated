@@ -45,6 +45,7 @@ public final class Constants {
     public static double MAX_INPUT = 0;
     public static final int LEFT_SHOOTER_CONTROLLER_PORT = 0;
     public static final int RIGHT_SHOOTER_CONTROLLER_PORT = 0;
+    public static final int KICKER_CONTROLLER_PORT = 0;
   }
   public static final class IntakeConstants
   {

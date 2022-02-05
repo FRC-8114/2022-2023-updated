@@ -65,6 +65,18 @@ public class DriveSystem extends SubsystemBase {
     }
   }
 
+  public double getLeftDistance() {
+    return (leftLeaderEncoder.getPosition() + leftFollowerEncoder.getPosition()) / 2;
+  }
+
+  public double getRightDistance() {
+    return (rightLeaderEncoder.getPosition() + rightFollowerEncoder.getPosition()) / 2;
+  }
+
+  public double getTotalDistance() {
+    return (getLeftDistance() + getRightDistance()) / 2;
+  }
+
   /**
    * Drives the robot using tank drive controls.
    *
@@ -73,6 +85,10 @@ public class DriveSystem extends SubsystemBase {
    */
   public void tankDrive(double leftSpeed, double rightSpeed) {
     m_drive.tankDrive(leftSpeed, rightSpeed);
+  }
+
+  public void arcadeDrive(double speed, double rotation) {
+    m_drive.arcadeDrive(speed, rotation);
   }
 
 }
