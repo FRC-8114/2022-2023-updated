@@ -11,12 +11,12 @@ import frc.robot.Constants.DriveConstants;
 
 public class DriveSystem extends SubsystemBase {
   // The motors on the left side of the drive.
-  public final static CANSparkMax leftMotorLeader = new CANSparkMax(2, MotorType.kBrushless);
-  public final static CANSparkMax leftMotorFollower = new CANSparkMax(1, MotorType.kBrushless);
+  public final static CANSparkMax leftMotorLeader = new CANSparkMax(DriveConstants.LEFT_MOTOR_1_PORT, MotorType.kBrushless);
+  public final static CANSparkMax leftMotorFollower = new CANSparkMax(DriveConstants.LEFT_MOTOR_2_PORT, MotorType.kBrushless);
 
   // The motors on the right side of the drive.
-  public final static CANSparkMax rightMotorLeader = new CANSparkMax(4, MotorType.kBrushless);
-  public final static CANSparkMax rightMotorFollower = new CANSparkMax(3, MotorType.kBrushless);
+  public final static CANSparkMax rightMotorLeader = new CANSparkMax(DriveConstants.RIGHT_MOTOR_1_PORT, MotorType.kBrushless);
+  public final static CANSparkMax rightMotorFollower = new CANSparkMax(DriveConstants.RIGHT_MOTOR_2_PORT, MotorType.kBrushless);
 
   // The encoders
   public final static RelativeEncoder leftLeaderEncoder = leftMotorLeader.getEncoder();
