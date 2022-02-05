@@ -19,6 +19,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
+    RobotUtils.sendNumberToShuffleboard("xPos", m_robotContainer.positioningSystem.position[0]);
+    RobotUtils.sendNumberToShuffleboard("yPos", m_robotContainer.positioningSystem.position[1]);
 
     CommandScheduler.getInstance().run();
   }

@@ -4,9 +4,11 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSystem;
+import frc.robot.subsystems.FieldPositioningSystem;
 
 public class RobotContainer {
   public DriveSystem m_driveSystem = new DriveSystem();
+  public FieldPositioningSystem positioningSystem = new FieldPositioningSystem(m_driveSystem);
 
   public XboxController controller = new XboxController(0);
 
