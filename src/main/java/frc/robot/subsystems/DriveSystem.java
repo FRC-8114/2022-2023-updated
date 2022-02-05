@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,6 +17,12 @@ public class DriveSystem extends SubsystemBase {
   // The motors on the right side of the drive.
   public final static CANSparkMax rightMotorLeader = new CANSparkMax(4, MotorType.kBrushless);
   public final static CANSparkMax rightMotorFollower = new CANSparkMax(3, MotorType.kBrushless);
+
+  // The encoders
+  public final static RelativeEncoder leftLeaderEncoder = leftMotorLeader.getEncoder();
+  public final static RelativeEncoder leftFollowerEncoder = leftMotorFollower.getEncoder();
+  public final static RelativeEncoder rightLeaderEncoder = rightMotorLeader.getEncoder();
+  public final static RelativeEncoder rightFollowerEncoder = rightMotorFollower.getEncoder();
 
   // The robot's drive
   private static final DifferentialDrive m_drive = new DifferentialDrive(leftMotorLeader, rightMotorLeader);
@@ -46,6 +53,16 @@ public class DriveSystem extends SubsystemBase {
     rightMotorFollower.setIdleMode(IdleMode.kCoast);
     rightMotorFollower.setInverted(DriveConstants.RIGHT_MOTORS_INVERSED);
     rightMotorFollower.follow(rightMotorLeader, false);
+  }
+
+  public RelativeEncoder getEncoder(String encoderName) {
+    switch (encoderName) {
+      case "leftLeaderEncoder": return leftLeaderEncoder;
+      case "leftFollowerEncoder": return leftFollowerEncoder;
+      case "rightLeaderEncoder": return rightLeaderEncoder;
+      case "rightFollowerEncoder": return rightFollowerEncoder;
+      default: return null;
+    }
   }
 
   /**
