@@ -1,7 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
-
 public final class Constants {
   public static final class DriveConstants {
     public static final int LEFT_MOTOR_1_PORT = 1;
@@ -17,9 +15,9 @@ public final class Constants {
     public static final double VELOCITY_CONVERSION_FACTOR = 0;
     public static final double ENCODER_DISTANCE_PER_PULSE = 0;
     public static double MAX_INPUT = 0;
-    public static final int LEFT_SHOOTER_CONTROLLER_PORT = 0;
-    public static final int RIGHT_SHOOTER_CONTROLLER_PORT = 0;
-    public static final int KICKER_CONTROLLER_PORT = 0;
+    public static final int UPPER_KICKER_CONTROLLER_PORT = 7;
+    public static final int LOWER_KICKER_CONTROLLER_PORT = 8;
+    public static final int SHOOTER_CONTROLLER_PORT = 9;
   }
 
   public static final class IntakeConstants {
