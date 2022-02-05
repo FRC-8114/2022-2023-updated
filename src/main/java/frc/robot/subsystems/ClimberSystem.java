@@ -13,6 +13,9 @@ public class ClimberSystem extends SubsystemBase {
     final CANSparkMax climberDeployController = new CANSparkMax(ClimberConstants.CLIMBER_DEPLOY_PORT,
             MotorType.kBrushless);
 
+    final RelativeEncoder climberRunControllerEncoder = climberRunController.getEncoder();
+    final RelativeEncoder climberDeployControllerEncoder = climberDeployController.getEncoder();
+
     // Creates the IntakeSubsystem
     public ClimberSystem() {
 
