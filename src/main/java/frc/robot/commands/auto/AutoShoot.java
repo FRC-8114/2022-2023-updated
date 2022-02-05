@@ -16,17 +16,20 @@ public class AutoShoot extends CommandBase {
 
     public void execute() {
         if (!(ShooterSystem.ShooterRPM < desired_rpm*.95)) {
-            ShooterSystem.KickerRun(1);
+            ShooterSystem.LowerKickerRun(1);
+            ShooterSystem.UpperKickerRun(1);
             count++;
         }
         else {
-            ShooterSystem.KickerStop();
+            ShooterSystem.UpperKickerStop();
+            ShooterSystem.LowerKickerStop();
         }
     }
 
     public void end() {
         ShooterSystem.ShooterStop();
-        ShooterSystem.KickerStop();
+        ShooterSystem.UpperKickerStop();
+        ShooterSystem.LowerKickerStop();
     }
 
     public boolean isFinished() {

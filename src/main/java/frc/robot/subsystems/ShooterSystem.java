@@ -21,49 +21,27 @@ import frc.robot.Constants.ShooterConstants;
 
 public class ShooterSystem extends SubsystemBase {
     // Shooter motor controllers
-    public final static CANSparkMax leftShooterController = new CANSparkMax(ShooterConstants.LEFT_SHOOTER_CONTROLLER_PORT, MotorType.kBrushless);
-    final CANSparkMax rightShooterController = new CANSparkMax(ShooterConstants.RIGHT_SHOOTER_CONTROLLER_PORT, MotorType.kBrushless);
-    public final static CANSparkMax kickerController = new CANSparkMax(ShooterConstants.KICKER_CONTROLLER_PORT, MotorType.kBrushless);
-    
+    public final static CANSparkMax shooterController = new CANSparkMax(ShooterConstants.LEFT_SHOOTER_CONTROLLER_PORT, MotorType.kBrushless);
+    public final static CANSparkMax upperKickerController = new CANSparkMax(ShooterConstants.KICKER_CONTROLLER_PORT, MotorType.kBrushless);
+    public final static CANSparkMax lowerKickerController = new CANSparkMax(ShooterConstants.KICKER_CONTROLLER_PORT, MotorType.kBrushless);
 
     // Shooter motor controller encoders
-    final RelativeEncoder leftShooterControllerEncoder = leftShooterController.getEncoder();
-    final RelativeEncoder rightShooterControllerEncoder = rightShooterController.getEncoder();
-    final RelativeEncoder kickerControllerEncoder = kickerController.getEncoder();
+    final RelativeEncoder shooterControllerEncoder = shooterController.getEncoder();
+    final RelativeEncoder upperKickerControllerEncoder = upperKickerController.getEncoder();
+    final RelativeEncoder lowerKickerControllerEncoder = lowerKickerController.getEncoder();
 	public static final double ShooterRPM = 0;
-
-
-    public double velocity = 0;
-    public static double speed = leftShooterController.getAppliedOutput();
 
     // Creates the ShooterSubsystem
     public ShooterSystem() {
-        leftShooterController.restoreFactoryDefaults();
-        leftShooterController.setIdleMode(IdleMode.kCoast);
-        leftShooterController.setInverted(true);
+        shooterController.restoreFactoryDefaults();
+        shooterController.setIdleMode(IdleMode.kCoast);
+        shooterController.setInverted(true);
 
-        rightShooterController.restoreFactoryDefaults();
-        rightShooterController.setIdleMode(IdleMode.kCoast);
-        rightShooterController.follow(leftShooterController, true);
-
-
-        leftShooterControllerEncoder.setPositionConversionFactor(ShooterConstants.SHOOTER_DISTANCE_PER_PULSE);
-        leftShooterControllerEncoder.setVelocityConversionFactor(ShooterConstants.VELOCITY_CONVERSION_FACTOR);
-
-        rightShooterControllerEncoder.setPositionConversionFactor(ShooterConstants.SHOOTER_DISTANCE_PER_PULSE);
-        rightShooterControllerEncoder.setVelocityConversionFactor(ShooterConstants.VELOCITY_CONVERSION_FACTOR);
-
-
-        Shuffleboard.getTab("Shooting").add("Shooter Control", ShooterConstants.MAX_INPUT)
-                .withWidget(BuiltInWidgets.kNumberSlider).getEntry().addListener(event -> {
-                    ShooterConstants.MAX_INPUT = event.value.getDouble();
-                }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
-        
+        shooterControllerEncoder.setPositionConversionFactor(ShooterConstants.SHOOTER_DISTANCE_PER_PULSE);
+        shooterControllerEncoder.setVelocityConversionFactor(ShooterConstants.VELOCITY_CONVERSION_FACTOR);
     }
 
     public void periodic() {
-        SmartDashboard.putNumber("desiredVelocity", velocity);
-        SmartDashboard.putNumber("actualVelocity", speed);
 
     }
 
@@ -74,27 +52,39 @@ public class ShooterSystem extends SubsystemBase {
         return speed;
     }
 
-    public static void ShooterRun(double rpm) {
-        SmartDashboard.putNumber("Flywheel Set Velocity", rpm);
+    public static void ShooterRun(double speed) {
+        shooterController.set(speed);
     }
 
     public static void ShooterStop() {
-        SmartDashboard.putNumber("Flywheel Set Velocity", 0);
+        shooterController.stopMotor();
     }
 
-    public void ShooterReverse(double rpm) {
-        SmartDashboard.putNumber("Flywheel Set Velocity", -rpm);
+    public void ShooterReverse(double speed) {
+        shooterController.set(-speed);
     }
 
-    public double InchesToMeters(double inches) {
-        return inches / 39.37;
-    }
-
-    public static void KickerRun(double speed) {
-        kickerController.set(speed);
+    public static void UpperKickerRun(double speed) {
+        upperKickerController.set(speed);
     }
     
-    public static void KickerStop() {
-        kickerController.set(0);
+    public static void UpperKickerReverse(double speed) {
+        upperKickerController.set(-speed);
+    }
+
+    public static void UpperKickerStop() {
+        upperKickerController.stopMotor();
+    }
+    
+    public static void LowerKickerRun(double speed) {
+        lowerKickerController.set(speed);
+    }
+
+    public static void LowerKickerReverse(double speed) {
+        lowerKickerController.set(-speed);
+    }
+
+    public static void LowerKickerStop() {
+        lowerKickerController.stopMotor();
     }
 }
