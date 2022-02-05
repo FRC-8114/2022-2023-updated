@@ -87,7 +87,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    m_robotContainer.getDriveSystem().tankDrive(m_robotContainer.getXboxController().getRightY(), m_robotContainer.getXboxController().getLeftY());
+    m_robotContainer.getDriveSystem().arcadeDrive(m_robotContainer.getXboxController().getRightY(), m_robotContainer.getXboxController().getLeftX());
     m_robotContainer.periodic();
   }
 
@@ -99,5 +99,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+
+  }
 }
