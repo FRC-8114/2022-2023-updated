@@ -15,23 +15,24 @@ import frc.robot.Constants.ShooterConstants;
 public class ShooterSystem extends SubsystemBase {
     // Shooter motor controllers
     public final static CANSparkMax shooterController = new CANSparkMax(ShooterConstants.SHOOTER_CONTROLLER_PORT, MotorType.kBrushless);
-    public final static CANSparkMax upperKickerController = new CANSparkMax(ShooterConstants.UPPER_KICKER_CONTROLLER_PORT, MotorType.kBrushless);
+    public final static CANSparkMax upperKickerController = new CANSparkMax(ShooterConstants.UPPER_KICKER_CONTROLLER_PORT, MotorType.kBrushed);
     public final static CANSparkMax lowerKickerController = new CANSparkMax(ShooterConstants.LOWER_KICKER_CONTROLLER_PORT, MotorType.kBrushed);
 
     // Shooter motor controller encoders
     final RelativeEncoder shooterControllerEncoder = shooterController.getEncoder();
-    final RelativeEncoder upperKickerControllerEncoder = upperKickerController.getEncoder();
-    final RelativeEncoder lowerKickerControllerEncoder = lowerKickerController.getEncoder();
 	public static final double ShooterRPM = 0;
 
     // Creates the ShooterSubsystem
     public ShooterSystem() {
         shooterController.restoreFactoryDefaults();
         shooterController.setIdleMode(IdleMode.kCoast);
-        shooterController.setInverted(true);
+        shooterController.setInverted(false);
 
         shooterControllerEncoder.setPositionConversionFactor(ShooterConstants.SHOOTER_DISTANCE_PER_PULSE);
         shooterControllerEncoder.setVelocityConversionFactor(ShooterConstants.VELOCITY_CONVERSION_FACTOR);
+
+        upperKickerController.setIdleMode(IdleMode.kCoast);
+        upperKickerController.setInverted(true);
     }
 
     public void periodic() {
