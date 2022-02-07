@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.auto.MoveXInches;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.FieldPositioningSystem;
 import frc.robot.subsystems.IntakeSystem;
@@ -14,6 +15,8 @@ public class RobotContainer {
   public FieldPositioningSystem positioningSystem = new FieldPositioningSystem(m_driveSystem);
 
   public XboxController controller = new XboxController(0);
+
+  public MoveXInches autoCommand = new MoveXInches(m_driveSystem, positioningSystem, 180, -0.2);
 
   // The container for the robot. Contains subsystems, OI devices, and commands.
   public RobotContainer() {
@@ -68,6 +71,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return null;
+    return autoCommand;
   }
 }

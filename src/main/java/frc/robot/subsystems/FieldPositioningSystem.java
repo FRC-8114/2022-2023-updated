@@ -74,4 +74,17 @@ public class FieldPositioningSystem extends SubsystemBase {
 
         return (leftFollowerDistance + leftLeaderDistance + rightFollowerDistance + rightLeaderDistance) / 4.0;
     }
+
+    /**
+     * Returns the distance from a given position to the robot
+     * 
+     * @param pos   the position to check distance from
+     * @return      the distance from the given position
+     */
+    public double distanceFrom(double[] distancePos) {
+        double xDistance = position[0] - distancePos[0];
+        double yDistance = position[1] - distancePos[1];
+        
+        return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
+    }
 }
