@@ -2,6 +2,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.auto.MoveXInches;
@@ -13,6 +14,7 @@ import frc.robot.subsystems.ShooterSystem;
 public class RobotContainer {
   public DriveSystem m_driveSystem = new DriveSystem();
   public FieldPositioningSystem positioningSystem = new FieldPositioningSystem(m_driveSystem);
+  public ShooterSystem shooterSystem = new ShooterSystem();
 
   public XboxController controller = new XboxController(0);
 
@@ -30,16 +32,17 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    new JoystickButton(controller, 5)
+      .whenPressed(() -> shooterSystem.UpperKickerRun(.25))
+      .whenReleased(() -> shooterSystem.UpperKickerStop());
+
     new JoystickButton(controller, 6)
-        .whenPressed(() -> ShooterSystem.LowerKickerRun(.5))
-        .whenReleased(() -> ShooterSystem.LowerKickerStop());
-    
-    new JoystickButton(controller, 5) 
-      .whenPressed(() -> ShooterSystem.UpperKickerRun(.5))
-      .whenReleased(() -> ShooterSystem.UpperKickerStop());
-    
+        .whenPressed(() -> shooterSystem.LowerKickerRun(.8))
+        .whenReleased(() -> shooterSystem.LowerKickerStop());
 
-
+    new JoystickButton(controller, Button.kY.value)
+      .whenPressed(() -> shooterSystem.LowerKickerReverse(.15))
+      .whenReleased(() -> shooterSystem.LowerKickerStop());
   }
 
   public XboxController getXboxController() {
@@ -52,13 +55,13 @@ public class RobotContainer {
 
   public void periodic() {
     if(controller.getLeftTriggerAxis() == 1) {
-      IntakeSystem.IntakeRunnerRun(.5);
+      IntakeSystem.IntakeRunnerRun(.25);
     }
     else {
       IntakeSystem.IntakeRunnerStop();
     }
     if(controller.getRightTriggerAxis() == 1) {
-      ShooterSystem.ShooterRun(.5);
+      ShooterSystem.ShooterRun(.80);
     }
     else {
       ShooterSystem.ShooterStop();

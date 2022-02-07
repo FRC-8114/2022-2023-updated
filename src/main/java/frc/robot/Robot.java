@@ -16,7 +16,6 @@ public class Robot extends TimedRobot {
     // Instantiates RobotContainer. Performs all button bindings, and puts
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    ShooterSystem.LowerKickerRun(0.5);
   }
 
   @Override
