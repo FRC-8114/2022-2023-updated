@@ -13,8 +13,8 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
-    public static final double SHOOTER_DISTANCE_PER_PULSE = 0;
-    public static final double VELOCITY_CONVERSION_FACTOR = 0;
+    public static final double SHOOTER_DISTANCE_PER_PULSE = 1;
+    public static final double VELOCITY_CONVERSION_FACTOR = 1;
     public static final double ENCODER_DISTANCE_PER_PULSE = 0;
     public static double MAX_INPUT = 0;
     public static final int UPPER_KICKER_CONTROLLER_PORT = 7;
@@ -38,5 +38,16 @@ public final class Constants {
     public static final double WHEEL_DIAMETER_INCHES = 6;
     public static final double WHEEL_DIAMETER_METERS = WHEEL_DIAMETER_INCHES * INCHES_TO_METERS;
     public static final double WHEEL_CIRCUMFRENCE = WHEEL_DIAMETER_INCHES * Math.PI;
+  }
+
+  public static final class ControlConstants {
+    public static final double LOWER_KICKER_INITIAL_RUN_SPEED = .15;
+    public static final double LOWER_KICKER_INITIAL_REVERSE_SPEED = .15;
+    public static final double UPPER_KICKER_INITIAL_RUN_SPEED = .25;
+    public static final double UPPER_KICKER_INITIAL_REVERSE_SPEED = .25;
+    public static final double SHOOTER_INITIAL_RUN_SPEED = .8;
+    public static final double SHOOTER_INITIAL_REVERSE_SPEED = .25;
+    public static final double INTAKE_INITIAL_RUN_SPEED = .25;
+    public static final double INTAKE_INITIAL_REVERSE_SPEED = .25;
   }
 }
