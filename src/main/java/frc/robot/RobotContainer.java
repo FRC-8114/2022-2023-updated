@@ -95,6 +95,9 @@ public class RobotContainer {
     new JoystickButton(controller, Button.kY.value)
       .whenPressed(() -> shooterSystem.LowerKickerReverse(lowerKickerReverseSpeed))
       .whenReleased(() -> shooterSystem.LowerKickerStop());
+
+    new JoystickButton(controller, Button.kA.value)
+      .whenPressed(() -> m_driveSystem.switchMotorPorts());
   }
 
   public XboxController getXboxController() {
