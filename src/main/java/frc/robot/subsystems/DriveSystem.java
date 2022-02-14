@@ -7,6 +7,7 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 
 public class DriveSystem extends SubsystemBase {
@@ -26,6 +27,8 @@ public class DriveSystem extends SubsystemBase {
 
   // The robot's drive
   private static final DifferentialDrive m_drive = new DifferentialDrive(leftMotorLeader, rightMotorLeader);
+
+  public boolean steeringInversed;
 
   /** Creates a new DriveSubsystem. */
   public DriveSystem() {
@@ -53,6 +56,8 @@ public class DriveSystem extends SubsystemBase {
     rightMotorFollower.setIdleMode(IdleMode.kCoast);
     rightMotorFollower.setInverted(DriveConstants.RIGHT_MOTORS_INVERSED);
     rightMotorFollower.follow(rightMotorLeader, false);
+
+    steeringInversed = Constants.DriveConstants.STEERING_INVERSED;
   }
 
   public RelativeEncoder getEncoder(String encoderName) {
@@ -88,7 +93,12 @@ public class DriveSystem extends SubsystemBase {
   }
 
   public void arcadeDrive(double speed, double rotation) {
-    m_drive.arcadeDrive(speed, rotation);
+    if(steeringInversed) {
+      m_drive.arcadeDrive(speed, -rotation);
+    } else {
+      m_drive.arcadeDrive(speed, rotation);
+    }
+    
   }
 
 }

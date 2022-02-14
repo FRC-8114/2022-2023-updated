@@ -7,6 +7,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSystem extends SubsystemBase {
@@ -24,9 +25,11 @@ public class IntakeSystem extends SubsystemBase {
         //set to factory default and idle so we know what we're working with 
         intakeRunController.restoreFactoryDefaults();
         intakeRunController.setIdleMode(IdleMode.kCoast);
+        intakeRunController.setInverted(Constants.IntakeConstants.INTAKE_RUN_INVERSED);
 
         intakeDeployController.restoreFactoryDefaults();
         intakeDeployController.setIdleMode(IdleMode.kBrake);
+        intakeDeployController.setInverted(Constants.IntakeConstants.INTAKE_DEPLOY_INVERSED);
 
     }
 

@@ -8,28 +8,41 @@ public final class Constants {
     public static final int LEFT_MOTOR_2_PORT = 2;
     public static final int RIGHT_MOTOR_1_PORT = 3;
     public static final int RIGHT_MOTOR_2_PORT = 4;
-    public static final boolean RIGHT_MOTORS_INVERSED = true;
-    public static final boolean LEFT_MOTORS_INVERSED = false;
+
+    public static final boolean RIGHT_MOTORS_INVERSED = false;
+    public static final boolean LEFT_MOTORS_INVERSED = true;
+    public static final boolean STEERING_INVERSED = true;
   }
 
   public static final class ShooterConstants {
+    public static final int UPPER_KICKER_CONTROLLER_PORT = 7;
+    public static final int LOWER_KICKER_CONTROLLER_PORT = 8;
+    public static final int SHOOTER_CONTROLLER_PORT = 9;
+
+    public static final boolean SHOOTER_INVERSED = false;
+    public static final boolean UPPER_KICKER_INVERSED = false;
+    public static final boolean LOWER_KICKER_INVERSED = false;
+
     public static final double SHOOTER_DISTANCE_PER_PULSE = 1;
     public static final double VELOCITY_CONVERSION_FACTOR = 1;
     public static final double ENCODER_DISTANCE_PER_PULSE = 0;
     public static double MAX_INPUT = 0;
-    public static final int UPPER_KICKER_CONTROLLER_PORT = 7;
-    public static final int LOWER_KICKER_CONTROLLER_PORT = 8;
-    public static final int SHOOTER_CONTROLLER_PORT = 9;
   }
 
   public static final class IntakeConstants {
     public static final int INTAKE_RUN_PORT = 5;
     public static final int INTAKE_DEPLOY_PORT = 6;
+
+    public static final boolean INTAKE_RUN_INVERSED = false;
+    public static final boolean INTAKE_DEPLOY_INVERSED = false;
   }
 
   public static final class ClimberConstants {
     public static final int CLIMBER_RUN_PORT = 10;
     public static final int CLIMBER_DEPLOY_PORT = 11;
+
+    public static final boolean CLIMBER_RUN_INVERSED = false;
+    public static final boolean CLIMBER_DEPLOY_INVERSED = false;
   }
 
   public static final class PositioningConstants {

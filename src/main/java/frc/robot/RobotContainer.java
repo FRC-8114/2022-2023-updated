@@ -18,6 +18,7 @@ public class RobotContainer {
   public DriveSystem m_driveSystem = new DriveSystem();
   public FieldPositioningSystem positioningSystem = new FieldPositioningSystem(m_driveSystem);
   public ShooterSystem shooterSystem = new ShooterSystem();
+  public IntakeSystem intakeSystem = new IntakeSystem();
 
   public XboxController controller = new XboxController(0);
 
@@ -88,8 +89,8 @@ public class RobotContainer {
       .whenReleased(() -> shooterSystem.UpperKickerStop());
 
     new JoystickButton(controller, 6)
-        .whenPressed(() -> shooterSystem.LowerKickerRun(lowerKickerRunSpeed))
-        .whenReleased(() -> shooterSystem.LowerKickerStop());
+        .whenPressed(() -> intakeSystem.IntakeRunnerReverse(intakeReverseSpeed))
+        .whenReleased(() -> intakeSystem.IntakeRunnerStop());
 
     new JoystickButton(controller, Button.kY.value)
       .whenPressed(() -> shooterSystem.LowerKickerReverse(lowerKickerReverseSpeed))
@@ -106,16 +107,18 @@ public class RobotContainer {
 
   public void periodic() {
     if(controller.getLeftTriggerAxis() == 1) {
-      IntakeSystem.IntakeRunnerRun(intakeRunSpeed);
+      intakeSystem.IntakeRunnerRun(intakeRunSpeed);
+      shooterSystem.LowerKickerRun(lowerKickerRunSpeed);
     }
     else {
-      IntakeSystem.IntakeRunnerStop();
+      intakeSystem.IntakeRunnerStop();
+      shooterSystem.LowerKickerStop();
     }
     if(controller.getRightTriggerAxis() == 1) {
-      ShooterSystem.ShooterRun(shooterRunSpeed);
+      shooterSystem.ShooterRun(shooterRunSpeed);
     }
     else {
-      ShooterSystem.ShooterStop();
+      shooterSystem.ShooterStop();
     }
   }
 
