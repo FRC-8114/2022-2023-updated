@@ -1,10 +1,15 @@
 package frc.robot.subsystems;
 
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SerialPort;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotUtils;
 
 public class FieldPositioningSystem extends SubsystemBase {
     private DriveSystem drive;
+    public AHRS navx;
     public double[] position;
     public double[] oldLeftEncoderValues = new double[2], oldRightEncoderValues = new double[2];
     public double angle;
@@ -14,6 +19,9 @@ public class FieldPositioningSystem extends SubsystemBase {
         double[] position = new double[2];
         position[0] = 0;
         position[1] = 0;
+
+        navx = new AHRS(SerialPort.Port.kUSB);
+        navx.calibrate();
         
         initializePosition(position, 0);
     }
@@ -26,7 +34,7 @@ public class FieldPositioningSystem extends SubsystemBase {
 
     public void initializePosition(double[] position, double angle) {
         this.position = position;
-        this.angle = angle;
+        this.angle = navx.getYaw();
     }
 
     /**
@@ -44,6 +52,10 @@ public class FieldPositioningSystem extends SubsystemBase {
     public void updatePosition() {
         double rotations = averageEncoderDistance();
         double distanceCovered = rotationsToDistance(rotations);
+
+        angle = navx.getYaw();
+        RobotUtils.sendNumberToShuffleboard("yawDegrees", angle);
+
         double xDisplacement = distanceCovered * Math.cos(angle);
         double yDisplacement = distanceCovered * Math.sin(angle);
 
