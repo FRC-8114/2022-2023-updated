@@ -29,6 +29,9 @@ public class RobotContainer {
   public double shooterRunSpeed, shooterReverseSpeed;
   public double intakeRunSpeed, intakeReverseSpeed;
 
+  private int oldLeftTriggerAxis;
+  private int oldRightTriggerAxis;
+
   // The container for the robot. Contains subsystems, OI devices, and commands.
   public RobotContainer() {
     configureButtonBindings();
@@ -84,20 +87,21 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(controller, 5)
-      .whenPressed(() -> shooterSystem.UpperKickerRun(upperKickerRunSpeed))
-      .whenReleased(() -> shooterSystem.UpperKickerStop());
-
-    new JoystickButton(controller, 6)
-        .whenPressed(() -> intakeSystem.IntakeRunnerReverse(intakeReverseSpeed))
-        .whenReleased(() -> intakeSystem.IntakeRunnerStop());
+    new JoystickButton(controller, Button.kA.value)
+      .whenPressed(() -> m_driveSystem.switchMotorPorts());
 
     new JoystickButton(controller, Button.kY.value)
       .whenPressed(() -> shooterSystem.LowerKickerReverse(lowerKickerReverseSpeed))
       .whenReleased(() -> shooterSystem.LowerKickerStop());
 
-    new JoystickButton(controller, Button.kA.value)
-      .whenPressed(() -> m_driveSystem.switchMotorPorts());
+    new JoystickButton(controller, 5)
+      .whenPressed(() -> shooterSystem.UpperKickerRun(upperKickerRunSpeed))
+      .whenReleased(() -> shooterSystem.UpperKickerStop());
+
+    new JoystickButton(controller, 6)
+      .whenPressed(() -> intakeSystem.IntakeRunnerReverse(intakeReverseSpeed))
+      .whenReleased(() -> intakeSystem.IntakeRunnerStop());
+
   }
 
   public XboxController getXboxController() {
@@ -112,17 +116,24 @@ public class RobotContainer {
     if(controller.getLeftTriggerAxis() == 1) {
       intakeSystem.IntakeRunnerRun(intakeRunSpeed);
       shooterSystem.LowerKickerRun(lowerKickerRunSpeed);
+      
     }
-    else {
+    else if (oldLeftTriggerAxis == 1) {
       intakeSystem.IntakeRunnerStop();
       shooterSystem.LowerKickerStop();
+
     }
     if(controller.getRightTriggerAxis() == 1) {
       shooterSystem.ShooterRun(shooterRunSpeed);
+
     }
-    else {
+    else if (oldRightTriggerAxis == 1) {
       shooterSystem.ShooterStop();
+
     }
+    oldLeftTriggerAxis = (int)controller.getLeftTriggerAxis();
+    oldRightTriggerAxis = (int)controller.getRightTriggerAxis();
+
   }
 
   /**
