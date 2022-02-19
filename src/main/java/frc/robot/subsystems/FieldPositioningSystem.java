@@ -19,9 +19,6 @@ public class FieldPositioningSystem extends SubsystemBase {
         double[] position = new double[2];
         position[0] = 0;
         position[1] = 0;
-
-        navx = new AHRS(SerialPort.Port.kUSB);
-        navx.calibrate();
         
         initializePosition(position, 0);
     }
@@ -33,6 +30,9 @@ public class FieldPositioningSystem extends SubsystemBase {
     }
 
     public void initializePosition(double[] position, double angle) {
+        navx = new AHRS(SerialPort.Port.kUSB);
+        navx.calibrate();
+        
         this.position = position;
         this.angle = navx.getYaw();
     }
