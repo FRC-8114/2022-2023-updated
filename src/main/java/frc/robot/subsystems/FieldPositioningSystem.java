@@ -16,13 +16,7 @@ public class FieldPositioningSystem extends SubsystemBase {
 
     public FieldPositioningSystem(DriveSystem drive) {
         this.drive = drive;
-<<<<<<< HEAD
-        double[] position = new double[2];
-        position[0] = 0;
-        position[1] = 0;
-=======
         double[] position = {0, 0};
->>>>>>> ea20bff (Implements position tracking with angle and directionality.)
         
         initializePosition(position, 0);
     }
@@ -35,16 +29,8 @@ public class FieldPositioningSystem extends SubsystemBase {
 
     public void initializePosition(double[] position, double angle) {
         navx = new AHRS(SerialPort.Port.kUSB);
-<<<<<<< HEAD
-        navx.calibrate();
-        
-=======
-        navx.enableBoardlevelYawReset(true);
-        navx.resetDisplacement();
-        navx.reset();
         navx.calibrate();
 
->>>>>>> ea20bff (Implements position tracking with angle and directionality.)
         this.position = position;
         this.angle = navx.getYaw();
     }

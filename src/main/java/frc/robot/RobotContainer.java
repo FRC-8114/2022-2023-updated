@@ -102,6 +102,12 @@ public class RobotContainer {
       .whenPressed(() -> intakeSystem.IntakeRunnerReverse(intakeReverseSpeed))
       .whenReleased(() -> intakeSystem.IntakeRunnerStop());
 
+
+    new JoystickButton(controller, Button.kA.value)
+      .whenPressed(() -> m_driveSystem.switchMotorPorts());
+
+    new JoystickButton(controller, Button.kB.value)
+      .whenPressed(() -> m_driveSystem.switchDriveSystem());
   }
 
   public XboxController getXboxController() {

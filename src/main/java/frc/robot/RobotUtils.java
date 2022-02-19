@@ -32,4 +32,21 @@ public class RobotUtils {
 
         sendNumberToShuffleboard("work?", 0);
     }
+
+    public static void sendBooleanSetterToShuffleboard(Object object, Method setter, String tab, String name, boolean initialValue) {
+    
+        Shuffleboard.getTab(tab).add(name, initialValue).withWidget(BuiltInWidgets.kToggleButton).getEntry().addListener(event -> {
+        try {
+            setter.invoke(object, event.value.getBoolean());
+        } catch (IllegalAccessException e) {
+            SmartDashboard.putString("depressing_error", e.toString());
+        } catch (IllegalArgumentException e) {
+            SmartDashboard.putString("depressing_error", e.toString());
+        } catch (InvocationTargetException e) {
+            SmartDashboard.putString("depressing_error", e.toString());
+        }
+        }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+
+        sendNumberToShuffleboard("work?", 0);
+    }
 }

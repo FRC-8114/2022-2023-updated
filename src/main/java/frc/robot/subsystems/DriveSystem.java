@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -29,6 +30,12 @@ public class DriveSystem extends SubsystemBase {
   private static final DifferentialDrive m_drive = new DifferentialDrive(leftMotorLeader, rightMotorLeader);
 
   public boolean steeringInversed = false;
+
+  private static DifferentialDriveOdometry m_odometry;
+  private double maxVelocity;
+  private static double curvatureMaxCurvature = 1.0;
+  private static double arcadeMaxCurvature;
+  private double[] currentSpeeds = new double[2];
 
   /** Creates a new DriveSubsystem. */
   public DriveSystem() {
@@ -60,6 +67,9 @@ public class DriveSystem extends SubsystemBase {
     steeringInversed = Constants.DriveConstants.STEERING_INVERSED;
   }
 
+  public static boolean back = false;
+  public static boolean isArcade = false;
+
   public RelativeEncoder getEncoder(String encoderName) {
     switch (encoderName) {
       case "leftLeaderEncoder": return leftLeaderEncoder;
@@ -73,10 +83,15 @@ public class DriveSystem extends SubsystemBase {
   public void invertMotors(boolean reversed) {
     rightMotorLeader.setInverted(reversed);
     leftMotorLeader.setInverted(reversed);
+    back = reversed;
   }
 
   public void switchMotorPorts () {
     steeringInversed = !steeringInversed;
+  }
+
+  public void switchDriveSystem () {
+    isArcade = !isArcade;
   }
 
   public double getLeftDistance() {
@@ -91,6 +106,19 @@ public class DriveSystem extends SubsystemBase {
     return (getLeftDistance() + getRightDistance()) / 2;
   }
 
+  public static void cheesyDrive(double speed, double curvature, boolean isArcade) {
+    if (back) {
+      curvature = curvature;
+    }
+    if (!isArcade) {
+      // Applies a maximum curvature to curvature mode, limiting the minimum turn
+      // radius
+      m_drive.curvatureDrive(speed, -curvature * curvatureMaxCurvature, isArcade);
+    } else {
+      // m_drive.curvatureDrive(speed, curvature * arcadeMaxCurvature, isArcade);
+      m_drive.arcadeDrive(speed, -curvature);
+    }
+  }
   /**
    * Drives the robot using tank drive controls.
    *
