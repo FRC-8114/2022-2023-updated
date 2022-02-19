@@ -30,7 +30,10 @@ public class FieldPositioningSystem extends SubsystemBase {
     public void initializePosition(double[] position, double angle) {
         navx = new AHRS(SerialPort.Port.kUSB);
         navx.calibrate();
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
         this.position = position;
         this.angle = navx.getYaw();
     }
