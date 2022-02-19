@@ -12,6 +12,8 @@ public final class Constants {
     public static final boolean RIGHT_MOTORS_INVERSED = false;
     public static final boolean LEFT_MOTORS_INVERSED = true;
     public static final boolean STEERING_INVERSED = true;
+
+    public static final double INITIAL_MAX_INPUT = .8;
   }
 
   public static final class ShooterConstants {

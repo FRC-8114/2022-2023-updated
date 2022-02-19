@@ -32,7 +32,6 @@ public class DriveSystem extends SubsystemBase {
   public boolean steeringInversed = false;
 
   private static DifferentialDriveOdometry m_odometry;
-  private double maxVelocity;
   private static double curvatureMaxCurvature = 1.0;
   private static double arcadeMaxCurvature;
   private double[] currentSpeeds = new double[2];
@@ -138,4 +137,7 @@ public class DriveSystem extends SubsystemBase {
     
   }
 
+  public void setMaxInput(Double input) {
+    m_drive.setMaxOutput(input);
+  }
 }

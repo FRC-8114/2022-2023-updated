@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.auto.MoveXInches;
+import frc.robot.commands.auto.RotateToAngle;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.FieldPositioningSystem;
 import frc.robot.subsystems.IntakeSystem;
@@ -22,7 +22,7 @@ public class RobotContainer {
 
   public XboxController controller = new XboxController(0);
 
-  public MoveXInches autoCommand = new MoveXInches(m_driveSystem, positioningSystem, 180, -0.2);
+  public RotateToAngle autoCommand = new RotateToAngle(m_driveSystem, positioningSystem, 90, 0.175);
 
   public double lowerKickerRunSpeed, lowerKickerReverseSpeed;
   public double upperKickerRunSpeed, upperKickerReverseSpeed;
@@ -66,6 +66,7 @@ public class RobotContainer {
       Method shooterReverseSpeedSetter = RobotContainer.class.getMethod("setShooterReverseSpeed", Double.class);
       Method intakeRunSpeedSetter = RobotContainer.class.getMethod("setIntakeRunSpeed", Double.class);
       Method intakeReverseSpeedSetter = RobotContainer.class.getMethod("setIntakeReverseSpeed", Double.class);
+      Method maxDriveInputSetter = DriveSystem.class.getMethod("setMaxInput", Double.class);
 
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, lowerKickerRunSpeedSetter, "Control Variables", "lowerKickerRunSpeed", lowerKickerRunSpeed);
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, lowerKickerReverseSpeedSetter, "Control Variables", "lowerKickerReverseSpeed", lowerKickerReverseSpeed);
@@ -75,6 +76,7 @@ public class RobotContainer {
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, shooterReverseSpeedSetter, "Control Variables", "shooterReverseSpeed", shooterReverseSpeed);
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, intakeRunSpeedSetter, "Control Variables", "intakeRunSpeed", intakeRunSpeed);
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, intakeReverseSpeedSetter, "Control Variables", "intakeReverseSpeed", intakeReverseSpeed);
+      RobotUtils.sendNumberSetterToShuffleboard(m_driveSystem, maxDriveInputSetter, "Control Variables", "maxDriveInput", Constants.DriveConstants.INITIAL_MAX_INPUT);
     } catch (NoSuchMethodException | SecurityException e) {
       SmartDashboard.putString("depressing_error", e.toString());
     }
