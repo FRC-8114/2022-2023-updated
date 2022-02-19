@@ -16,9 +16,13 @@ public class FieldPositioningSystem extends SubsystemBase {
 
     public FieldPositioningSystem(DriveSystem drive) {
         this.drive = drive;
+<<<<<<< HEAD
         double[] position = new double[2];
         position[0] = 0;
         position[1] = 0;
+=======
+        double[] position = {0, 0};
+>>>>>>> ea20bff (Implements position tracking with angle and directionality.)
         
         initializePosition(position, 0);
     }
@@ -31,8 +35,16 @@ public class FieldPositioningSystem extends SubsystemBase {
 
     public void initializePosition(double[] position, double angle) {
         navx = new AHRS(SerialPort.Port.kUSB);
+<<<<<<< HEAD
         navx.calibrate();
         
+=======
+        navx.enableBoardlevelYawReset(true);
+        navx.resetDisplacement();
+        navx.reset();
+        navx.calibrate();
+
+>>>>>>> ea20bff (Implements position tracking with angle and directionality.)
         this.position = position;
         this.angle = navx.getYaw();
     }
@@ -56,8 +68,8 @@ public class FieldPositioningSystem extends SubsystemBase {
         angle = navx.getYaw();
         RobotUtils.sendNumberToShuffleboard("yawDegrees", angle);
 
-        double xDisplacement = distanceCovered * Math.cos(angle);
-        double yDisplacement = distanceCovered * Math.sin(angle);
+        double xDisplacement = distanceCovered * Math.cos(Math.toRadians(angle));
+        double yDisplacement = distanceCovered * Math.sin(Math.toRadians(angle));
 
         position[0] += xDisplacement;
         position[1] += yDisplacement;
@@ -79,10 +91,10 @@ public class FieldPositioningSystem extends SubsystemBase {
      * Returns the average displacement of the encoders since the alst update
      */
     public double averageEncoderDistance() {
-        double leftLeaderDistance = Math.abs(drive.leftLeaderEncoder.getPosition() - oldLeftEncoderValues[0]);
-        double leftFollowerDistance = Math.abs(drive.leftFollowerEncoder.getPosition() - oldLeftEncoderValues[1]);
-        double rightLeaderDistance = Math.abs(drive.rightLeaderEncoder.getPosition() - oldRightEncoderValues[0]);
-        double rightFollowerDistance = Math.abs(drive.rightFollowerEncoder.getPosition() - oldRightEncoderValues[1]);
+        double leftLeaderDistance = drive.leftLeaderEncoder.getPosition() - oldLeftEncoderValues[0];
+        double leftFollowerDistance = drive.leftFollowerEncoder.getPosition() - oldLeftEncoderValues[1];
+        double rightLeaderDistance = drive.rightLeaderEncoder.getPosition() - oldRightEncoderValues[0];
+        double rightFollowerDistance = drive.rightFollowerEncoder.getPosition() - oldRightEncoderValues[1];
 
         return (leftFollowerDistance + leftLeaderDistance + rightFollowerDistance + rightLeaderDistance) / 4.0;
     }
