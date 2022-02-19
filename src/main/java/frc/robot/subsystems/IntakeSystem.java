@@ -13,11 +13,9 @@ import frc.robot.Constants.IntakeConstants;
 public class IntakeSystem extends SubsystemBase {
     //the intake motor controller for running and for deploying
     final static CANSparkMax intakeRunController = new CANSparkMax(IntakeConstants.INTAKE_RUN_PORT, MotorType.kBrushless);
-    final CANSparkMax intakeDeployController = new CANSparkMax(IntakeConstants.INTAKE_DEPLOY_PORT, MotorType.kBrushless);
 
     //the intake motor controller encoders
     final RelativeEncoder intakeRunControllerEncoder = intakeRunController.getEncoder();
-    final RelativeEncoder intakeDeployControllerEncoder = intakeDeployController.getEncoder();
 
     //Creates the IntakeSubsystem
     public IntakeSystem() {
@@ -43,27 +41,5 @@ public class IntakeSystem extends SubsystemBase {
 
     public static void IntakeRunnerStop() {
         intakeRunController.stopMotor();
-    }
-
-    public void IntakeDeployerRunnerUp(double speed) {
-        intakeDeployController.set(speed);
-    }
-
-    public void IntakeDeployerRunnerDown(double speed) {
-        intakeDeployController.set(-speed);
-    }
-
-    public void IntakeDeployerRunnerSoftDrop(double time) {
-        Timer timer = new Timer();
-        timer.start();
-        while (timer.get() < time) {
-            intakeDeployController.set(.15);
-        }
-        intakeDeployController.stopMotor();
-        timer.stop();
-    }
-
-    public void IntakeDeployerRunnerStop() {
-        intakeDeployController.stopMotor();
     }
 }
