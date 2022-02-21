@@ -124,6 +124,9 @@ public class RobotContainer {
   }
 
   public void periodic() {
+    m_driveSystem.cheesyDrive(controller.getLeftY(), controller.getRightX(), m_driveSystem.isArcade);
+    //m_driveSystem.tankDrive(controller.getLeftY(), controller.getRightY());
+
     if(controller.getLeftTriggerAxis() == 1) {
       intakeSystem.IntakeRunnerRun(intakeRunSpeed);
       shooterSystem.LowerKickerRun(lowerKickerRunSpeed);
