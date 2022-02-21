@@ -22,12 +22,11 @@ public class RobotContainer {
 
   public XboxController controller = new XboxController(0);
 
-  public RotateToAngle autoCommand = new RotateToAngle(m_driveSystem, positioningSystem, 90, 0.175);
-
   public double lowerKickerRunSpeed, lowerKickerReverseSpeed;
   public double upperKickerRunSpeed, upperKickerReverseSpeed;
   public double shooterRunSpeed, shooterReverseSpeed;
   public double intakeRunSpeed, intakeReverseSpeed;
+  public double autoRotateSpeed;
 
   private int oldLeftTriggerAxis;
   private int oldRightTriggerAxis;
@@ -52,6 +51,8 @@ public class RobotContainer {
     shooterReverseSpeed = Constants.ControlConstants.SHOOTER_INITIAL_REVERSE_SPEED;
     intakeRunSpeed = Constants.ControlConstants.INTAKE_INITIAL_RUN_SPEED;
     intakeReverseSpeed = Constants.ControlConstants.INTAKE_INITIAL_REVERSE_SPEED;
+
+    autoRotateSpeed = Constants.AutoConstants.AUTO_ROTATE_SPEED;
   }
 
   public void sendControlVariableSettersToShuffleboard() {
@@ -67,6 +68,7 @@ public class RobotContainer {
       Method intakeRunSpeedSetter = RobotContainer.class.getMethod("setIntakeRunSpeed", Double.class);
       Method intakeReverseSpeedSetter = RobotContainer.class.getMethod("setIntakeReverseSpeed", Double.class);
       Method maxDriveInputSetter = DriveSystem.class.getMethod("setMaxInput", Double.class);
+      Method autoRotateSpeedSetter = RobotContainer.class.getMethod("setAutoRotateSpeed", Double.class);
 
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, lowerKickerRunSpeedSetter, "Control Variables", "lowerKickerRunSpeed", lowerKickerRunSpeed);
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, lowerKickerReverseSpeedSetter, "Control Variables", "lowerKickerReverseSpeed", lowerKickerReverseSpeed);
@@ -77,6 +79,7 @@ public class RobotContainer {
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, intakeRunSpeedSetter, "Control Variables", "intakeRunSpeed", intakeRunSpeed);
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, intakeReverseSpeedSetter, "Control Variables", "intakeReverseSpeed", intakeReverseSpeed);
       RobotUtils.sendNumberSetterToShuffleboard(m_driveSystem, maxDriveInputSetter, "Control Variables", "maxDriveInput", Constants.DriveConstants.INITIAL_MAX_INPUT);
+      RobotUtils.sendNumberSetterToShuffleboard(robotContainer, autoRotateSpeedSetter, "Control Variables", "autoRotateSpeed", autoRotateSpeed);
     } catch (NoSuchMethodException | SecurityException e) {
       SmartDashboard.putString("depressing_error", e.toString());
     }
@@ -150,7 +153,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoCommand;
+    return new RotateToAngle(m_driveSystem, positioningSystem, 90, autoRotateSpeed);
   }
 
   /**
@@ -187,5 +190,9 @@ public class RobotContainer {
 
   public void setIntakeReverseSpeed(Double speed) {
     intakeReverseSpeed = speed;
+  }
+
+  public void setAutoRotateSpeed(Double speed) {
+    autoRotateSpeed = speed;
   }
 }

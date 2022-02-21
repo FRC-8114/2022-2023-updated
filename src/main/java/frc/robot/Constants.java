@@ -65,4 +65,8 @@ public final class Constants {
     public static final double INTAKE_INITIAL_RUN_SPEED = .25;
     public static final double INTAKE_INITIAL_REVERSE_SPEED = .25;
   }
+
+  public static final class AutoConstants {
+    public static final double AUTO_ROTATE_SPEED = 0.2;
+  }
 }
