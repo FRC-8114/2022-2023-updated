@@ -25,10 +25,6 @@ public class IntakeSystem extends SubsystemBase {
         intakeRunController.setIdleMode(IdleMode.kCoast);
         intakeRunController.setInverted(Constants.IntakeConstants.INTAKE_RUN_INVERSED);
 
-        intakeDeployController.restoreFactoryDefaults();
-        intakeDeployController.setIdleMode(IdleMode.kBrake);
-        intakeDeployController.setInverted(Constants.IntakeConstants.INTAKE_DEPLOY_INVERSED);
-
     }
 
     public static void IntakeRunnerRun(double speed) {

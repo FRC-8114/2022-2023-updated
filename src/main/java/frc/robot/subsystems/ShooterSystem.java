@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import com.revrobotics.RelativeEncoder;
 
+import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 
 public class ShooterSystem extends SubsystemBase {
@@ -26,13 +27,16 @@ public class ShooterSystem extends SubsystemBase {
     public ShooterSystem() {
         shooterController.restoreFactoryDefaults();
         shooterController.setIdleMode(IdleMode.kCoast);
-        shooterController.setInverted(false);
+        shooterController.setInverted(Constants.ShooterConstants.SHOOTER_INVERSED);
 
         shooterControllerEncoder.setPositionConversionFactor(ShooterConstants.SHOOTER_DISTANCE_PER_PULSE);
         shooterControllerEncoder.setVelocityConversionFactor(ShooterConstants.VELOCITY_CONVERSION_FACTOR);
 
         upperKickerController.setIdleMode(IdleMode.kCoast);
-        upperKickerController.setInverted(true);
+        upperKickerController.setInverted(Constants.ShooterConstants.UPPER_KICKER_INVERSED);
+
+        upperKickerController.setIdleMode(IdleMode.kBrake);
+        upperKickerController.setInverted(Constants.ShooterConstants.LOWER_KICKER_INVERSED);
     }
 
     public void periodic() {

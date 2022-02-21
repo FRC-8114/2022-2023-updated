@@ -28,15 +28,13 @@ public final class Constants {
     public static final double SHOOTER_DISTANCE_PER_PULSE = 1;
     public static final double VELOCITY_CONVERSION_FACTOR = 1;
     public static final double ENCODER_DISTANCE_PER_PULSE = 0;
-    public static double MAX_INPUT = 0;
+    public static final double MAX_INPUT = 0;
   }
 
   public static final class IntakeConstants {
     public static final int INTAKE_RUN_PORT = 5;
-    public static final int INTAKE_DEPLOY_PORT = 6;
 
     public static final boolean INTAKE_RUN_INVERSED = false;
-    public static final boolean INTAKE_DEPLOY_INVERSED = false;
   }
 
   public static final class ClimberConstants {

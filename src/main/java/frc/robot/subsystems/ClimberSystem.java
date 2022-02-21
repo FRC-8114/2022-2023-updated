@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
 
 import com.revrobotics.CANSparkMax;
@@ -21,12 +22,12 @@ public class ClimberSystem extends SubsystemBase {
 
         // set to factory default and idle so we know what we're working with
         climberRunController.restoreFactoryDefaults();
-        climberRunController.setInverted(false);
+        climberRunController.setInverted(Constants.ClimberConstants.CLIMBER_RUN_INVERSED);
         climberRunController.setIdleMode(IdleMode.kBrake);
         climberRunController.stopMotor();
 
         climberDeployController.restoreFactoryDefaults();
-        climberDeployController.setInverted(false);
+        climberDeployController.setInverted(Constants.ClimberConstants.CLIMBER_DEPLOY_INVERSED);
         climberDeployController.setIdleMode(IdleMode.kBrake);
         climberDeployController.stopMotor();
     }
