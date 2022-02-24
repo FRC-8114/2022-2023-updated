@@ -27,7 +27,7 @@ public class IntakeSystem extends SubsystemBase {
 
     }
 
-    public static void IntakeRunnerRun(double speed) {
+    public void IntakeRunnerRun(double speed) {
         intakeRunController.set(speed);
     }
 
@@ -35,7 +35,7 @@ public class IntakeSystem extends SubsystemBase {
         intakeRunController.set(-speed);
     }
 
-    public static void IntakeRunnerStop() {
+    public void IntakeRunnerStop() {
         intakeRunController.stopMotor();
     }
 }

@@ -4,32 +4,36 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShooterSystem;
 
 public class AutoShoot extends CommandBase {
+    private ShooterSystem shooterSystem;
     private int desired_rpm = 0, count = 0;
 
-    public AutoShoot(int desired_rpm) {
+    public AutoShoot(int desired_rpm, ShooterSystem shooterSystem) {
         this.desired_rpm = desired_rpm;
+        this.shooterSystem = shooterSystem;
     }
 
     public void initialize() {
-        ShooterSystem.ShooterRun(desired_rpm);
+        shooterSystem.ShooterRun(desired_rpm);
     }
 
     public void execute() {
-        if (!(ShooterSystem.ShooterRPM < desired_rpm*.95)) {
-            ShooterSystem.UpperKickerRun(1);
-            ShooterSystem.LowerKickerRun(1);
+        if (ShooterSystem.ShooterRPM >= desired_rpm*.95) {
+            shooterSystem.UpperKickerRun(1);
+            shooterSystem.LowerKickerRun(1);
             count++;
+
         }
         else {
-            ShooterSystem.UpperKickerStop();
-            ShooterSystem.LowerKickerStop();
+            shooterSystem.UpperKickerStop();
+            shooterSystem.LowerKickerStop();
+            
         }
     }
 
     public void end() {
-        ShooterSystem.ShooterStop();
-        ShooterSystem.UpperKickerStop();
-        ShooterSystem.LowerKickerStop();
+        shooterSystem.ShooterStop();
+        shooterSystem.UpperKickerStop();
+        shooterSystem.LowerKickerStop();
     }
 
     public boolean isFinished() {

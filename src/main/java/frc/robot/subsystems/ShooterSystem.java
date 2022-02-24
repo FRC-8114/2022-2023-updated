@@ -43,18 +43,18 @@ public class ShooterSystem extends SubsystemBase {
 
     }
 
-    public static double verifyVelocity(double speed) {
+    public double verifyVelocity(double speed) {
         int sign = (int) (speed / Math.abs(speed));
         if (Math.abs(speed) > ShooterConstants.MAX_INPUT)
             return sign * ShooterConstants.MAX_INPUT;
         return speed;
     }
 
-    public static void ShooterRun(double speed) {
+    public void ShooterRun(double speed) {
         shooterController.set(speed);
     }
 
-    public static void ShooterStop() {
+    public void ShooterStop() {
         shooterController.stopMotor();
     }
 
@@ -62,27 +62,28 @@ public class ShooterSystem extends SubsystemBase {
         shooterController.set(-speed);
     }
 
-    public static void UpperKickerRun(double speed) {
+    public void UpperKickerRun(double speed) {
         upperKickerController.set(speed);
     }
     
-    public static void UpperKickerReverse(double speed) {
+    public void UpperKickerReverse(double speed) {
         upperKickerController.set(-speed);
     }
 
-    public static void UpperKickerStop() {
+    public void UpperKickerStop() {
         upperKickerController.stopMotor();
     }
     
-    public static void LowerKickerRun(double speed) {
+    public void LowerKickerRun(double speed) {
         lowerKickerController.set(speed);
     }
 
-    public static void LowerKickerReverse(double speed) {
+    public void LowerKickerReverse(double speed) {
         lowerKickerController.set(-speed);
     }
 
-    public static void LowerKickerStop() {
+    public void LowerKickerStop() {
         lowerKickerController.stopMotor();
     }
+
 }
