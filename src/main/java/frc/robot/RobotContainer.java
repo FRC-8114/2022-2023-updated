@@ -2,6 +2,8 @@ package frc.robot;
 
 import java.lang.reflect.Method;
 
+import javax.lang.model.util.ElementScanner6;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
@@ -9,16 +11,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.auto.RotateToAngle;
+import frc.robot.commands.auto.MoveXInches;
+import frc.robot.commands.shooter.*;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.FieldPositioningSystem;
 import frc.robot.subsystems.IntakeSystem;
 import frc.robot.subsystems.ShooterSystem;
+import frc.robot.subsystems.ClimberSystem;
 
 public class RobotContainer {
   public DriveSystem m_driveSystem = new DriveSystem();
   public FieldPositioningSystem positioningSystem = new FieldPositioningSystem(m_driveSystem);
   public ShooterSystem shooterSystem = new ShooterSystem();
   public IntakeSystem intakeSystem = new IntakeSystem();
+  public ClimberSystem climberSystem = new ClimberSystem();
+  public DriveSystem driveSystem = new DriveSystem();
 
   public XboxController controller = new XboxController(0);
 
@@ -27,9 +34,11 @@ public class RobotContainer {
   public double shooterRunSpeed, shooterReverseSpeed;
   public double intakeRunSpeed, intakeReverseSpeed;
   public double autoRotateSpeed;
+  public double climberRunnerRunSpeed, climberRunnerReverseSpeed;
+  public double climberDeployerRunSpeed, climberDeployerReverseSpeed;
 
-  private int oldLeftTriggerAxis;
-  private int oldRightTriggerAxis;
+  private int oldLeftTriggerAxis, oldRightTriggerAxis, oldPOV;
+  private boolean oldRightStickButton;
 
   // The container for the robot. Contains subsystems, OI devices, and commands.
   public RobotContainer() {
@@ -53,6 +62,13 @@ public class RobotContainer {
     intakeReverseSpeed = Constants.ControlConstants.INTAKE_INITIAL_REVERSE_SPEED;
 
     autoRotateSpeed = Constants.AutoConstants.AUTO_ROTATE_SPEED;
+    climberRunnerRunSpeed = Constants.ControlConstants.CLIMBER_RUNNER_INITIAL_RUN_SPEED;
+    climberRunnerReverseSpeed = Constants.ControlConstants.CLIMBER_RUNNER_INITIAL_REVERSE_SPEED;
+    climberDeployerRunSpeed = Constants.ControlConstants.CLIMBER_DEPLOYER_INITIAL_RUN_SPEED;
+    climberDeployerReverseSpeed = Constants.ControlConstants.INTAKE_INITIAL_REVERSE_SPEED;
+    oldLeftTriggerAxis = oldRightTriggerAxis = 0;
+    oldPOV = -1;
+    oldRightStickButton = false;
   }
 
   public void sendControlVariableSettersToShuffleboard() {
@@ -92,27 +108,23 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(controller, Button.kA.value)
-      .whenPressed(() -> m_driveSystem.switchMotorPorts());
+    //buttons
+    //test
+    new JoystickButton(controller, Button.kB.value)
+      .whileHeld(new AllKickerReverse(upperKickerReverseSpeed, lowerKickerReverseSpeed, shooterSystem))
+      .whenReleased(new AllKickerStop(shooterSystem));
 
-    new JoystickButton(controller, Button.kY.value)
-      .whenPressed(() -> shooterSystem.LowerKickerReverse(lowerKickerReverseSpeed))
-      .whenReleased(() -> shooterSystem.LowerKickerStop());
+    //test
+    new JoystickButton(controller, Button.kX.value)
+      .whileHeld(() -> shooterSystem.ShooterReverse(shooterReverseSpeed))
+      .whenReleased(() -> shooterSystem.ShooterStop());
 
-    new JoystickButton(controller, 5)
-      .whenPressed(() -> shooterSystem.UpperKickerRun(upperKickerRunSpeed))
-      .whenReleased(() -> shooterSystem.UpperKickerStop());
-
-    new JoystickButton(controller, 6)
-      .whenPressed(() -> intakeSystem.IntakeRunnerReverse(intakeReverseSpeed))
+    //bumper
+    //works
+    new JoystickButton(controller, Button.kLeftBumper.value)
+      .whileHeld(() -> intakeSystem.IntakeRunnerReverse(intakeReverseSpeed))
       .whenReleased(() -> intakeSystem.IntakeRunnerStop());
 
-
-    new JoystickButton(controller, Button.kA.value)
-      .whenPressed(() -> m_driveSystem.switchMotorPorts());
-
-    new JoystickButton(controller, Button.kB.value)
-      .whenPressed(() -> m_driveSystem.switchDriveSystem());
   }
 
   public XboxController getXboxController() {
@@ -124,29 +136,38 @@ public class RobotContainer {
   }
 
   public void periodic() {
-    m_driveSystem.cheesyDrive(controller.getLeftY(), controller.getRightX(), m_driveSystem.isArcade);
-    //m_driveSystem.tankDrive(controller.getLeftY(), controller.getRightY());
-
-    if(controller.getLeftTriggerAxis() == 1) {
-      intakeSystem.IntakeRunnerRun(intakeRunSpeed);
-      shooterSystem.LowerKickerRun(lowerKickerRunSpeed);
-      
-    }
-    else if (oldLeftTriggerAxis == 1) {
-      intakeSystem.IntakeRunnerStop();
-      shooterSystem.LowerKickerStop();
-
-    }
-    if(controller.getRightTriggerAxis() == 1) {
-      shooterSystem.ShooterRun(shooterRunSpeed);
-
-    }
-    else if (oldRightTriggerAxis == 1) {
-      shooterSystem.ShooterStop();
-
-    }
     oldLeftTriggerAxis = (int)controller.getLeftTriggerAxis();
     oldRightTriggerAxis = (int)controller.getRightTriggerAxis();
+    oldRightStickButton = controller.getRightStickButton();
+    oldPOV = ((int)controller.getPOV());
+    //triggers
+    //works
+    if(controller.getLeftTriggerAxis() == 1) //intake
+      intakeSystem.IntakeRunnerRun(intakeRunSpeed);
+    else if (oldLeftTriggerAxis == 1)
+      intakeSystem.IntakeRunnerStop();
+    
+    //test
+    if(controller.getRightTriggerAxis() == 1 && oldRightTriggerAxis == 0) //auto shoot
+      new TeleOpShoot(3600, .5, .5, shooterSystem, controller);
+
+    //d-pad
+    //test
+    if (controller.getPOV() == 0)
+      climberSystem.ClimberRunnerUp(climberRunnerRunSpeed);
+    else if (controller.getPOV() == 180)
+      climberSystem.ClimberRunnerDown(climberRunnerReverseSpeed);
+    else if (controller.getPOV() == 270)
+      climberSystem.ClimberDeployerUp(climberDeployerRunSpeed);
+    else if (controller.getPOV() == 90)
+      climberSystem.ClimberDeployerDown(climberDeployerReverseSpeed);
+    else if (oldPOV >= 0)
+      climberSystem.ClimberStop();
+
+    //sticks
+    //test
+    if (!oldRightStickButton && controller.getRightStickButton()) //reverse drive
+      driveSystem.switchMotorPorts();
 
   }
 
