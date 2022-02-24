@@ -8,15 +8,15 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 public class ClimberSystem extends SubsystemBase {
     final CANSparkMax climberRunController = new CANSparkMax(ClimberConstants.CLIMBER_RUN_PORT, MotorType.kBrushed);
     final CANSparkMax climberDeployController = new CANSparkMax(ClimberConstants.CLIMBER_DEPLOY_PORT,
             MotorType.kBrushless);
 
-    final RelativeEncoder climberRunControllerEncoder = climberRunController.getEncoder();
+    final WPI_TalonFX climberRunControllerEncoder = new WPI_TalonFX(ClimberConstants.CLIMBER_RUN_PORT);
     final RelativeEncoder climberDeployControllerEncoder = climberDeployController.getEncoder();
-
     // Creates the IntakeSubsystem
     public ClimberSystem() {
 
