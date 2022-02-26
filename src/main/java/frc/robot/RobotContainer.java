@@ -166,8 +166,14 @@ public class RobotContainer {
       climberSystem.ClimberDeployerUp(climberDeployerRunSpeed);
     else if (controller.getPOV() == 90)
       climberSystem.ClimberDeployerDown(climberDeployerReverseSpeed);
-    else if (oldPOV >= 0)
+    else if (controller.getPOV() < 0) {
       climberSystem.ClimberStop();
+      climberSystem.ClimberDeployerStop();
+    }
+    else if (oldPOV >= 0) {
+      climberSystem.ClimberStop();
+      climberSystem.ClimberDeployerStop();
+    }
 
     //sticks
     //test

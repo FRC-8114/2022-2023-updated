@@ -8,23 +8,21 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 public class ClimberSystem extends SubsystemBase {
-    final CANSparkMax climberRunController = new CANSparkMax(ClimberConstants.CLIMBER_RUN_PORT, MotorType.kBrushed);
+    final TalonFX climberRunController = new TalonFX(ClimberConstants.CLIMBER_RUN_PORT);
     final CANSparkMax climberDeployController = new CANSparkMax(ClimberConstants.CLIMBER_DEPLOY_PORT,
             MotorType.kBrushless);
 
-    final WPI_TalonFX climberRunControllerEncoder = new WPI_TalonFX(ClimberConstants.CLIMBER_RUN_PORT);
+    final TalonFX climberRunControllerEncoder = new TalonFX(ClimberConstants.CLIMBER_RUN_PORT);
     final RelativeEncoder climberDeployControllerEncoder = climberDeployController.getEncoder();
     // Creates the IntakeSubsystem
     public ClimberSystem() {
 
         // set to factory default and idle so we know what we're working with
-        climberRunController.restoreFactoryDefaults();
         climberRunController.setInverted(Constants.ClimberConstants.CLIMBER_RUN_INVERSED);
-        climberRunController.setIdleMode(IdleMode.kBrake);
-        climberRunController.stopMotor();
 
         climberDeployController.restoreFactoryDefaults();
         climberDeployController.setInverted(Constants.ClimberConstants.CLIMBER_DEPLOY_INVERSED);
@@ -33,15 +31,15 @@ public class ClimberSystem extends SubsystemBase {
     }
 
     public void ClimberRunnerUp(double speed) {
-        climberRunController.set(speed);
+        climberRunController.set(TalonFXControlMode.PercentOutput, speed);
     }
 
     public void ClimberRunnerDown(double speed) {
-        climberRunController.set(-speed);
+        climberRunController.set(TalonFXControlMode.PercentOutput, speed);
     }
 
     public void ClimberStop() {
-        climberRunController.stopMotor();
+        climberRunController.set(TalonFXControlMode.PercentOutput, 0);
     }
 
     public void ClimberDeployerUp(double speed) {
