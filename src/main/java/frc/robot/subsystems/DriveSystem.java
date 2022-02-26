@@ -29,7 +29,8 @@ public class DriveSystem extends SubsystemBase {
   // The robot's drive
   private static final DifferentialDrive m_drive = new DifferentialDrive(leftMotorLeader, rightMotorLeader);
 
-  public boolean steeringInversed = false;
+  // Steering direction
+  private boolean steeringInversed = Constants.DriveConstants.STEERING_INVERSED;
 
   private static DifferentialDriveOdometry m_odometry;
   private static double curvatureMaxCurvature = 1.0;
@@ -62,8 +63,6 @@ public class DriveSystem extends SubsystemBase {
     rightMotorFollower.setIdleMode(IdleMode.kCoast);
     rightMotorFollower.setInverted(DriveConstants.RIGHT_MOTORS_INVERSED);
     rightMotorFollower.follow(rightMotorLeader, false);
-
-    steeringInversed = Constants.DriveConstants.STEERING_INVERSED;
   }
 
   public static boolean back = false;
@@ -87,6 +86,7 @@ public class DriveSystem extends SubsystemBase {
 
   public void switchMotorPorts () {
     steeringInversed = !steeringInversed;
+    System.out.println(steeringInversed);
   }
 
   public void switchDriveSystem () {
@@ -130,9 +130,9 @@ public class DriveSystem extends SubsystemBase {
 
   public void arcadeDrive(double speed, double rotation) {
     if(steeringInversed) {
-      m_drive.arcadeDrive(speed, -rotation);
-    } else {
       m_drive.arcadeDrive(-speed, -rotation);
+    } else {
+      m_drive.arcadeDrive(speed, -rotation);
     }
     
   }

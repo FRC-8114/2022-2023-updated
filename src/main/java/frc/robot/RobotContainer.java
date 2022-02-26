@@ -25,7 +25,6 @@ public class RobotContainer {
   public ShooterSystem shooterSystem = new ShooterSystem();
   public IntakeSystem intakeSystem = new IntakeSystem();
   public ClimberSystem climberSystem = new ClimberSystem();
-  public DriveSystem driveSystem = new DriveSystem();
 
   public XboxController controller = new XboxController(0);
 
@@ -136,15 +135,6 @@ public class RobotContainer {
   }
 
   public void periodic() {
-    oldLeftTriggerAxis = (int)controller.getLeftTriggerAxis();
-    oldRightTriggerAxis = (int)controller.getRightTriggerAxis();
-    oldRightStickButton = controller.getRightStickButton();
-    oldPOV = ((int)controller.getPOV());
-
-    //drive
-    //m_driveSystem.cheesyDrive(controller.getLeftY(), controller.getRightX(), m_driveSystem.isArcade);
-    getDriveSystem().arcadeDrive(getXboxController().getLeftY(), getXboxController().getRightX());
-
     //triggers
     //works
     if(controller.getLeftTriggerAxis() == 1) //intake
@@ -176,9 +166,15 @@ public class RobotContainer {
     }
 
     //sticks
-    //test
+    //fix
     if (!oldRightStickButton && controller.getRightStickButton()) //reverse drive
-      driveSystem.switchMotorPorts();
+      m_driveSystem.switchMotorPorts();
+    
+    //old inputs
+    oldLeftTriggerAxis = (int)controller.getLeftTriggerAxis();
+    oldRightTriggerAxis = (int)controller.getRightTriggerAxis();
+    oldRightStickButton = controller.getRightStickButton();
+    oldPOV = ((int)controller.getPOV());
 
   }
 
