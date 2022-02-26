@@ -22,7 +22,8 @@ public class ClimberSystem extends SubsystemBase {
     public ClimberSystem() {
 
         // set to factory default and idle so we know what we're working with
-        climberRunController.setInverted(Constants.ClimberConstants.CLIMBER_RUN_INVERSED);
+        climberRunController.configFactoryDefault();
+        climberRunController.setInverted(Constants.ClimberConstants.CLIMBER_DEPLOY_INVERSED);
 
         climberDeployController.restoreFactoryDefaults();
         climberDeployController.setInverted(Constants.ClimberConstants.CLIMBER_DEPLOY_INVERSED);
