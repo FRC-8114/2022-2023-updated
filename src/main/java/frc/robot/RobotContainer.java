@@ -140,6 +140,11 @@ public class RobotContainer {
     oldRightTriggerAxis = (int)controller.getRightTriggerAxis();
     oldRightStickButton = controller.getRightStickButton();
     oldPOV = ((int)controller.getPOV());
+
+    //drive
+    //m_driveSystem.cheesyDrive(controller.getLeftY(), controller.getRightX(), m_driveSystem.isArcade);
+    getDriveSystem().arcadeDrive(getXboxController().getLeftY(), getXboxController().getRightX());
+
     //triggers
     //works
     if(controller.getLeftTriggerAxis() == 1) //intake
