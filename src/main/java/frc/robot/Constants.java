@@ -25,8 +25,8 @@ public final class Constants {
     public static final boolean UPPER_KICKER_INVERSED = false;
     public static final boolean LOWER_KICKER_INVERSED = false;
 
-    public static final double SHOOTER_DISTANCE_PER_PULSE = 1;
-    public static final double VELOCITY_CONVERSION_FACTOR = 1;
+    public static final double SHOOTER_DISTANCE_PER_PULSE = 1/42 * Math.PI * 5;
+    public static final double VELOCITY_CONVERSION_FACTOR = 1/42 * Math.PI * 5;
     public static final double ENCODER_DISTANCE_PER_PULSE = 0;
     public static final double MAX_INPUT = 0;
   }
@@ -43,6 +43,7 @@ public final class Constants {
 
     public static final boolean CLIMBER_RUN_INVERSED = false;
     public static final boolean CLIMBER_DEPLOY_INVERSED = false;
+    public static final double CLIMBER_DEPLOY_CONVERSTION_FACTOR = 0;
   }
 
   public static final class PositioningConstants {

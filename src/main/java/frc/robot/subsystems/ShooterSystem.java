@@ -21,7 +21,7 @@ public class ShooterSystem extends SubsystemBase {
 
     // Shooter motor controller encoders
     final RelativeEncoder shooterControllerEncoder = shooterController.getEncoder();
-	public static final double ShooterRPM = 0;
+	public static double ShooterRPM = 0;
 
     // Creates the ShooterSubsystem
     public ShooterSystem() {
@@ -40,7 +40,7 @@ public class ShooterSystem extends SubsystemBase {
     }
 
     public void periodic() {
-
+        ShooterRPM = shooterControllerEncoder.getVelocity();
     }
 
     public double verifyVelocity(double speed) {

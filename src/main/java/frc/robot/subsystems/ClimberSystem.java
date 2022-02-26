@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.AnalogPotentiometer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
@@ -19,6 +20,8 @@ public class ClimberSystem extends SubsystemBase {
 
     final TalonFX climberRunControllerEncoder = new TalonFX(ClimberConstants.CLIMBER_RUN_PORT);
     final RelativeEncoder climberDeployControllerEncoder = climberDeployController.getEncoder();
+
+    final AnalogPotentiometer potentiometer = new AnalogPotentiometer(0);
     // Creates the IntakeSubsystem
     public ClimberSystem() {
 
@@ -26,6 +29,8 @@ public class ClimberSystem extends SubsystemBase {
         climberRunController.configFactoryDefault();
         climberRunController.setInverted(Constants.ClimberConstants.CLIMBER_DEPLOY_INVERSED);
         climberRunController.setNeutralMode(NeutralMode.Brake);
+
+        climberDeployControllerEncoder.setPositionConversionFactor(Constants.ClimberConstants.CLIMBER_DEPLOY_CONVERSTION_FACTOR);
 
         climberDeployController.restoreFactoryDefaults();
         climberDeployController.setInverted(Constants.ClimberConstants.CLIMBER_DEPLOY_INVERSED);
@@ -55,5 +60,13 @@ public class ClimberSystem extends SubsystemBase {
 
     public void ClimberDeployerStop() {
         climberDeployController.stopMotor();
+    }
+
+    public double getPotentiometerAngle() {
+        return potentiometer.get();
+    }
+
+    public double getDartPosition() {
+        return 6 + getPotentiometerAngle() * (6/4.4);
     }
 }
