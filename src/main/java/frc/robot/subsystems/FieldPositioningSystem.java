@@ -30,10 +30,6 @@ public class FieldPositioningSystem extends SubsystemBase {
     public void initializePosition(double[] position, double angle) {
         navx = new AHRS(SerialPort.Port.kUSB);
         navx.calibrate();
-<<<<<<< HEAD
-        
-=======
->>>>>>> c19692d (minor changes)
         this.position = position;
         this.angle = navx.getYaw();
         
