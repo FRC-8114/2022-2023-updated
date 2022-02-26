@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
@@ -24,6 +25,7 @@ public class ClimberSystem extends SubsystemBase {
         // set to factory default and idle so we know what we're working with
         climberRunController.configFactoryDefault();
         climberRunController.setInverted(Constants.ClimberConstants.CLIMBER_DEPLOY_INVERSED);
+        climberRunController.setNeutralMode(NeutralMode.Brake);
 
         climberDeployController.restoreFactoryDefaults();
         climberDeployController.setInverted(Constants.ClimberConstants.CLIMBER_DEPLOY_INVERSED);
