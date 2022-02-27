@@ -35,12 +35,15 @@ public class ShooterSystem extends SubsystemBase {
         upperKickerController.setIdleMode(IdleMode.kCoast);
         upperKickerController.setInverted(Constants.ShooterConstants.UPPER_KICKER_INVERSED);
 
-        upperKickerController.setIdleMode(IdleMode.kBrake);
-        upperKickerController.setInverted(Constants.ShooterConstants.LOWER_KICKER_INVERSED);
+        lowerKickerController.setIdleMode(IdleMode.kBrake);
+        lowerKickerController.setInverted(Constants.ShooterConstants.LOWER_KICKER_INVERSED);
+        
     }
+
 
     public void periodic() {
         ShooterRPM = shooterControllerEncoder.getVelocity();
+
     }
 
     public double verifyVelocity(double speed) {
@@ -75,11 +78,11 @@ public class ShooterSystem extends SubsystemBase {
     }
     
     public void LowerKickerRun(double speed) {
-        lowerKickerController.set(speed);
+        lowerKickerController.set(-speed);
     }
 
     public void LowerKickerReverse(double speed) {
-        lowerKickerController.set(-speed);
+        lowerKickerController.set(speed);
     }
 
     public void LowerKickerStop() {
