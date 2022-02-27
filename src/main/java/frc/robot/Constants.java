@@ -23,7 +23,7 @@ public final class Constants {
 
     public static final boolean SHOOTER_INVERSED = false;
     public static final boolean UPPER_KICKER_INVERSED = false;
-    public static final boolean LOWER_KICKER_INVERSED = false;
+    public static final boolean LOWER_KICKER_INVERSED = true;
 
     public static final double SHOOTER_DISTANCE_PER_PULSE = 1/42 * Math.PI * 5;
     public static final double VELOCITY_CONVERSION_FACTOR = 1/42 * Math.PI * 5;
@@ -55,18 +55,18 @@ public final class Constants {
   }
 
   public static final class ControlConstants {
-    public static final double LOWER_KICKER_INITIAL_RUN_SPEED = .15;
-    public static final double LOWER_KICKER_INITIAL_REVERSE_SPEED = .15;
-    public static final double UPPER_KICKER_INITIAL_RUN_SPEED = .25;
-    public static final double UPPER_KICKER_INITIAL_REVERSE_SPEED = .25;
+    public static final double LOWER_KICKER_INITIAL_RUN_SPEED = .5;
+    public static final double LOWER_KICKER_INITIAL_REVERSE_SPEED = .75;
+    public static final double UPPER_KICKER_INITIAL_RUN_SPEED = .35;
+    public static final double UPPER_KICKER_INITIAL_REVERSE_SPEED = .5;
     public static final double SHOOTER_INITIAL_RUN_SPEED = .8;
     public static final double SHOOTER_INITIAL_REVERSE_SPEED = .25;
     public static final double INTAKE_INITIAL_RUN_SPEED = .25;
     public static final double INTAKE_INITIAL_REVERSE_SPEED = .25;
-    public static final double CLIMBER_RUNNER_INITIAL_RUN_SPEED = .25;
-    public static final double CLIMBER_RUNNER_INITIAL_REVERSE_SPEED = .25;
-    public static final double CLIMBER_DEPLOYER_INITIAL_RUN_SPEED = .25;
-    public static final double CLIMBER_DEPLOYER_INITIAL_REVERSE_SPEED = .25;
+    public static final double CLIMBER_RUNNER_INITIAL_RUN_SPEED = .9;
+    public static final double CLIMBER_RUNNER_INITIAL_REVERSE_SPEED = .2;
+    public static final double CLIMBER_DEPLOYER_INITIAL_RUN_SPEED = .1;
+    public static final double CLIMBER_DEPLOYER_INITIAL_REVERSE_SPEED = .1;
   }
 
   public static final class AutoConstants {
