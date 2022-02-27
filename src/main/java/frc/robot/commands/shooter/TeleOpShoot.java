@@ -8,6 +8,7 @@ public class TeleOpShoot extends CommandBase {
     private double desiredRPM, lowerKickerSpeed, upperKickerSpeed;
     private ShooterSystem shooterSystem;
     private XboxController controller;
+
     public TeleOpShoot(double desiredRPM, double lowerKickerSpeed, double upperKickerSpeed, ShooterSystem shooterSystem, XboxController controller) {
         this.desiredRPM = desiredRPM;
         this.lowerKickerSpeed = lowerKickerSpeed;
@@ -38,9 +39,7 @@ public class TeleOpShoot extends CommandBase {
     }
 
     public boolean isFinished() {
-        if (controller.getRightTriggerAxis() != 1)
-            return true;
-        return false;
+        return true;
 
     }
     

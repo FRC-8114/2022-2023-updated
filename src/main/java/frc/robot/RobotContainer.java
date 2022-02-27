@@ -108,18 +108,25 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //buttons
-    //test
-    new JoystickButton(controller, Button.kB.value)
-      .whileHeld(new AllKickerReverse(upperKickerReverseSpeed, lowerKickerReverseSpeed, shooterSystem))
-      .whenReleased(new AllKickerStop(shooterSystem));
-
-    //test
+    //lower kicker reverse (A)
+    new JoystickButton(controller, Button.kA.value)
+      .whileHeld(() -> shooterSystem.LowerKickerReverse(lowerKickerReverseSpeed))
+      .whenReleased(() -> shooterSystem.LowerKickerStop());
+    //all kicker reverse (B)
+    new JoystickButton(controller, Button.kB.value) 
+      .whileHeld(() -> new AllKickerReverse(upperKickerReverseSpeed, lowerKickerReverseSpeed, shooterSystem).schedule())
+      .whenReleased(() -> new AllKickerStop(shooterSystem).schedule());
+    //shooter reverse (X)
     new JoystickButton(controller, Button.kX.value)
       .whileHeld(() -> shooterSystem.ShooterReverse(shooterReverseSpeed))
       .whenReleased(() -> shooterSystem.ShooterStop());
+    //upper kicker reverse (Y)
+    new JoystickButton(controller, Button.kY.value)
+      .whileHeld(() -> shooterSystem.UpperKickerReverse(upperKickerReverseSpeed))
+      .whenReleased(() -> shooterSystem.UpperKickerStop());
 
-    //bumper
-    //works
+    //bumpers
+    //intake reverse (LB)
     new JoystickButton(controller, Button.kLeftBumper.value)
       .whileHeld(() -> intakeSystem.IntakeRunnerReverse(intakeReverseSpeed))
       .whenReleased(() -> intakeSystem.IntakeRunnerStop());
@@ -136,38 +143,51 @@ public class RobotContainer {
 
   public void periodic() {
     //triggers
-    //works
-    if(controller.getLeftTriggerAxis() == 1) //intake
+    //intake and kickers (LT)
+    if(controller.getLeftTriggerAxis() == 1) {
       intakeSystem.IntakeRunnerRun(intakeRunSpeed);
-    else if (oldLeftTriggerAxis == 1)
+      shooterSystem.UpperKickerRun(upperKickerRunSpeed);
+      shooterSystem.LowerKickerReverse(lowerKickerReverseSpeed);
+
+    }
+    else if (oldLeftTriggerAxis == 1) {
       intakeSystem.IntakeRunnerStop();
-    
-    //test
-    if(controller.getRightTriggerAxis() == 1 && oldRightTriggerAxis == 0) //auto shoot
-      new TeleOpShoot(3600, .5, .5, shooterSystem, controller);
+      shooterSystem.UpperKickerStop();
+      shooterSystem.LowerKickerStop();
+
+    }
+    //auto shoot (RT)
+    if(controller.getRightTriggerAxis() == 1)
+      new TeleOpShoot(1000, lowerKickerRunSpeed, upperKickerRunSpeed, shooterSystem, controller).schedule();
+    else if (controller.getRightTriggerAxis() == 0 && oldRightTriggerAxis == 1) {
+      shooterSystem.ShooterStop();
+      shooterSystem.LowerKickerStop();
+      shooterSystem.UpperKickerStop();
+
+    }
 
     //d-pad
-    //test
+    //climber runner up (Up)
     if (controller.getPOV() == 0)
       climberSystem.ClimberRunnerUp(climberRunnerRunSpeed);
+    //climber runner down (Down)
     else if (controller.getPOV() == 180)
       climberSystem.ClimberRunnerDown(climberRunnerReverseSpeed);
+    //climber deployer up (Left)
     else if (controller.getPOV() == 270)
       climberSystem.ClimberDeployerUp(climberDeployerRunSpeed);
+    //climber deployer down (Right)
     else if (controller.getPOV() == 90)
       climberSystem.ClimberDeployerDown(climberDeployerReverseSpeed);
-    else if (controller.getPOV() < 0) {
+    else if (controller.getPOV() < 0 && oldPOV >= 0) {
       climberSystem.ClimberStop();
       climberSystem.ClimberDeployerStop();
-    }
-    else if (oldPOV >= 0) {
-      climberSystem.ClimberStop();
-      climberSystem.ClimberDeployerStop();
+
     }
 
     //sticks
-    //fix
-    if (!oldRightStickButton && controller.getRightStickButton()) //reverse drive
+    //reverse drive (RS)
+    if (!oldRightStickButton && controller.getRightStickButton())
       m_driveSystem.switchMotorPorts();
     
     //old inputs
