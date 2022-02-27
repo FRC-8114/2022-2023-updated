@@ -43,7 +43,7 @@ public class ClimberSystem extends SubsystemBase {
     }
 
     public void ClimberRunnerDown(double speed) {
-        climberRunController.set(TalonFXControlMode.PercentOutput, speed);
+        climberRunController.set(TalonFXControlMode.PercentOutput, -speed);
     }
 
     public void ClimberStop() {
