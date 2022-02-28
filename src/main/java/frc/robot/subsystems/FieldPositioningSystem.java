@@ -97,4 +97,35 @@ public class FieldPositioningSystem extends SubsystemBase {
         
         return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
     }
+
+    /**
+     * Returns the distance along the x-axis from a given position 
+     * to the robot
+     * 
+     * @param pos   the position to check distance from
+     * @return      the x distance from the given position
+     */
+    public double xDistanceFrom(double[] distancePos) {
+        return position[0] - distancePos[0];
+    }
+
+    /**
+     * Returns the distance along the y-axis from a given position 
+     * to the robot
+     * 
+     * @param pos   the position to check distance from
+     * @return      the y distance from the given position
+     */
+    public double yDistanceFrom(double[] distancePos) {
+        return position[1] - distancePos[1];
+    }
+
+    public double angleToPoint(double[] anglePos) {
+        if(xDistanceFrom(anglePos) != 0) {
+            return Math.toDegrees(Math.atan(yDistanceFrom(anglePos) / xDistanceFrom(anglePos)));
+        } else if(yDistanceFrom(anglePos) > 0) {
+            return 90;
+        }
+        return -90;
+    }
 }
