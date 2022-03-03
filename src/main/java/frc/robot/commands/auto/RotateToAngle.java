@@ -25,34 +25,32 @@ public class RotateToAngle extends CommandBase {
     }
 
     public void initialize() {
-        marginOfError = 0.5;
+        marginOfError = 0.25;
         if(velocity > 0.2) {
             marginOfError *= 2;
         }
         
         maxDriveInput = NetworkTableInstance.getDefault().getTable("Control Variables").getEntry("maxDriveInput");
         formerMaxDriveInput = maxDriveInput.getDouble(Constants.DriveConstants.INITIAL_MAX_INPUT);
-        maxDriveInput.forceSetDouble(0.05);
-        driveSystem.setMaxInput(0.05);
+    
+        SmartDashboard.putNumber("desiredAngle", desiredAngle);
     }
 
     public void execute() {
         double angleDifference = desiredAngle - fieldPositioningSystem.angle;
 
-        if((angleDifference < 0 && Math.abs(angleDifference) < 180) || (angleDifference > 0 && Math.abs(angleDifference) > 180)) {
-            driveSystem.tankDrive(-0.8, 0.8);
-        } else {
-            driveSystem.tankDrive(0.8, -0.8);
-        }
+        driveSystem.tankDrive(-velocity, velocity);
+
+        SmartDashboard.putNumber("fieldPositioningAngle", fieldPositioningSystem.angle);
+        SmartDashboard.putNumber("diff", Math.abs(desiredAngle - fieldPositioningSystem.angle));
+        SmartDashboard.putBoolean("done", Math.abs(desiredAngle - fieldPositioningSystem.angle) <= marginOfError);
     }
 
     public void end() {
         driveSystem.arcadeDrive(0,0);
-        maxDriveInput.forceSetDouble(formerMaxDriveInput);
-        driveSystem.setMaxInput(formerMaxDriveInput);
     }
 
     public boolean isFinished() {
-        return Math.abs(desiredAngle - fieldPositioningSystem.angle) <= marginOfError;
+        return Math.abs(Math.abs(desiredAngle) - Math.abs(fieldPositioningSystem.angle)) <= marginOfError;
     }
 }
