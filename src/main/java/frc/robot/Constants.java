@@ -2,6 +2,8 @@ package frc.robot;
 
 public final class Constants {
   public static final double INCHES_TO_METERS = 0.0254;
+  public static final double RPM_TO_VOLTAGE = 0;
+  public static final double RPM_TO_VOLTAGE_CONSTANT = 0;
 
   public static final class DriveConstants {
     public static final int LEFT_MOTOR_1_PORT = 1;
@@ -58,10 +60,10 @@ public final class Constants {
     public static final double LOWER_KICKER_INITIAL_RUN_SPEED = .5;
     public static final double LOWER_KICKER_INITIAL_REVERSE_SPEED = .75;
     public static final double UPPER_KICKER_INITIAL_RUN_SPEED = .35;
-    public static final double UPPER_KICKER_INITIAL_REVERSE_SPEED = .5;
+    public static final double UPPER_KICKER_INITIAL_REVERSE_SPEED = .35;
     public static final double SHOOTER_INITIAL_RUN_SPEED = .8;
     public static final double SHOOTER_INITIAL_REVERSE_SPEED = .25;
-    public static final double INTAKE_INITIAL_RUN_SPEED = .25;
+    public static final double INTAKE_INITIAL_RUN_SPEED = .4;
     public static final double INTAKE_INITIAL_REVERSE_SPEED = .25;
     public static final double CLIMBER_RUNNER_INITIAL_RUN_SPEED = .9;
     public static final double CLIMBER_RUNNER_INITIAL_REVERSE_SPEED = .2;
