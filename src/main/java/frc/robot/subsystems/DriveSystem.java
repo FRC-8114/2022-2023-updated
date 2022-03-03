@@ -140,4 +140,18 @@ public class DriveSystem extends SubsystemBase {
   public void setMaxInput(Double input) {
     m_drive.setMaxOutput(input);
   }
+
+  public void overwriteBrake(boolean breakMode) {
+    if(breakMode) {
+      leftMotorLeader.setIdleMode(IdleMode.kBrake);
+      leftMotorFollower.setIdleMode(IdleMode.kBrake);
+      rightMotorLeader.setIdleMode(IdleMode.kBrake);
+      rightMotorFollower.setIdleMode(IdleMode.kBrake);
+    } else {
+      leftMotorLeader.setIdleMode(IdleMode.kCoast);
+      leftMotorFollower.setIdleMode(IdleMode.kCoast);
+      rightMotorLeader.setIdleMode(IdleMode.kCoast);
+      rightMotorFollower.setIdleMode(IdleMode.kCoast);
+    }
+  }
 }
