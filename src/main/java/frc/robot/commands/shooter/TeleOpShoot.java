@@ -1,40 +1,34 @@
 package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.ShooterSystem;
 
 public class TeleOpShoot extends CommandBase {
     private double desiredRPM, lowerKickerSpeed, upperKickerSpeed;
     private ShooterSystem shooterSystem;
-    private XboxController controller;
 
-    public TeleOpShoot(double desiredRPM, double lowerKickerSpeed, double upperKickerSpeed, ShooterSystem shooterSystem, XboxController controller) {
+    public TeleOpShoot(double desiredRPM, double lowerKickerSpeed, double upperKickerSpeed, ShooterSystem shooterSystem) {
         this.desiredRPM = desiredRPM;
         this.lowerKickerSpeed = lowerKickerSpeed;
         this.upperKickerSpeed = upperKickerSpeed;
         this.shooterSystem = shooterSystem;
-        this.controller = controller;
 
     }
     public void initialize() {
 
     }
     public void execute() {
-        shooterSystem.ShooterRun(desiredRPM * 1.1);
-        if (shooterSystem.ShooterRPM >= desiredRPM) {
+        shooterSystem.ShooterRunVoltage(desiredRPM * Constants.RPM_TO_VOLTAGE + Constants.RPM_TO_VOLTAGE_CONSTANT);
+        if (shooterSystem.ShooterRPM >= .95 * desiredRPM) {
             shooterSystem.LowerKickerRun(lowerKickerSpeed);
             shooterSystem.UpperKickerRun(upperKickerSpeed);
 
         }
             
-
     }
 
     public void end() {
-        shooterSystem.ShooterStop();
-        shooterSystem.UpperKickerStop();
-        shooterSystem.LowerKickerStop();
 
     }
 

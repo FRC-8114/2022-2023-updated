@@ -2,6 +2,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkMax;
@@ -22,12 +23,14 @@ public class ShooterSystem extends SubsystemBase {
     // Shooter motor controller encoders
     final RelativeEncoder shooterControllerEncoder = shooterController.getEncoder();
 	public static double ShooterRPM = 0;
+    public static double ShooterVoltage = 0;
 
     // Creates the ShooterSubsystem
     public ShooterSystem() {
         shooterController.restoreFactoryDefaults();
         shooterController.setIdleMode(IdleMode.kCoast);
         shooterController.setInverted(Constants.ShooterConstants.SHOOTER_INVERSED);
+        shooterController.setVoltage(12);
 
         shooterControllerEncoder.setPositionConversionFactor(ShooterConstants.SHOOTER_DISTANCE_PER_PULSE);
         shooterControllerEncoder.setVelocityConversionFactor(ShooterConstants.VELOCITY_CONVERSION_FACTOR);
@@ -43,6 +46,9 @@ public class ShooterSystem extends SubsystemBase {
 
     public void periodic() {
         ShooterRPM = shooterControllerEncoder.getVelocity();
+        ShooterVoltage = shooterController.getBusVoltage();
+        SmartDashboard.putNumber("rpm", ShooterRPM);
+        SmartDashboard.putNumber("voltage", ShooterVoltage);
 
     }
 
@@ -57,8 +63,19 @@ public class ShooterSystem extends SubsystemBase {
         shooterController.set(speed);
     }
 
+    public void ShooterRunVoltage(double voltage) {
+        shooterController.setVoltage(voltage);
+        shooterController.set(1);
+    }
+
+    public void ShooterVoltage(double voltage) {
+        shooterController.setVoltage(voltage);
+    }
+
     public void ShooterStop() {
         shooterController.stopMotor();
+        shooterController.setVoltage(12);
+
     }
 
     public void ShooterReverse(double speed) {

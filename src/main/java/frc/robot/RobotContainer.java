@@ -7,6 +7,7 @@ import javax.lang.model.util.ElementScanner6;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -120,10 +121,11 @@ public class RobotContainer {
     new JoystickButton(controller, Button.kX.value)
       .whileHeld(() -> shooterSystem.ShooterReverse(shooterReverseSpeed))
       .whenReleased(() -> shooterSystem.ShooterStop());
-    //upper kicker reverse (Y)
+    //shooter (Y)
     new JoystickButton(controller, Button.kY.value)
-      .whileHeld(() -> shooterSystem.UpperKickerReverse(upperKickerReverseSpeed))
-      .whenReleased(() -> shooterSystem.UpperKickerStop());
+      .whenPressed(() -> shooterSystem.ShooterRunVoltage(6))
+      .whenReleased(() -> shooterSystem.ShooterStop())
+      .whenReleased(() -> shooterSystem.ShooterVoltage(12));
 
     //bumpers
     //intake reverse (LB)
@@ -158,8 +160,8 @@ public class RobotContainer {
     }
     //auto shoot (RT)
     if(controller.getRightTriggerAxis() == 1)
-      new TeleOpShoot(1000, lowerKickerRunSpeed, upperKickerRunSpeed, shooterSystem, controller).schedule();
-    else if (controller.getRightTriggerAxis() == 0 && oldRightTriggerAxis == 1) {
+      new TeleOpShoot(4000, lowerKickerRunSpeed, upperKickerRunSpeed, shooterSystem).schedule();
+    else if (oldRightTriggerAxis == 1) {
       shooterSystem.ShooterStop();
       shooterSystem.LowerKickerStop();
       shooterSystem.UpperKickerStop();
