@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotUtils;
@@ -41,6 +41,32 @@ public class FieldPositioningSystem extends SubsystemBase {
      */
     public double rotationsToDistance(double rotations) {
         return rotations * Constants.PositioningConstants.GEAR_RATIO * Constants.PositioningConstants.WHEEL_CIRCUMFRENCE;
+    }
+
+    /**
+     * Sets the robot's location to 0,0 and the angle to zero
+     */
+    public void zeroPosition() {
+        overwriteLocation(new double[] {0,0});
+        overwriteAngle();
+    }
+
+    /**
+     * Sets the position of the robot to be the given position
+     * 
+     * @param position
+     */
+    public void overwriteLocation(double[] position) {
+        this.position = position;
+    }
+
+    /**
+     * Zeros the yaw angle of the navx
+     * 
+     * @param position
+     */
+    public void overwriteAngle() {
+        navx.zeroYaw();
     }
 
     /**
@@ -121,11 +147,21 @@ public class FieldPositioningSystem extends SubsystemBase {
     }
 
     public double angleToPoint(double[] anglePos) {
-        if(xDistanceFrom(anglePos) != 0) {
+        SmartDashboard.putNumber("tan", yDistanceFrom(anglePos) / xDistanceFrom(anglePos));
+        SmartDashboard.putNumber("arctan", Math.atan(yDistanceFrom(anglePos) / xDistanceFrom(anglePos)));
+
+        if(xDistanceFrom(anglePos) != 0 && yDistanceFrom(anglePos) != 0) {
             return Math.toDegrees(Math.atan(yDistanceFrom(anglePos) / xDistanceFrom(anglePos)));
-        } else if(yDistanceFrom(anglePos) > 0) {
-            return 90;
+        } else if(xDistanceFrom(anglePos) == 0) {
+            if(yDistanceFrom(anglePos) > 0) {
+                return 90;
+            }
+            return -90;
+        } else {
+            if(xDistanceFrom(anglePos) > 0) {
+                return 0;
+            }
+            return 180;
         }
-        return -90;
     }
 }

@@ -10,8 +10,10 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.auto.RotateToAngle;
+import frc.robot.commands.auto.MoveToPosition;
 import frc.robot.commands.auto.MoveXInches;
 import frc.robot.commands.shooter.*;
 import frc.robot.subsystems.DriveSystem;
@@ -206,7 +208,11 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new RotateToAngle(m_driveSystem, positioningSystem, 90, autoRotateSpeed);
+    positioningSystem.zeroPosition();
+    //return new MoveToPosition(m_driveSystem, positioningSystem, new double[] {initialPos[0]+12,initialPos[1]+12});
+    return new SequentialCommandGroup(
+      new MoveToPosition(m_driveSystem, positioningSystem, new double[] {-36,0}),
+      new MoveToPosition(m_driveSystem, positioningSystem, new double[] {12,0}));
   }
 
   /**
