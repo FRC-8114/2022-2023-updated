@@ -25,12 +25,12 @@ public class AutoIntake extends CommandBase {
     }
     public void execute() {
         if (timer.get() < 4) {
-            intakeSystem.IntakeRunnerRun(intakeRunSpeed);
+            intakeSystem.IntakeRun(intakeRunSpeed);
             shooterSystem.UpperKickerRun(upperKickerRunSpeed);
 
         }
         else {
-            intakeSystem.IntakeRunnerStop();
+            intakeSystem.IntakeStop();
             shooterSystem.UpperKickerStop();
 
         }
