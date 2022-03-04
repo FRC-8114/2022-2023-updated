@@ -20,16 +20,16 @@ public class DriveSystem extends SubsystemBase {
   public static CANSparkMax rightMotorLeader = new CANSparkMax(DriveConstants.RIGHT_MOTOR_1_PORT, MotorType.kBrushless);
   public static CANSparkMax rightMotorFollower = new CANSparkMax(DriveConstants.RIGHT_MOTOR_2_PORT, MotorType.kBrushless);
 
-  // The encoders
+  // Creates and initializes the encoders
   public final static RelativeEncoder leftLeaderEncoder = leftMotorLeader.getEncoder();
   public final static RelativeEncoder leftFollowerEncoder = leftMotorFollower.getEncoder();
   public final static RelativeEncoder rightLeaderEncoder = rightMotorLeader.getEncoder();
   public final static RelativeEncoder rightFollowerEncoder = rightMotorFollower.getEncoder();
 
-  // The robot's drive
+  // Creates a DifferentialDrive object
   private static final DifferentialDrive m_drive = new DifferentialDrive(leftMotorLeader, rightMotorLeader);
 
-  // Steering direction
+  // Measures which side of the robot is considered front
   private boolean steeringInversed = Constants.DriveConstants.STEERING_INVERSED;
 
   private static DifferentialDriveOdometry m_odometry;
@@ -37,8 +37,11 @@ public class DriveSystem extends SubsystemBase {
   private static double arcadeMaxCurvature;
   private double[] currentSpeeds = new double[2];
 
+  public static boolean back = false;
+  public static boolean isArcade = false;
+
   /** Creates a new DriveSubsystem. */
-  public DriveSystem() {
+  public DriveSystem () {
   
     /* Initialize the drivetrain motors */
 
@@ -65,47 +68,32 @@ public class DriveSystem extends SubsystemBase {
     rightMotorFollower.follow(rightMotorLeader, false);
   }
 
-  public static boolean back = false;
-  public static boolean isArcade = false;
-
-  public RelativeEncoder getEncoder(String encoderName) {
-    switch (encoderName) {
-      case "leftLeaderEncoder": return leftLeaderEncoder;
-      case "leftFollowerEncoder": return leftFollowerEncoder;
-      case "rightLeaderEncoder": return rightLeaderEncoder;
-      case "rightFollowerEncoder": return rightFollowerEncoder;
-      default: return null;
-    }
-  }
-
-  public void invertMotors(boolean reversed) {
-    rightMotorLeader.setInverted(reversed);
-    leftMotorLeader.setInverted(reversed);
-    back = reversed;
-  }
-
+  // Switches which side of the robot is considered front
   public void switchMotorPorts () {
     steeringInversed = !steeringInversed;
-    System.out.println(steeringInversed);
   }
 
+  // For use in cheesy drive, will switch back and forth from curvature drive to arcade drive
   public void switchDriveSystem () {
     isArcade = !isArcade;
   }
 
-  public double getLeftDistance() {
+  // Will return the average distance from the encoders on the left side of the drivetrain
+  public double getLeftDistance () {
     return (leftLeaderEncoder.getPosition() + leftFollowerEncoder.getPosition()) / 2;
   }
 
-  public double getRightDistance() {
+  // Will return the average distance from the encoders on the right side of the drivetrain
+  public double getRightDistance () {
     return (rightLeaderEncoder.getPosition() + rightFollowerEncoder.getPosition()) / 2;
   }
 
-  public double getTotalDistance() {
+  // Will return the average distance from the left and right sides
+  public double getTotalDistance () {
     return (getLeftDistance() + getRightDistance()) / 2;
   }
 
-  public static void cheesyDrive(double speed, double curvature, boolean isArcade) {
+  public static void cheesyDrive (double speed, double curvature, boolean isArcade) {
     if (back) {
       curvature = curvature;
     }
@@ -118,36 +106,43 @@ public class DriveSystem extends SubsystemBase {
       m_drive.arcadeDrive(speed, -curvature);
     }
   }
+
   /**
    * Drives the robot using tank drive controls.
    *
    * @param fwd the commanded forward movement
    * @param rot the commanded rotation
    */
-  public void tankDrive(double leftSpeed, double rightSpeed) {
+  public void tankDrive (double leftSpeed, double rightSpeed) {
     m_drive.tankDrive(leftSpeed, rightSpeed);
   }
 
-  public void arcadeDrive(double speed, double rotation) {
+  // Drives the robot using arcade drive controls
+  public void arcadeDrive (double speed, double rotation) {
     if(steeringInversed) {
       m_drive.arcadeDrive(-speed, -rotation);
-    } else {
-      m_drive.arcadeDrive(speed, -rotation);
     }
     
+    else {
+      m_drive.arcadeDrive(speed, -rotation);
+    }
   }
 
-  public void setMaxInput(Double input) {
+  // Sets the maximum input accepted by the drivetrain to be a certain number
+  public void setMaxInput (Double input) {
     m_drive.setMaxOutput(input);
   }
 
-  public void overwriteBrake(boolean breakMode) {
-    if(breakMode) {
+  // Switches the drivetrain between brake mode and coast mode 
+  public void overwriteBrake (boolean brakeMode) {
+    if (brakeMode) {
       leftMotorLeader.setIdleMode(IdleMode.kBrake);
       leftMotorFollower.setIdleMode(IdleMode.kBrake);
       rightMotorLeader.setIdleMode(IdleMode.kBrake);
       rightMotorFollower.setIdleMode(IdleMode.kBrake);
-    } else {
+    }
+    
+    else {
       leftMotorLeader.setIdleMode(IdleMode.kCoast);
       leftMotorFollower.setIdleMode(IdleMode.kCoast);
       rightMotorLeader.setIdleMode(IdleMode.kCoast);
