@@ -133,8 +133,8 @@ public class RobotContainer {
     //bumpers
     //intake reverse (LB)
     new JoystickButton(controller, Button.kLeftBumper.value)
-      .whileHeld(() -> intakeSystem.IntakeRunnerReverse(intakeReverseSpeed))
-      .whenReleased(() -> intakeSystem.IntakeRunnerStop());
+      .whileHeld(() -> intakeSystem.IntakeReverse(intakeReverseSpeed))
+      .whenReleased(() -> intakeSystem.IntakeStop());
 
   }
 
@@ -150,13 +150,13 @@ public class RobotContainer {
     //triggers
     //intake and kickers (LT)
     if(controller.getLeftTriggerAxis() == 1) {
-      intakeSystem.IntakeRunnerRun(intakeRunSpeed);
+      intakeSystem.IntakeRun(intakeRunSpeed);
       shooterSystem.UpperKickerRun(upperKickerRunSpeed);
       shooterSystem.LowerKickerReverse(lowerKickerReverseSpeed);
 
     }
     else if (oldLeftTriggerAxis == 1) {
-      intakeSystem.IntakeRunnerStop();
+      intakeSystem.IntakeStop();
       shooterSystem.UpperKickerStop();
       shooterSystem.LowerKickerStop();
 

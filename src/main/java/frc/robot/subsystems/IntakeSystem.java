@@ -1,5 +1,4 @@
 package frc.robot.subsystems;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkMax;
@@ -11,31 +10,44 @@ import frc.robot.Constants;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSystem extends SubsystemBase {
-    //the intake motor controller for running and for deploying
-    final static CANSparkMax intakeRunController = new CANSparkMax(IntakeConstants.INTAKE_RUN_PORT, MotorType.kBrushless);
+    // Creates the intake motor controller
+    final static CANSparkMax intakeController = new CANSparkMax(IntakeConstants.INTAKE_RUN_PORT, MotorType.kBrushless);
 
-    //the intake motor controller encoders
-    final RelativeEncoder intakeRunControllerEncoder = intakeRunController.getEncoder();
+    // Creates the intake motor controller encoder
+    final RelativeEncoder intakeControllerEncoder = intakeController.getEncoder();
 
     //Creates the IntakeSubsystem
-    public IntakeSystem() {
+    public IntakeSystem () {
 
         //set to factory default and idle so we know what we're working with 
-        intakeRunController.restoreFactoryDefaults();
-        intakeRunController.setIdleMode(IdleMode.kCoast);
-        intakeRunController.setInverted(Constants.IntakeConstants.INTAKE_RUN_INVERSED);
+        intakeController.restoreFactoryDefaults();
+        intakeController.setIdleMode(IdleMode.kCoast);
+        intakeController.setInverted(Constants.IntakeConstants.INTAKE_RUN_INVERSED);
 
     }
 
-    public void IntakeRunnerRun(double speed) {
-        intakeRunController.set(speed);
+    // Runs the intake at a speed from 0 to 1.0
+    public void IntakeRun (double speed) {
+        intakeController.set(speed);
     }
 
-    public void IntakeRunnerReverse(double speed) {
-        intakeRunController.set(-speed);
+    // Runs the intake at a given voltage
+    public void IntakeRunVoltage (double voltage) {
+        intakeController.setVoltage(voltage);
     }
 
-    public void IntakeRunnerStop() {
-        intakeRunController.stopMotor();
+    // Reverses the intake at a speed from 0 to 1.0
+    public void IntakeReverse (double speed) {
+        intakeController.set(-speed);
+    }
+
+    // Reverses the intake at a given voltage
+    public void IntakeReverseVoltage (double voltage) {
+        intakeController.setVoltage(-voltage);
+    }
+
+    // Stops all motion on the intake motor
+    public void IntakeStop() {
+        intakeController.setVoltage(0);
     }
 }
