@@ -123,7 +123,7 @@ public class RobotContainer {
       .whenReleased(() -> shooterSystem.ShooterStop());
     //shooter (Y)
     new JoystickButton(controller, Button.kY.value)
-      .whenPressed(() -> shooterSystem.ShooterRunVoltage(6))
+      .whileHeld(() -> shooterSystem.ShooterRunVoltage(6))
       .whenReleased(() -> shooterSystem.ShooterStop())
       .whenReleased(() -> shooterSystem.ShooterVoltage(12));
 
