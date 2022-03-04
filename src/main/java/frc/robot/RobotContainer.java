@@ -12,10 +12,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
 import frc.robot.commands.auto.RotateToAngle;
 import frc.robot.commands.auto.MoveToPosition;
 import frc.robot.commands.auto.MoveXInches;
 import frc.robot.commands.shooter.*;
+
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.FieldPositioningSystem;
 import frc.robot.subsystems.IntakeSystem;
@@ -126,8 +128,7 @@ public class RobotContainer {
     //shooter (Y)
     new JoystickButton(controller, Button.kY.value)
       .whileHeld(() -> shooterSystem.ShooterRunVoltage(6))
-      .whenReleased(() -> shooterSystem.ShooterStop())
-      .whenReleased(() -> shooterSystem.ShooterVoltage(12));
+      .whenReleased(() -> shooterSystem.ShooterStop());
 
     //bumpers
     //intake reverse (LB)
