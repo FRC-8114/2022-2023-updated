@@ -2,8 +2,8 @@ package frc.robot;
 
 public final class Constants {
   public static final double INCHES_TO_METERS = 0.0254;
-  public static final double RPM_TO_VOLTAGE = 1/463;
-  public static final double RPM_TO_VOLTAGE_CONSTANT = -9.04;
+  public static final double RPM_TO_VOLTAGE = 463;
+  public static final double RPM_TO_VOLTAGE_CONSTANT = 9.04;
 
   public static final class DriveConstants {
     public static final int LEFT_MOTOR_1_PORT = 1;
@@ -25,7 +25,7 @@ public final class Constants {
 
     public static final boolean SHOOTER_INVERSED = false;
     public static final boolean UPPER_KICKER_INVERSED = false;
-    public static final boolean LOWER_KICKER_INVERSED = true;
+    public static final boolean LOWER_KICKER_INVERSED = false;
 
     public static final double SHOOTER_DISTANCE_PER_PULSE = 1/42 * Math.PI * 5;
     public static final double VELOCITY_CONVERSION_FACTOR = 1/42 * Math.PI * 5;
