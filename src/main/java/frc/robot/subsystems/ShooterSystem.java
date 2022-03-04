@@ -22,11 +22,13 @@ public class ShooterSystem extends SubsystemBase {
 
     // Shooter motor controller encoders
     final RelativeEncoder shooterControllerEncoder = shooterController.getEncoder();
+
+    // Shooter variables
 	public static double ShooterRPM = 0;
     public static double ShooterVoltage = 0;
 
     // Creates the ShooterSubsystem
-    public ShooterSystem() {
+    public ShooterSystem () {
         shooterController.restoreFactoryDefaults();
         shooterController.setIdleMode(IdleMode.kCoast);
         shooterController.setInverted(Constants.ShooterConstants.SHOOTER_INVERSED);
@@ -42,66 +44,100 @@ public class ShooterSystem extends SubsystemBase {
         
     }
 
-
-    public void periodic() {
+    // Run repeatedly to update certain values
+    public void periodic () {
         ShooterRPM = shooterControllerEncoder.getVelocity();
         ShooterVoltage = shooterController.getBusVoltage();
         SmartDashboard.putNumber("rpm", ShooterRPM);
         SmartDashboard.putNumber("voltage", ShooterVoltage);
-
     }
 
-    public double verifyVelocity(double speed) {
+    // Ensure that the speed passed into a function is not over the maximum input
+    public double verifyVelocity (double speed) {
         int sign = (int) (speed / Math.abs(speed));
         if (Math.abs(speed) > ShooterConstants.MAX_INPUT)
             return sign * ShooterConstants.MAX_INPUT;
         return speed;
     }
 
-    public void ShooterRun(double speed) {
+    // Run the shooter at a speed from 0 to 1.0
+    public void ShooterRun (double speed) {
         shooterController.set(speed);
     }
 
-    public void ShooterRunVoltage(double voltage) {
-        shooterController.setVoltage(voltage);
-        shooterController.set(1);
-    }
-
-    public void ShooterVoltage(double voltage) {
+    // Run the shooter at a given voltage
+    public void ShooterRunVoltage (double voltage) {
         shooterController.setVoltage(voltage);
     }
 
-    public void ShooterStop() {
+    // Return the current voltage fed into the shooter
+    public void getShooterVoltage () {
+        shooterController.getBusVoltage();
+    }
+
+    // Stop any motion of the shooter
+    public void ShooterStop () {
         shooterController.setVoltage(0);
-
     }
 
-    public void ShooterReverse(double speed) {
+    // Reverse the shooter at a speed from 0 to 1.0
+    public void ShooterReverse (double speed) {
         shooterController.set(-speed);
     }
 
-    public void UpperKickerRun(double speed) {
+    // Reverse the shooter at a given voltage
+    public void ShooterReverseVoltage (double voltage) {
+        shooterController.setVoltage(-voltage);
+    }
+
+    // Run the upper kicker at a speed from 0 to 1.0
+    public void UpperKickerRun (double speed) {
         upperKickerController.set(speed);
     }
     
-    public void UpperKickerReverse(double speed) {
+    // Run the upper kicker at a given voltage
+    public void UpperKickerRunVoltage (double voltage) {
+        upperKickerController.setVoltage(voltage);
+    }
+
+    // Reverse the upper kicker at a speed from 0 to 1.0
+    public void UpperKickerReverse (double speed) {
         upperKickerController.set(-speed);
     }
 
-    public void UpperKickerStop() {
-        upperKickerController.stopMotor();
-    }
-    
-    public void LowerKickerRun(double speed) {
-        lowerKickerController.set(-speed);
+    // Reverse the upper kicker at a given voltage
+    public void UpperKickerReverseVoltage (double voltage) {
+        upperKickerController.setVoltage(-voltage);
     }
 
-    public void LowerKickerReverse(double speed) {
+    // Stop any motion of the upper kicker
+    public void UpperKickerStop () {
+        upperKickerController.setVoltage(0);
+    }
+    
+    // Run the lower kicker at a speed from 0 to 1.0
+    public void LowerKickerRun (double speed) {
         lowerKickerController.set(speed);
     }
 
-    public void LowerKickerStop() {
-        lowerKickerController.stopMotor();
+    // Run the lower kicker at a given voltage
+    public void LowerKickerRunVoltage (double voltage) {
+        lowerKickerController.setVoltage(voltage);
+    }
+
+    // Reverse the lower kicker at a speed from 0 to 1.0
+    public void LowerKickerReverse (double speed) {
+        lowerKickerController.set(-speed);
+    }
+
+    // Reverse the lower kicker at a given voltage
+    public void LowerKickerReverseVoltage (double voltage) {
+        lowerKickerController.setVoltage(-voltage);
+    }
+
+    // Stop any motion of the lower kicker
+    public void LowerKickerStop () {
+        lowerKickerController.setVoltage(0);
     }
 
 }
