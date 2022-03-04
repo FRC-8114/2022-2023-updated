@@ -54,6 +54,20 @@ public final class Constants {
     public static final double WHEEL_DIAMETER_INCHES = 6;
     public static final double WHEEL_DIAMETER_METERS = WHEEL_DIAMETER_INCHES * INCHES_TO_METERS;
     public static final double WHEEL_CIRCUMFRENCE = WHEEL_DIAMETER_INCHES * Math.PI;
+    // The comments describe what point is assigned to what letter on the whiteboard.
+    double[] BLUE_SPAWN_ONE = new double[] {296.563, -139.023}; //A
+    double[] BLUE_SPAWN_TWO = new double[] {300.661, -189.075}; //B
+    double[] BLUE_SPAWN_THREE = new double[] {324.997, -198.840}; //C
+    double[] RED_SPAWN_ONE = new double[] {350.714, -184.977}; //D
+    double[] RED_SPAWN_TWO = new double[] {346.616, -134.925}; //E
+    double[] RED_SPAWN_THREE = new double[] {325.356, -126.340}; //F
+    //Number is in order of what is closest to the spawns (ex: Ball One = Spawn one...)
+    double[] BLUE_BALL_ONE = new double[] {194.242, -80.357};
+    double[] BLUE_BALL_TWO = new double[] {198.693, -250.303};
+    double[] BLUE_BALL_THREE = new double[] {297.728, -312.790};
+    double[] RED_BALL_ONE = new double[] {453.035, -243.643};
+    double[] RED_BALL_TWO = new double[] {448.585, -73.697};
+    double[] RED_BALL_THREE = new double[] {349.549, -11.210};
   }
 
   public static final class ControlConstants {
