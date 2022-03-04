@@ -19,7 +19,7 @@ public class TeleOpShoot extends CommandBase {
 
     }
     public void execute() {
-        shooterSystem.ShooterRunVoltage(desiredRPM * Constants.RPM_TO_VOLTAGE + Constants.RPM_TO_VOLTAGE_CONSTANT);
+        shooterSystem.ShooterRunVoltage((desiredRPM - Constants.RPM_TO_VOLTAGE_CONSTANT)/ Constants.RPM_TO_VOLTAGE);
         if (shooterSystem.ShooterRPM >= .95 * desiredRPM) {
             shooterSystem.LowerKickerRun(lowerKickerSpeed);
             shooterSystem.UpperKickerRun(upperKickerSpeed);
