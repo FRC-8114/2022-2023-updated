@@ -30,7 +30,6 @@ public class ShooterSystem extends SubsystemBase {
         shooterController.restoreFactoryDefaults();
         shooterController.setIdleMode(IdleMode.kCoast);
         shooterController.setInverted(Constants.ShooterConstants.SHOOTER_INVERSED);
-        shooterController.setVoltage(12);
 
         shooterControllerEncoder.setPositionConversionFactor(ShooterConstants.SHOOTER_DISTANCE_PER_PULSE);
         shooterControllerEncoder.setVelocityConversionFactor(ShooterConstants.VELOCITY_CONVERSION_FACTOR);
@@ -73,8 +72,7 @@ public class ShooterSystem extends SubsystemBase {
     }
 
     public void ShooterStop() {
-        shooterController.stopMotor();
-        shooterController.setVoltage(12);
+        shooterController.setVoltage(0);
 
     }
 

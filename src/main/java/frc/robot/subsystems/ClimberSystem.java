@@ -18,7 +18,6 @@ public class ClimberSystem extends SubsystemBase {
     final CANSparkMax climberDeployController = new CANSparkMax(ClimberConstants.CLIMBER_DEPLOY_PORT,
             MotorType.kBrushless);
 
-    final TalonFX climberRunControllerEncoder = new TalonFX(ClimberConstants.CLIMBER_RUN_PORT);
     final RelativeEncoder climberDeployControllerEncoder = climberDeployController.getEncoder();
 
     final AnalogPotentiometer potentiometer = new AnalogPotentiometer(0);
