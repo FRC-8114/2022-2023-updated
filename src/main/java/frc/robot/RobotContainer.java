@@ -221,15 +221,10 @@ public class RobotContainer {
     positioningSystem.zeroPosition();
     //return new MoveToPosition(m_driveSystem, positioningSystem, new double[] {initialPos[0]+12,initialPos[1]+12});
     return new SequentialCommandGroup(
-      /*
-      new AutoShoot(2700, shooterSystem),
-      
-      */
       new AutoIntakeDown(m_driveSystem, positioningSystem),
-      //new AutoIntake(intakeSystem, shooterSystem),
       new AutoShoot(2700, shooterSystem),
-      new MoveToPosition(m_driveSystem, positioningSystem, new double[] {-36, 0})
-    ); // Moved 8 when desired 12, 14 w d 24
+      new MoveXInches(m_driveSystem, positioningSystem, -108, .50)
+    );
   }
 
   /**
