@@ -12,27 +12,27 @@ public class FieldPositioningSystem extends SubsystemBase {
     public AHRS navx;
     public double[] position;
     public double[] oldLeftEncoderValues = new double[2], oldRightEncoderValues = new double[2];
-    public double angle;
+    public double angle, angleOffset;
 
     public FieldPositioningSystem(DriveSystem drive) {
         this.drive = drive;
         double[] position = {0, 0};
         
-        initializePosition(position, 0);
+        initializePosition(position, 0, 0);
     }
 
-    public FieldPositioningSystem(DriveSystem drive, double[] position, double angle) {
+    public FieldPositioningSystem(DriveSystem drive, double[] position, double angle, double angleOffset) {
         this.drive = drive;
         
-        initializePosition(position, angle);
+        initializePosition(position, angle, angleOffset);
     }
 
-    public void initializePosition(double[] position, double angle) {
+    public void initializePosition(double[] position, double angle, double angleOffset) {
         navx = new AHRS(SerialPort.Port.kUSB);
         navx.calibrate();
         this.position = position;
         this.angle = navx.getYaw();
-        
+        this.angleOffset = angleOffset;
     }
 
     /**
@@ -48,7 +48,15 @@ public class FieldPositioningSystem extends SubsystemBase {
      */
     public void zeroPosition() {
         overwriteLocation(new double[] {0,0});
-        overwriteAngle();
+        overwriteAngle(0);
+    }
+
+    /**
+     * Sets the robot's location to match the given point and angle
+     */
+    public void overwritePosition(double[] point, double angle) {
+        overwriteLocation(new double[] {0,0});
+        overwriteAngle(angle);
     }
 
     /**
@@ -65,8 +73,10 @@ public class FieldPositioningSystem extends SubsystemBase {
      * 
      * @param position
      */
-    public void overwriteAngle() {
+    public void overwriteAngle(double angle) {
         navx.zeroYaw();
+
+        angleOffset = angle;
     }
 
     /**
@@ -77,7 +87,7 @@ public class FieldPositioningSystem extends SubsystemBase {
         double rotations = averageEncoderDistance();
         double distanceCovered = rotationsToDistance(rotations);
 
-        angle = navx.getYaw();
+        angle = navx.getYaw() + angleOffset;
         RobotUtils.sendNumberToShuffleboard("yawDegrees", angle);
 
         double xDisplacement = distanceCovered * Math.cos(Math.toRadians(angle));
