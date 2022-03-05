@@ -72,7 +72,7 @@ public class RobotContainer {
     oldLeftTriggerAxis = oldRightTriggerAxis = 0;
     oldPOV = -1;
     oldRightStickButton = false;
-    teleopShootSpeed = 3000;
+    teleopShootSpeed = 2700;
   }
 
   public void sendControlVariableSettersToShuffleboard() {
