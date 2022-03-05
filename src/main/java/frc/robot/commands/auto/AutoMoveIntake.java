@@ -10,7 +10,7 @@ public class AutoMoveIntake extends ParallelCommandGroup {
     public AutoMoveIntake (ShooterSystem shooterSystem, DriveSystem driveSystem, FieldPositioningSystem fieldPositioningSystem, IntakeSystem intakeSystem) {
         addCommands(
             new AutoIntake(intakeSystem, shooterSystem),
-            new MoveXInches(driveSystem, fieldPositioningSystem, 20, .2)  
+            new MoveXInchesBackwards(driveSystem, fieldPositioningSystem, 20, .2)  
         );
     }
     
