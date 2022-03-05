@@ -10,6 +10,8 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -20,14 +22,16 @@ import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.FieldPositioningSystem;
 import frc.robot.subsystems.IntakeSystem;
 import frc.robot.subsystems.ShooterSystem;
+import frc.robot.subsystems.BallTrackingSystem;
 import frc.robot.subsystems.ClimberSystem;
 
 public class RobotContainer {
   public DriveSystem m_driveSystem = new DriveSystem();
-  public FieldPositioningSystem positioningSystem = new FieldPositioningSystem(m_driveSystem);
+  public FieldPositioningSystem positioningSystem;
   public ShooterSystem shooterSystem = new ShooterSystem();
   public IntakeSystem intakeSystem = new IntakeSystem();
   public ClimberSystem climberSystem = new ClimberSystem();
+  public BallTrackingSystem ballTrackingSystem = new BallTrackingSystem(74, Math.sqrt(Math.pow(640, 2) + Math.pow(480, 2)));
 
   public XboxController controller = new XboxController(0);
 
@@ -42,6 +46,10 @@ public class RobotContainer {
 
   private int oldLeftTriggerAxis, oldRightTriggerAxis, oldPOV;
   private boolean oldRightStickButton;
+  
+  final private int start = 1;
+  private double[] startPosition;
+  private double[] almostBallPosition;
 
   // The container for the robot. Contains subsystems, OI devices, and commands.
   public RobotContainer() {
@@ -49,6 +57,35 @@ public class RobotContainer {
 
     initializeControlVariables();
     sendControlVariableSettersToShuffleboard();
+
+    double[] ballPosition;
+    almostBallPosition = new double[2];
+
+    switch (start) {
+      case 1: 
+        startPosition = Constants.PositioningConstants.SPAWN_ONE; 
+        ballPosition = Constants.PositioningConstants.BALL_ONE; 
+        almostBallPosition[0] = ballPosition[0] + 6;
+        almostBallPosition[1] = ballPosition[1] - 6;
+        positioningSystem = new FieldPositioningSystem(m_driveSystem, startPosition, -15); 
+        break;
+      case 2: 
+        startPosition = Constants.PositioningConstants.SPAWN_TWO; 
+        ballPosition = Constants.PositioningConstants.BALL_TWO; 
+        almostBallPosition[0] = ballPosition[0] + 6;
+        almostBallPosition[1] = ballPosition[1] + 6;
+        positioningSystem = new FieldPositioningSystem(m_driveSystem, startPosition, 75); 
+        break;
+      case 3: 
+        startPosition = Constants.PositioningConstants.SPAWN_THREE;
+        ballPosition = Constants.PositioningConstants.BALL_THREE; 
+        almostBallPosition[0] = ballPosition[0] + 6;
+        almostBallPosition[1] = ballPosition[1] + 6;
+        positioningSystem = new FieldPositioningSystem(m_driveSystem, startPosition, 75); 
+        break;
+
+    }
+    
   }
 
   /**
@@ -213,12 +250,41 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     positioningSystem.zeroPosition();
+    double[] almostBallPosition = new double[]{};
     //return new MoveToPosition(m_driveSystem, positioningSystem, new double[] {initialPos[0]+12,initialPos[1]+12});
     return new SequentialCommandGroup(
       new AutoIntakeDown(m_driveSystem, positioningSystem),
       new AutoShoot(2700, shooterSystem),
       new MoveXInchesBackwards(m_driveSystem, positioningSystem, 108, .50)
+      /*
+      //shoot ball
+      new AutoIntakeDown(m_driveSystem, positioningSystem),
+      new AutoShoot(2700, shooterSystem),
+      //move to ball position
+      new MoveToPosition(m_driveSystem, positioningSystem, almostBallPosition),
+      new RotateToBall(ballTrackingSystem, positioningSystem, m_driveSystem),  
+      //move w/ intake
+      new ParallelRaceGroup(
+        new MoveXInches(m_driveSystem, positioningSystem, 15, .3),
+        new AutoIntake(intakeSystem, shooterSystem)
+
+      ),
+      //move back and shoot
+      new MoveToPosition(m_driveSystem, positioningSystem, startPosition),
+      new AutoShoot(2700, shooterSystem)
+      */
+
+      /* test
+      new ParallelRaceGroup(
+        new MoveXInches(m_driveSystem, positioningSystem, 15, .3),
+        new AutoIntake(intakeSystem, shooterSystem)
+
+      )
+      */
+      
+       // Moved 8 when desired 12, 14 w d 24
     );
+      
   }
 
   /**

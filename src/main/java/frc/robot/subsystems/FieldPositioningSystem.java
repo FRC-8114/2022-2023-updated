@@ -18,21 +18,21 @@ public class FieldPositioningSystem extends SubsystemBase {
         this.drive = drive;
         double[] position = {0, 0};
         
-        initializePosition(position, 0, 0);
+        initializePosition(position, 0);
     }
 
-    public FieldPositioningSystem(DriveSystem drive, double[] position, double angle, double angleOffset) {
+    public FieldPositioningSystem(DriveSystem drive, double[] position, double angle) {
         this.drive = drive;
         
-        initializePosition(position, angle, angleOffset);
+        initializePosition(position, angle);
     }
 
-    public void initializePosition(double[] position, double angle, double angleOffset) {
+    public void initializePosition(double[] position, double angle) {
         navx = new AHRS(SerialPort.Port.kUSB);
         navx.calibrate();
         this.position = position;
-        this.angle = navx.getYaw();
-        this.angleOffset = angleOffset;
+        this.angleOffset = angle;
+        this.angle = navx.getYaw() + angleOffset;
     }
 
     /**
