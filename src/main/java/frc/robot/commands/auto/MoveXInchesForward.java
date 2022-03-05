@@ -5,13 +5,13 @@ import frc.robot.RobotUtils;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.FieldPositioningSystem;
 
-public class MoveXInches extends CommandBase {
+public class MoveXInchesForward extends CommandBase {
     private double[] startingPos;
     private double desiredDistance, velocity;
     private DriveSystem driveSystem;
     private FieldPositioningSystem fieldPositioningSystem;
 
-    public MoveXInches(DriveSystem driveSystem, FieldPositioningSystem fieldPositioningSystem, double desiredDistance, double velocity) {
+    public MoveXInchesForward(DriveSystem driveSystem, FieldPositioningSystem fieldPositioningSystem, double desiredDistance, double velocity) {
         this.driveSystem = driveSystem;
         this.fieldPositioningSystem = fieldPositioningSystem;
         

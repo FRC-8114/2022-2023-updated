@@ -13,7 +13,7 @@ public class MoveToPosition extends SequentialCommandGroup {
         addCommands(
             new RotateToAngle(drive, fieldPositioning, fieldPositioning.angleToPoint(desiredPos), 0.3),
 
-            new MoveXInches(drive, fieldPositioning, fieldPositioning.distanceFrom(desiredPos), 0.4)
+            new MoveXInchesForward(drive, fieldPositioning, fieldPositioning.distanceFrom(desiredPos), 0.4)
         );
     }
 }

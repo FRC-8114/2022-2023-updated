@@ -13,13 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
-import frc.robot.commands.auto.RotateToAngle;
-import frc.robot.commands.auto.AutoIntake;
-import frc.robot.commands.auto.AutoIntakeDown;
-import frc.robot.commands.auto.AutoShoot;
-import frc.robot.commands.auto.MoveToBall;
-import frc.robot.commands.auto.MoveToPosition;
-import frc.robot.commands.auto.MoveXInches;
+import frc.robot.commands.auto.*;
 import frc.robot.commands.shooter.*;
 
 import frc.robot.subsystems.DriveSystem;
@@ -223,7 +217,7 @@ public class RobotContainer {
     return new SequentialCommandGroup(
       new AutoIntakeDown(m_driveSystem, positioningSystem),
       new AutoShoot(2700, shooterSystem),
-      new MoveXInches(m_driveSystem, positioningSystem, -108, .50)
+      new MoveXInchesBackwards(m_driveSystem, positioningSystem, 108, .50)
     );
   }
 
