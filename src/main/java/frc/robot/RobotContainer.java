@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.auto.RotateToAngle;
+import frc.robot.commands.auto.AutoShoot;
 import frc.robot.commands.auto.MoveToPosition;
 import frc.robot.commands.auto.MoveXInches;
 import frc.robot.commands.shooter.*;
@@ -40,6 +41,7 @@ public class RobotContainer {
   public double autoRotateSpeed;
   public double climberRunnerRunSpeed, climberRunnerReverseSpeed;
   public double climberDeployerRunSpeed, climberDeployerReverseSpeed;
+  public double teleopShootSpeed;
 
   private int oldLeftTriggerAxis, oldRightTriggerAxis, oldPOV;
   private boolean oldRightStickButton;
@@ -73,6 +75,7 @@ public class RobotContainer {
     oldLeftTriggerAxis = oldRightTriggerAxis = 0;
     oldPOV = -1;
     oldRightStickButton = false;
+    teleopShootSpeed = 3000;
   }
 
   public void sendControlVariableSettersToShuffleboard() {
@@ -89,6 +92,7 @@ public class RobotContainer {
       Method intakeReverseSpeedSetter = RobotContainer.class.getMethod("setIntakeReverseSpeed", Double.class);
       Method maxDriveInputSetter = DriveSystem.class.getMethod("setMaxInput", Double.class);
       Method autoRotateSpeedSetter = RobotContainer.class.getMethod("setAutoRotateSpeed", Double.class);
+      Method teleopShootSpeedSetter = RobotContainer.class.getMethod("teleopShootSpeedSetter", Double.class);
 
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, lowerKickerRunSpeedSetter, "Control Variables", "lowerKickerRunSpeed", lowerKickerRunSpeed);
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, lowerKickerReverseSpeedSetter, "Control Variables", "lowerKickerReverseSpeed", lowerKickerReverseSpeed);
@@ -100,6 +104,7 @@ public class RobotContainer {
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, intakeReverseSpeedSetter, "Control Variables", "intakeReverseSpeed", intakeReverseSpeed);
       RobotUtils.sendNumberSetterToShuffleboard(m_driveSystem, maxDriveInputSetter, "Control Variables", "maxDriveInput", Constants.DriveConstants.INITIAL_MAX_INPUT);
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, autoRotateSpeedSetter, "Control Variables", "autoRotateSpeed", autoRotateSpeed);
+      RobotUtils.sendNumberSetterToShuffleboard(robotContainer, teleopShootSpeedSetter, "Control Variables", "teleopShootSpeed", teleopShootSpeed);
     } catch (NoSuchMethodException | SecurityException e) {
       SmartDashboard.putString("depressing_error", e.toString());
     }
@@ -112,6 +117,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    SmartDashboard.putNumber("shooterDesiredRPM", teleopShootSpeed);
     //buttons
     //lower kicker reverse (A)
     new JoystickButton(controller, Button.kA.value)
@@ -163,7 +169,7 @@ public class RobotContainer {
     }
     //auto shoot (RT)
     if(controller.getRightTriggerAxis() == 1)
-      new TeleOpShoot(4000, lowerKickerRunSpeed, upperKickerRunSpeed, shooterSystem).schedule();
+      new TeleOpShoot(teleopShootSpeed, lowerKickerRunSpeed, upperKickerRunSpeed, shooterSystem).schedule();
     else if (oldRightTriggerAxis == 1) {
       shooterSystem.ShooterStop();
       shooterSystem.LowerKickerStop();
@@ -212,8 +218,8 @@ public class RobotContainer {
     positioningSystem.zeroPosition();
     //return new MoveToPosition(m_driveSystem, positioningSystem, new double[] {initialPos[0]+12,initialPos[1]+12});
     return new SequentialCommandGroup(
-      new MoveToPosition(m_driveSystem, positioningSystem, new double[] {-36,0}),
-      new MoveToPosition(m_driveSystem, positioningSystem, new double[] {12,0}));
+      new MoveXInches(m_driveSystem, positioningSystem, 24, .25)
+    ); // Moved 8 when desired 12, 14 w d 24
   }
 
   /**
@@ -254,5 +260,9 @@ public class RobotContainer {
 
   public void setAutoRotateSpeed(Double speed) {
     autoRotateSpeed = speed;
+  }
+
+  public void setTeleopShootSpeed (Double speed) {
+    teleopShootSpeed = speed;
   }
 }
