@@ -16,7 +16,7 @@ public class Robot extends TimedRobot {
     // Instantiates RobotContainer. Performs all button bindings, and puts
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-  }
+  }   
 
   @Override
   public void robotPeriodic() {
@@ -91,7 +91,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     //m_robotContainer.m_driveSystem.cheesyDrive(m_robotContainer.controller.getLeftY(), m_robotContainer.controller.getRightX(), m_robotContainer.m_driveSystem.isArcade);
-    m_robotContainer.m_driveSystem.arcadeDrive(m_robotContainer.controller.getLeftY(), m_robotContainer.controller.getRightX());
+    m_robotContainer.getDriveSystem().arcadeDrive(m_robotContainer.getXboxController().getLeftY(), m_robotContainer.getXboxController().getRightX());
     m_robotContainer.periodic();
   }
 
