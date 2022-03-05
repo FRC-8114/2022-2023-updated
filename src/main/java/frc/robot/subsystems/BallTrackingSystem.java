@@ -112,14 +112,16 @@ public class BallTrackingSystem {
          * The method below is incredibly stupid, but it does work
          * 
          * All json entities sent by follow the format:
-         * {"label": *label*,
+         * {
+         *  "label": *label*,
          *  "box": {
          *      "ymin": *ymin*,
          *      "xmin": *xmin*,
          *      "ymax": *ymax*,
          *      "xmax": *xmax*,
          *  },
-         *  "confidence": *confidence*}
+         *  "confidence": *confidence*
+         *  },
          * 
          * This means that an entity is 8 lines long, the only non-entity portions
          * of an axon json are the leading and tailing square brackets
@@ -131,7 +133,7 @@ public class BallTrackingSystem {
         // Due to the nature of this loop, the trailing bracket will be read but won't be used
         while(jsonScanner.hasNextLine()) {
             // Check if you have already parsed a full entity
-            if(temp.size() == 8) {
+            if(temp.size() == 10) {
                 // Reconstruct entity with original newlines
                 String entity = "";
 
@@ -168,16 +170,19 @@ public class BallTrackingSystem {
          * The method below is incredibly stupid, but it does work
          * 
          * All json entities sent by follow the format:
-         * {"label": *label*,
+         * {
+         *  "label": *label*,
          *  "box": {
          *      "ymin": *ymin*,
          *      "xmin": *xmin*,
          *      "ymax": *ymax*,
          *      "xmax": *xmax*,
          *  },
-         *  "confidence": *confidence*}
+         *  "confidence": *confidence*
+         *  },
          * 
          * thus breaking the string on whitespace yeilds the sequence:
+         * {
          * "label":
          * *label*,
          * "box":
@@ -188,12 +193,13 @@ public class BallTrackingSystem {
          * *xmin,
          * ...
          * 
-         * Thus the terms of interest are at indicies 1, 5, 7, 9, 11, 14 and all contain 1 character beyond the integer
+         * Thus the terms of interest are at indicies 2, 6, 8, 10, 12, 15 and all contain 1 character beyond the integer
          * or floating point number in question (ie *ymin*, == 5,) (ie *confidence*} == .99})
          **/
         Scanner entityScanner = new Scanner(entityJson);
         String temp = ""; // Overwritten to store a read String for extra character removal
         
+        entityScanner.next();
         entityScanner.next();
 
         // Skips label because the AI is currently color-blind \\
@@ -235,7 +241,6 @@ public class BallTrackingSystem {
 
         // Handles Confidence \\
         temp = entityScanner.next(); // Reads in confidence
-        temp = temp.substring(0,temp.length()-1); // Removes extraneous character
         entityData[4] = (double)Double.parseDouble(temp) - entityData[0];// Assigns confidence
 
         // Closes the scanner utilized
