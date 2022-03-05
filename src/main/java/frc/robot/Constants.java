@@ -44,7 +44,7 @@ public final class Constants {
     public static final int CLIMBER_DEPLOY_PORT = 11;
 
     public static final boolean CLIMBER_RUN_INVERSED = false;
-    public static final boolean CLIMBER_DEPLOY_INVERSED = true;
+    public static final boolean CLIMBER_DEPLOY_INVERSED = false;
     public static final double CLIMBER_DEPLOY_CONVERSTION_FACTOR = 0;
   }
 
@@ -79,8 +79,8 @@ public final class Constants {
     public static final double SHOOTER_INITIAL_REVERSE_SPEED = .25;
     public static final double INTAKE_INITIAL_RUN_SPEED = .4;
     public static final double INTAKE_INITIAL_REVERSE_SPEED = .25;
-    public static final double CLIMBER_RUNNER_INITIAL_RUN_SPEED = .3;
-    public static final double CLIMBER_RUNNER_INITIAL_REVERSE_SPEED = .3;
+    public static final double CLIMBER_RUNNER_INITIAL_RUN_SPEED = .6;
+    public static final double CLIMBER_RUNNER_INITIAL_REVERSE_SPEED = .6;
     public static final double CLIMBER_DEPLOYER_INITIAL_RUN_SPEED = .175;
     public static final double CLIMBER_DEPLOYER_INITIAL_REVERSE_SPEED = .175;
   }

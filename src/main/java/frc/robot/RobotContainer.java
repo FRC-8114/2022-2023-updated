@@ -14,7 +14,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.auto.RotateToAngle;
+import frc.robot.commands.auto.AutoIntake;
+import frc.robot.commands.auto.AutoIntakeDown;
 import frc.robot.commands.auto.AutoShoot;
+import frc.robot.commands.auto.MoveToBall;
 import frc.robot.commands.auto.MoveToPosition;
 import frc.robot.commands.auto.MoveXInches;
 import frc.robot.commands.shooter.*;
@@ -218,7 +221,14 @@ public class RobotContainer {
     positioningSystem.zeroPosition();
     //return new MoveToPosition(m_driveSystem, positioningSystem, new double[] {initialPos[0]+12,initialPos[1]+12});
     return new SequentialCommandGroup(
-      new MoveXInches(m_driveSystem, positioningSystem, 24, .25)
+      /*
+      new AutoShoot(2700, shooterSystem),
+      
+      */
+      new AutoIntakeDown(m_driveSystem, positioningSystem),
+      //new AutoIntake(intakeSystem, shooterSystem),
+      new AutoShoot(2700, shooterSystem),
+      new MoveToPosition(m_driveSystem, positioningSystem, new double[] {-36, 0})
     ); // Moved 8 when desired 12, 14 w d 24
   }
 
