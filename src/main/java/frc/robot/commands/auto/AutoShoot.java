@@ -1,6 +1,8 @@
 package frc.robot.commands.auto;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.ShooterSystem;
 
 public class AutoShoot extends CommandBase {
@@ -13,20 +15,24 @@ public class AutoShoot extends CommandBase {
     }
 
     public void initialize() {
-        shooterSystem.ShooterRun(desired_rpm);
+        shooterSystem.ShooterRunVoltage((desired_rpm - Constants.RPM_TO_VOLTAGE_CONSTANT)/ Constants.RPM_TO_VOLTAGE);
     }
 
     public void execute() {
-        if (ShooterSystem.ShooterRPM >= desired_rpm*.95) {
+        if (ShooterSystem.ShooterRPM >= desired_rpm) {
             shooterSystem.UpperKickerRun(1);
             shooterSystem.LowerKickerRun(1);
+            try {
+                new Timer().wait(1000);
+            }
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             count++;
-
         }
         else {
             shooterSystem.UpperKickerStop();
-            shooterSystem.LowerKickerStop();
-            
+            shooterSystem.LowerKickerStop(); 
         }
     }
 
