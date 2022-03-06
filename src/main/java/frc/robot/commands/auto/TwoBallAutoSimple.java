@@ -18,13 +18,8 @@ public class TwoBallAutoSimple extends SequentialCommandGroup {
             ),
             new Rotate(driveSystem, positioningSystem, 180, 1, .3),
             new MoveXInchesForward(driveSystem, positioningSystem, distanceFromBall, .45),
-<<<<<<< HEAD
-            new AutoShoot(shooterSystem),
-            new RotateToAngle(driveSystem, positioningSystem, angleOfNet, .2)
-=======
             new AutoShoot(shooterSystem)
             //new RotateToAngle(driveSystem, positioningSystem, angleOfNet, 1, .2)
->>>>>>> all
 
         );
 

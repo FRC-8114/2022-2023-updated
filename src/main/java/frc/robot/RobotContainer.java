@@ -47,19 +47,11 @@ public class RobotContainer {
   private int oldLeftTriggerAxis, oldRightTriggerAxis, oldPOV;
   private boolean oldRightStickButton;
   
-<<<<<<< HEAD
-  // final private int start = 1;
-  // private double[] startPosition;
-  // private double[] almostStartPosition;
-  // private double[] ballPosition;
-  // private double[] almostBallPosition;
-=======
   final private int startLocation = 1;
   private double[] startPosition;
   private double[] almostStartPosition;
   private double[] ballPosition;
   private double[] almostBallPosition;
->>>>>>> all
 
   // The container for the robot. Contains subsystems, OI devices, and commands.
   public RobotContainer() {
@@ -68,7 +60,6 @@ public class RobotContainer {
     initializeControlVariables();
     sendControlVariableSettersToShuffleboard();
 
-    /*
     double angle = Math.PI;
     almostStartPosition = new double[2];
     almostBallPosition = new double[2];
@@ -97,7 +88,6 @@ public class RobotContainer {
     almostStartPosition[1] = startPosition[1] + 1.5 * Constants.IntakeConstants.INTAKE_LENGTH  * Math.sin(angle);
     almostBallPosition[0] = ballPosition[0] - 2 * Constants.BALL_RADIUS * Math.cos(angle);
     almostBallPosition[1] = ballPosition[1] - 2 * Constants.BALL_RADIUS * Math.sin(angle);
-    */
     positioningSystem = new FieldPositioningSystem(m_driveSystem); 
 
   }
@@ -289,7 +279,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     //return new OneBallAuto(m_driveSystem, positioningSystem, shooterSystem);
-    return new TwoBallAutoSimple(m_driveSystem, intakeSystem, positioningSystem, shooterSystem, startLocation, 0, Math.sqrt(Math.pow(ballPosition[0], 2) + Math.pow(ballPosition[1], 2)));
+    return new TwoBallAutoSimple(m_driveSystem, intakeSystem, positioningSystem, shooterSystem, startLocation, 0, Math.sqrt(Math.pow(ballPosition[0] - startPosition[0], 2) + Math.pow(ballPosition[1] - startPosition[1], 2)));
     //return new TwoBallAutoComplex(ballSystem, m_driveSystem, positioningSystem, intakeSystem, shooterSystem, almostBallPosition, almostStartPosition);
     
   }   
