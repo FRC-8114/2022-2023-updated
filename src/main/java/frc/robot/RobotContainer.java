@@ -31,7 +31,7 @@ public class RobotContainer {
   public ShooterSystem shooterSystem = new ShooterSystem();
   public IntakeSystem intakeSystem = new IntakeSystem();
   public ClimberSystem climberSystem = new ClimberSystem();
-  public BallTrackingSystem ballTrackingSystem = new BallTrackingSystem(74, Math.sqrt(Math.pow(640, 2) + Math.pow(480, 2)));
+  public BallTrackingSystem ballSystem = new BallTrackingSystem(74, Math.sqrt(Math.pow(640, 2) + Math.pow(480, 2)));
 
   public XboxController controller = new XboxController(0);
 
@@ -49,6 +49,8 @@ public class RobotContainer {
   
   final private int start = 1;
   private double[] startPosition;
+  private double[] almostStartPosition;
+  private double[] ballPosition;
   private double[] almostBallPosition;
 
   // The container for the robot. Contains subsystems, OI devices, and commands.
@@ -58,33 +60,34 @@ public class RobotContainer {
     initializeControlVariables();
     sendControlVariableSettersToShuffleboard();
 
-    double[] ballPosition;
+    double angle = Math.PI;
+    almostStartPosition = new double[2];
     almostBallPosition = new double[2];
 
     switch (start) {
       case 1: 
-        startPosition = Constants.PositioningConstants.SPAWN_ONE; 
+        angle = Math.PI + Math.atan((ballPosition[1] - startPosition[1]) / (ballPosition[0] - startPosition[0]));
+        startPosition = Constants.PositioningConstants.SPAWN_ONE;
         ballPosition = Constants.PositioningConstants.BALL_ONE; 
-        almostBallPosition[0] = ballPosition[0] + 6;
-        almostBallPosition[1] = ballPosition[1] - 6;
-        positioningSystem = new FieldPositioningSystem(m_driveSystem, startPosition, Math.PI + Math.atan((ballPosition[1] - startPosition[1]) / (ballPosition[0] - startPosition[0]))); 
         break;
       case 2: 
+        angle = -Math.PI + Math.atan((ballPosition[1] - startPosition[1]) / (ballPosition[0] - startPosition[0]));
         startPosition = Constants.PositioningConstants.SPAWN_TWO; 
         ballPosition = Constants.PositioningConstants.BALL_TWO; 
-        almostBallPosition[0] = ballPosition[0] + 6;
-        almostBallPosition[1] = ballPosition[1] + 6;
-        positioningSystem = new FieldPositioningSystem(m_driveSystem, startPosition, -Math.PI + Math.atan((ballPosition[1] - startPosition[1]) / (ballPosition[0] - startPosition[0]))); 
         break;
       case 3: 
+        angle = -Math.PI + Math.atan((ballPosition[1] - startPosition[1]) / (ballPosition[0] - startPosition[0]));
         startPosition = Constants.PositioningConstants.SPAWN_THREE;
         ballPosition = Constants.PositioningConstants.BALL_THREE; 
-        almostBallPosition[0] = ballPosition[0] + 6;
-        almostBallPosition[1] = ballPosition[1] + 6;
-        positioningSystem = new FieldPositioningSystem(m_driveSystem, startPosition, -Math.PI + Math.atan((ballPosition[1] - startPosition[1]) / (ballPosition[0] - startPosition[0]))); 
         break;
 
     }
+
+    positioningSystem = new FieldPositioningSystem(m_driveSystem, startPosition, angle); 
+    almostStartPosition[0] = startPosition[0] + 1.5 * Constants.IntakeConstants.INTAKE_LENGTH * Math.cos(angle);
+    almostStartPosition[1] = startPosition[1] + 1.5 * Constants.IntakeConstants.INTAKE_LENGTH  * Math.sin(angle);
+    almostBallPosition[0] = ballPosition[0] - 2 * Constants.BALL_RADIUS * Math.cos(angle);
+    almostBallPosition[1] = ballPosition[1] - 2 * Constants.BALL_RADIUS * Math.sin(angle);
     
   }
 
@@ -254,6 +257,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+<<<<<<< HEAD
     return new SequentialCommandGroup(
       new AutoIntakeDown(m_driveSystem, positioningSystem),
       new AutoShoot(shooterSystem)
@@ -287,6 +291,11 @@ public class RobotContainer {
       
        // Moved 8 when desired 12, 14 w d 24
     );
+=======
+    return new OneBallAuto(m_driveSystem, positioningSystem, shooterSystem);
+    //return new TwoBallAutoSimple(m_driveSystem, intakeSystem, positioningSystem, shooterSystem, 3700, ballPosition);
+    //return new TwoBallAutoComplex(ballSystem, m_driveSystem, positioningSystem, intakeSystem, shooterSystem, 3700, almostBallPosition, almostStartPosition);
+>>>>>>> Auto commands
       
   }
 
