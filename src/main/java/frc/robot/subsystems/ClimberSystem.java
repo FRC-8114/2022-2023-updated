@@ -105,4 +105,13 @@ public class ClimberSystem extends SubsystemBase {
     public double getDartPosition() {
         return 6 + getPotentiometerAngle() * (6/4.4);
     }
+
+    // Setters for shuffleboard
+    public void setClimberRunInversed(boolean inverted) {
+        climberRunController.setInverted(inverted);
+    }
+
+    public void setClimberDeployInversed(boolean inverted) {
+        climberDeployController.setInverted(inverted);
+    }
 }

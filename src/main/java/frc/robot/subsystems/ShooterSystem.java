@@ -140,4 +140,16 @@ public class ShooterSystem extends SubsystemBase {
         lowerKickerController.setVoltage(0);
     }
 
+    // Setters for shuffleboard
+    public void setShooterInverted(boolean inverted) {
+        shooterController.setInverted(inverted);
+    }
+
+    public void setLowerKickerInverted(boolean inverted) {
+        lowerKickerController.setInverted(inverted);
+    }
+
+    public void setUpperKickerInverted(boolean inverted) {
+        upperKickerController.setInverted(inverted);
+    }
 }

@@ -50,4 +50,9 @@ public class IntakeSystem extends SubsystemBase {
     public void IntakeStop() {
         intakeController.setVoltage(0);
     }
+
+    // Setters for shuffleboard
+    public void setIntakeInverted(boolean inverted) {
+        intakeController.setInverted(inverted);
+    }
 }

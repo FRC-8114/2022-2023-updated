@@ -147,6 +147,28 @@ public class RobotContainer {
     }
   }
 
+  public void sendMotorInversionsToShuffleboard() {
+    try {
+      RobotContainer robotContainer = this;
+
+      Method setClimberRunInverted = ClimberSystem.class.getMethod("setClimberRunInverted", boolean.class);
+      Method setClimberDeployInverted = ClimberSystem.class.getMethod("setClimberDeployInverted", boolean.class);
+      Method setIntakeInverted = IntakeSystem.class.getMethod("setIntakeInverted", boolean.class);
+      Method setShooterInverted = ShooterSystem.class.getMethod("setClimberRunInverted", boolean.class);
+      Method setLowerKickerInverted = ShooterSystem.class.getMethod("setLowerKickerInverted", boolean.class);
+      Method setUpperKickerInverted = ShooterSystem.class.getMethod("setUpperKickerInverted", boolean.class);
+
+      RobotUtils.sendBooleanSetterToShuffleboard(climberSystem, setClimberRunInverted, "Motor Inversions", "setClimberRunInverted", Constants.ClimberConstants.CLIMBER_RUN_INVERSED);
+      RobotUtils.sendBooleanSetterToShuffleboard(climberSystem, setClimberDeployInverted, "Motor Inversions", "setClimberDeployInverted", Constants.ClimberConstants.CLIMBER_DEPLOY_INVERSED);
+      RobotUtils.sendBooleanSetterToShuffleboard(intakeSystem, setIntakeInverted, "Motor Inversions", "setIntakeInverted", Constants.IntakeConstants.INTAKE_RUN_INVERSED);
+      RobotUtils.sendBooleanSetterToShuffleboard(shooterSystem, setShooterInverted, "Motor Inversions", "setShooterInverted", Constants.ShooterConstants.SHOOTER_INVERSED);
+      RobotUtils.sendBooleanSetterToShuffleboard(shooterSystem, setLowerKickerInverted, "Motor Inversions", "setLowerKickerInverted", Constants.ShooterConstants.LOWER_KICKER_INVERSED);
+      RobotUtils.sendBooleanSetterToShuffleboard(shooterSystem, setUpperKickerInverted, "Motor Inversions", "setUpperKickerInverted", Constants.ShooterConstants.UPPER_KICKER_INVERSED);
+    } catch (NoSuchMethodException | SecurityException e) {
+      SmartDashboard.putString("depressing_error", e.toString());
+    }
+  }
+
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
