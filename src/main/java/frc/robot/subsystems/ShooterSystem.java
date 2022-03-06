@@ -71,8 +71,8 @@ public class ShooterSystem extends SubsystemBase {
     }
 
     // Return the current voltage fed into the shooter
-    public void getShooterVoltage () {
-        shooterController.getBusVoltage();
+    public double getShooterVoltage () {
+        return shooterController.getBusVoltage();
     }
 
     // Stop any motion of the shooter

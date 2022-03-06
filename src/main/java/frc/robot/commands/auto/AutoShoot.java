@@ -1,6 +1,7 @@
 package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
@@ -14,7 +15,6 @@ public class AutoShoot extends CommandBase {
     public AutoShoot(ShooterSystem shooterSystem) {
         this.shooterSystem = shooterSystem;
 
-        timer = new Timer();
     }
 
     public void initialize() {
@@ -38,6 +38,7 @@ public class AutoShoot extends CommandBase {
         shooterSystem.ShooterStop();
         shooterSystem.UpperKickerStop();
         shooterSystem.LowerKickerStop();
+        SmartDashboard.putNumber("voltage when stopped!!", shooterSystem.getShooterVoltage());
     }
 
     public boolean isFinished() {
