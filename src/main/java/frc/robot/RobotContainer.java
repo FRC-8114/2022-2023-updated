@@ -203,7 +203,7 @@ public class RobotContainer {
     }
     //auto shoot (RT)
     if(controller.getRightTriggerAxis() == 1)
-      new TeleOpShoot(teleopShootSpeed, lowerKickerRunSpeed, upperKickerRunSpeed, shooterSystem).schedule();
+      new TeleOpShoot(lowerKickerRunSpeed, upperKickerRunSpeed, shooterSystem).schedule();
     else if (oldRightTriggerAxis == 1) {
       shooterSystem.ShooterStop();
       shooterSystem.LowerKickerStop();
@@ -254,7 +254,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return new SequentialCommandGroup(
       new AutoIntakeDown(m_driveSystem, positioningSystem),
-      new AutoShoot(2700, shooterSystem),
+      new AutoShoot(shooterSystem),
       new MoveXInchesBackwards(m_driveSystem, positioningSystem, 108, .50)
       //Two Ball Auto Original
       /*
