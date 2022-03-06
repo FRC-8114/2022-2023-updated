@@ -67,21 +67,21 @@ public class RobotContainer {
         ballPosition = Constants.PositioningConstants.BALL_ONE; 
         almostBallPosition[0] = ballPosition[0] + 6;
         almostBallPosition[1] = ballPosition[1] - 6;
-        positioningSystem = new FieldPositioningSystem(m_driveSystem, startPosition, -15); 
+        positioningSystem = new FieldPositioningSystem(m_driveSystem, startPosition, Math.PI + Math.atan((ballPosition[1] - startPosition[1]) / (ballPosition[0] - startPosition[0]))); 
         break;
       case 2: 
         startPosition = Constants.PositioningConstants.SPAWN_TWO; 
         ballPosition = Constants.PositioningConstants.BALL_TWO; 
         almostBallPosition[0] = ballPosition[0] + 6;
         almostBallPosition[1] = ballPosition[1] + 6;
-        positioningSystem = new FieldPositioningSystem(m_driveSystem, startPosition, 75); 
+        positioningSystem = new FieldPositioningSystem(m_driveSystem, startPosition, -Math.PI + Math.atan((ballPosition[1] - startPosition[1]) / (ballPosition[0] - startPosition[0]))); 
         break;
       case 3: 
         startPosition = Constants.PositioningConstants.SPAWN_THREE;
         ballPosition = Constants.PositioningConstants.BALL_THREE; 
         almostBallPosition[0] = ballPosition[0] + 6;
         almostBallPosition[1] = ballPosition[1] + 6;
-        positioningSystem = new FieldPositioningSystem(m_driveSystem, startPosition, 75); 
+        positioningSystem = new FieldPositioningSystem(m_driveSystem, startPosition, -Math.PI + Math.atan((ballPosition[1] - startPosition[1]) / (ballPosition[0] - startPosition[0]))); 
         break;
 
     }
@@ -244,18 +244,19 @@ public class RobotContainer {
   }
 
   /**
+   * Use this to pass the autonomous command to the main {@link Ro
+  /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
+   *bot} class.
    *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    positioningSystem.zeroPosition();
-    double[] almostBallPosition = new double[]{};
-    //return new MoveToPosition(m_driveSystem, positioningSystem, new double[] {initialPos[0]+12,initialPos[1]+12});
     return new SequentialCommandGroup(
       new AutoIntakeDown(m_driveSystem, positioningSystem),
       new AutoShoot(2700, shooterSystem),
       new MoveXInchesBackwards(m_driveSystem, positioningSystem, 108, .50)
+      //Two Ball Auto Original
       /*
       //shoot ball
       new AutoIntakeDown(m_driveSystem, positioningSystem),
