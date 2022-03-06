@@ -37,7 +37,7 @@ public class MoveXInchesForward extends CommandBase {
     public void execute() {
 
         // Move at the given velocity
-        driveSystem.tankDrive(velocity, velocity);
+        driveSystem.tankDrive(-velocity, -velocity);
 
         // Sent for debugging purposes
         RobotUtils.sendNumberToShuffleboard("autoDistance", fieldPositioningSystem.averageEncoderDistance());
