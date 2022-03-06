@@ -84,7 +84,7 @@ public class RobotContainer {
 
     }
 
-    positioningSystem = new FieldPositioningSystem(m_driveSystem, startPosition, angle); 
+    positioningSystem = new FieldPositioningSystem(m_driveSystem, startPosition, angle);
     almostStartPosition[0] = startPosition[0] + 1.5 * Constants.IntakeConstants.INTAKE_LENGTH * Math.cos(angle);
     almostStartPosition[1] = startPosition[1] + 1.5 * Constants.IntakeConstants.INTAKE_LENGTH  * Math.sin(angle);
     almostBallPosition[0] = ballPosition[0] - 2 * Constants.BALL_RADIUS * Math.cos(angle);
