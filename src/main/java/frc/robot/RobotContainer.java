@@ -47,11 +47,11 @@ public class RobotContainer {
   private int oldLeftTriggerAxis, oldRightTriggerAxis, oldPOV;
   private boolean oldRightStickButton;
   
-  final private int start = 1;
-  private double[] startPosition;
-  private double[] almostStartPosition;
-  private double[] ballPosition;
-  private double[] almostBallPosition;
+  // final private int start = 1;
+  // private double[] startPosition;
+  // private double[] almostStartPosition;
+  // private double[] ballPosition;
+  // private double[] almostBallPosition;
 
   // The container for the robot. Contains subsystems, OI devices, and commands.
   public RobotContainer() {
@@ -60,6 +60,7 @@ public class RobotContainer {
     initializeControlVariables();
     sendControlVariableSettersToShuffleboard();
 
+    /*
     double angle = Math.PI;
     almostStartPosition = new double[2];
     almostBallPosition = new double[2];
@@ -88,7 +89,9 @@ public class RobotContainer {
     almostStartPosition[1] = startPosition[1] + 1.5 * Constants.IntakeConstants.INTAKE_LENGTH  * Math.sin(angle);
     almostBallPosition[0] = ballPosition[0] - 2 * Constants.BALL_RADIUS * Math.cos(angle);
     almostBallPosition[1] = ballPosition[1] - 2 * Constants.BALL_RADIUS * Math.sin(angle);
-    
+    */
+    positioningSystem = new FieldPositioningSystem(m_driveSystem); 
+
   }
 
   /**

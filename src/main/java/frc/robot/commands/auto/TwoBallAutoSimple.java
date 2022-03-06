@@ -9,10 +9,10 @@ import frc.robot.subsystems.ShooterSystem;
 
 public class TwoBallAutoSimple extends SequentialCommandGroup {
     public TwoBallAutoSimple(DriveSystem driveSystem, IntakeSystem intakeSystem, FieldPositioningSystem positioningSystem, ShooterSystem shooterSystem, double[] ballPosition) {
-        double inchesForward = positioningSystem.distanceFrom(ballPosition) + 10;
+        double inchesForward = 90;
         addCommands(
             new ParallelRaceGroup(
-                new MoveXInchesForward(driveSystem, positioningSystem, inchesForward, .5),
+                new MoveXInchesForward(driveSystem, positioningSystem, inchesForward+5, .5),
                 new AutoIntake(intakeSystem, shooterSystem)
 
             ),
