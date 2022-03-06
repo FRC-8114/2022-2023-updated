@@ -4,7 +4,7 @@ public final class Constants {
   public static final double INCHES_TO_METERS = 0.0254;
   public static final double RPM_TO_VOLTAGE = 463;
   public static final double RPM_TO_VOLTAGE_CONSTANT = 9.04;
-  public static final double BALL_RADIUS = 4.5;
+  public static final double BALL_RADIUS = 4.75;
 
   public static final class DriveConstants {
     public static final int LEFT_MOTOR_1_PORT = 1;
