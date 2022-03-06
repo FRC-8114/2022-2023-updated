@@ -66,19 +66,19 @@ public class RobotContainer {
 
     switch (start) {
       case 1: 
-        angle = Math.PI + Math.atan((ballPosition[1] - startPosition[1]) / (ballPosition[0] - startPosition[0]));
         startPosition = Constants.PositioningConstants.SPAWN_ONE;
         ballPosition = Constants.PositioningConstants.BALL_ONE; 
+        angle = Math.PI + Math.atan((ballPosition[1] - startPosition[1]) / (ballPosition[0] - startPosition[0]));
         break;
       case 2: 
-        angle = -Math.PI + Math.atan((ballPosition[1] - startPosition[1]) / (ballPosition[0] - startPosition[0]));
         startPosition = Constants.PositioningConstants.SPAWN_TWO; 
         ballPosition = Constants.PositioningConstants.BALL_TWO; 
+        angle = -Math.PI + Math.atan((ballPosition[1] - startPosition[1]) / (ballPosition[0] - startPosition[0]));
         break;
       case 3: 
-        angle = -Math.PI + Math.atan((ballPosition[1] - startPosition[1]) / (ballPosition[0] - startPosition[0]));
         startPosition = Constants.PositioningConstants.SPAWN_THREE;
         ballPosition = Constants.PositioningConstants.BALL_THREE; 
+        angle = -Math.PI + Math.atan((ballPosition[1] - startPosition[1]) / (ballPosition[0] - startPosition[0]));
         break;
 
     }
