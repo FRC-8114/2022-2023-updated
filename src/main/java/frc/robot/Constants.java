@@ -33,6 +33,9 @@ public final class Constants {
     public static final double ENCODER_DISTANCE_PER_PULSE = 0;
     public static final double MAX_INPUT = 0;
 	  public static final int SHOOTER_SPIN_UP_TIME = 3;
+
+    public static final double TELEOP_DESIRED_VOLTAGE = 5.5;
+    public static final double AUTO_DESIRED_VOLTAGE = 6.5;
   }
 
   public static final class IntakeConstants {

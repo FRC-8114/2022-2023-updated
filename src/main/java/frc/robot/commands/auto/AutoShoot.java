@@ -22,7 +22,7 @@ public class AutoShoot extends CommandBase {
     }
 
     public void execute() {
-        shooterSystem.ShooterRunVoltage(6.5);
+        shooterSystem.ShooterRunVoltage(ShooterConstants.AUTO_DESIRED_VOLTAGE);
 
         if (timer.get() > ShooterConstants.SHOOTER_SPIN_UP_TIME) {
             shooterSystem.UpperKickerRun(1);

@@ -24,7 +24,7 @@ public class TeleOpShoot extends CommandBase {
 
     }
     public void execute() {
-        shooterSystem.ShooterRunVoltage(6.5);
+        shooterSystem.ShooterRunVoltage(ShooterConstants.TELEOP_DESIRED_VOLTAGE);
         if (timer.get() > ShooterConstants.SHOOTER_SPIN_UP_TIME) {
             shooterSystem.LowerKickerRun(lowerKickerSpeed);
             shooterSystem.UpperKickerRun(upperKickerSpeed);
