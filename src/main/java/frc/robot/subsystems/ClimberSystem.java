@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.EntryListenerFlags;
 import edu.wpi.first.wpilibj.AnalogPotentiometer;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ClimberConstants;
@@ -37,6 +40,10 @@ public class ClimberSystem extends SubsystemBase {
         climberDeployController.setInverted(Constants.ClimberConstants.CLIMBER_DEPLOY_INVERSED);
         climberDeployController.setIdleMode(IdleMode.kBrake);
         climberDeployController.stopMotor();
+
+        Shuffleboard.getTab("Deployer velocity").add("Change deployer velocity", 0).withWidget(BuiltInWidgets.kNumberSlider).getEntry()
+            .addListener(event -> {ClimberDeployerUp(event.value.getDouble());}, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+        
     }
 
     // Runs the climber arm at a speed from 0 to 1.0
