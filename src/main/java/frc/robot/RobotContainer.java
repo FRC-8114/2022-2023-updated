@@ -47,11 +47,19 @@ public class RobotContainer {
   private int oldLeftTriggerAxis, oldRightTriggerAxis, oldPOV;
   private boolean oldRightStickButton;
   
+<<<<<<< HEAD
   // final private int start = 1;
   // private double[] startPosition;
   // private double[] almostStartPosition;
   // private double[] ballPosition;
   // private double[] almostBallPosition;
+=======
+  final private int startLocation = 1;
+  private double[] startPosition;
+  private double[] almostStartPosition;
+  private double[] ballPosition;
+  private double[] almostBallPosition;
+>>>>>>> all
 
   // The container for the robot. Contains subsystems, OI devices, and commands.
   public RobotContainer() {
@@ -65,7 +73,7 @@ public class RobotContainer {
     almostStartPosition = new double[2];
     almostBallPosition = new double[2];
 
-    switch (start) {
+    switch (startLocation) {
       case 1: 
         startPosition = Constants.PositioningConstants.SPAWN_ONE;
         ballPosition = Constants.PositioningConstants.BALL_ONE; 
@@ -280,8 +288,8 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new OneBallAuto(m_driveSystem, positioningSystem, shooterSystem);
-    //return new TwoBallAutoSimple(m_driveSystem, intakeSystem, positioningSystem, shooterSystem, ballPosition);
+    //return new OneBallAuto(m_driveSystem, positioningSystem, shooterSystem);
+    return new TwoBallAutoSimple(m_driveSystem, intakeSystem, positioningSystem, shooterSystem, startLocation, 0, Math.sqrt(Math.pow(ballPosition[0], 2) + Math.pow(ballPosition[1], 2)));
     //return new TwoBallAutoComplex(ballSystem, m_driveSystem, positioningSystem, intakeSystem, shooterSystem, almostBallPosition, almostStartPosition);
     
   }   

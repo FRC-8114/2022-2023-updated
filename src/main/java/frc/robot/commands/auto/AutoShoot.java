@@ -3,19 +3,22 @@ package frc.robot.commands.auto;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.ShooterSystem;
 
 public class AutoShoot extends CommandBase {
     private ShooterSystem shooterSystem;
-    private int count = 0;
     private Timer timer;
 
     public AutoShoot(ShooterSystem shooterSystem) {
         this.shooterSystem = shooterSystem;
+<<<<<<< HEAD
 
         timer = new Timer();
+=======
+        timer = new Timer();
+        
+>>>>>>> all
     }
 
     public void initialize() {
