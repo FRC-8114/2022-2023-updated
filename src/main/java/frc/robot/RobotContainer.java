@@ -112,7 +112,7 @@ public class RobotContainer {
     oldLeftTriggerAxis = oldRightTriggerAxis = 0;
     oldPOV = -1;
     oldRightStickButton = false;
-    teleopShootSpeed = 3000;
+    teleopShootSpeed = 2700;
   }
 
   public void sendControlVariableSettersToShuffleboard() {
@@ -154,17 +154,15 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    SmartDashboard.putNumber("shooterDesiredRPM", teleopShootSpeed);
     //buttons
     //lower kicker reverse (A)
     new JoystickButton(controller, Button.kA.value)
       .whileHeld(() -> shooterSystem.LowerKickerReverse(lowerKickerReverseSpeed))
-      .whileHeld(() -> shooterSystem.UpperKickerReverse(upperKickerReverseSpeed))
-      .whenReleased(() -> shooterSystem.LowerKickerStop())
-      .whenReleased(() -> shooterSystem.UpperKickerStop());
+      .whenReleased(() -> shooterSystem.LowerKickerStop());
     //all kicker reverse (B)
     new JoystickButton(controller, Button.kB.value) 
-      .whileHeld(() -> shooterSystem.LowerKickerRun(lowerKickerRunSpeed))
-      .whileHeld(() -> shooterSystem.UpperKickerRun(upperKickerRunSpeed))
+      .whileHeld(() -> new AllKickerReverse(upperKickerReverseSpeed, lowerKickerReverseSpeed, shooterSystem).schedule())
       .whenReleased(() -> new AllKickerStop(shooterSystem).schedule());
     //shooter reverse (X)
     new JoystickButton(controller, Button.kX.value)
@@ -257,46 +255,10 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-<<<<<<< HEAD
-    return new SequentialCommandGroup(
-      new AutoIntakeDown(m_driveSystem, positioningSystem),
-      new AutoShoot(shooterSystem)
-      //new MoveXInchesBackwards(m_driveSystem, positioningSystem, 108, .50)
-      //Two Ball Auto Original
-      /*
-      //shoot ball
-      new AutoIntakeDown(m_driveSystem, positioningSystem),
-      new AutoShoot(2700, shooterSystem),
-      //move to ball position
-      new MoveToPosition(m_driveSystem, positioningSystem, almostBallPosition),
-      new RotateToBall(ballTrackingSystem, positioningSystem, m_driveSystem),  
-      //move w/ intake
-      new ParallelRaceGroup(
-        new MoveXInches(m_driveSystem, positioningSystem, 15, .3),
-        new AutoIntake(intakeSystem, shooterSystem)
-
-      ),
-      //move back and shoot
-      new MoveToPosition(m_driveSystem, positioningSystem, startPosition),
-      new AutoShoot(2700, shooterSystem)
-      */
-
-      /* test
-      new ParallelRaceGroup(
-        new MoveXInches(m_driveSystem, positioningSystem, 15, .3),
-        new AutoIntake(intakeSystem, shooterSystem)
-
-      )
-      */
-      
-       // Moved 8 when desired 12, 14 w d 24
-    );
-=======
     return new OneBallAuto(m_driveSystem, positioningSystem, shooterSystem);
-    //return new TwoBallAutoSimple(m_driveSystem, intakeSystem, positioningSystem, shooterSystem, 3700, ballPosition);
-    //return new TwoBallAutoComplex(ballSystem, m_driveSystem, positioningSystem, intakeSystem, shooterSystem, 3700, almostBallPosition, almostStartPosition);
->>>>>>> Auto commands
-      
+    //return new TwoBallAutoSimple(m_driveSystem, intakeSystem, positioningSystem, shooterSystem, ballPosition);
+    //return new TwoBallAutoComplex(ballSystem, m_driveSystem, positioningSystem, intakeSystem, shooterSystem, almostBallPosition, almostStartPosition);
+    
   }
 
   /**

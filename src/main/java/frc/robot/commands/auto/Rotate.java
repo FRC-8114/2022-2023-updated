@@ -7,21 +7,20 @@ import frc.robot.subsystems.FieldPositioningSystem;
 public class Rotate extends CommandBase {
     FieldPositioningSystem positioningSystem;
     DriveSystem driveSystem;
-    private double currentAngle, endAngle, velocity, marginOfError;
+    private double currentAngle, endAngle, marginOfError, velocity;
     private int direction;
-    public Rotate (DriveSystem driveSystem, FieldPositioningSystem positioningSystem, double degrees, double velocity){
+    public Rotate (DriveSystem driveSystem, FieldPositioningSystem positioningSystem, double degrees, double marginOfError, double velocity){
         this.driveSystem = driveSystem;
         this.positioningSystem = positioningSystem;
 
         currentAngle = positioningSystem.angle;
+        //convert current angle to unit circle
         if (currentAngle < 0)
             currentAngle = 2 * Math.PI + currentAngle;
         degrees = Math.toRadians(degrees);
         endAngle = currentAngle + degrees;
-        if (endAngle >= 2 * Math.PI)
-            endAngle -= 2 * Math.PI;
+        this.marginOfError = Math.PI * marginOfError / 180;
         this.velocity = velocity;
-        marginOfError = .1;
 
     }
     public void initialize() {
@@ -30,6 +29,7 @@ public class Rotate extends CommandBase {
     }
     public void execute() {
         currentAngle = positioningSystem.angle;
+        //convert current angle to unit circle
         if (currentAngle < 0)
             currentAngle = 2 * Math.PI + currentAngle;
         driveSystem.tankDrive(direction * -velocity, direction * velocity);
@@ -40,7 +40,7 @@ public class Rotate extends CommandBase {
 
     }
     public boolean isFinished() {
-        if (endAngle - currentAngle <= marginOfError)
+        if (Math.abs(endAngle - currentAngle) <= marginOfError || Math.abs(endAngle - (2 * Math.PI + currentAngle)) <= marginOfError)
             return true;
         return false;
 

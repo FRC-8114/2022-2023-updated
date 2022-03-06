@@ -8,7 +8,7 @@ import frc.robot.subsystems.IntakeSystem;
 import frc.robot.subsystems.ShooterSystem;
 
 public class TwoBallAutoSimple extends SequentialCommandGroup {
-    public TwoBallAutoSimple(DriveSystem driveSystem, IntakeSystem intakeSystem, FieldPositioningSystem positioningSystem, ShooterSystem shooterSystem, int desiredRPM, double[] ballPosition) {
+    public TwoBallAutoSimple(DriveSystem driveSystem, IntakeSystem intakeSystem, FieldPositioningSystem positioningSystem, ShooterSystem shooterSystem, double[] ballPosition) {
         double inchesForward = positioningSystem.distanceFrom(ballPosition) + 10;
         addCommands(
             new ParallelRaceGroup(
@@ -16,9 +16,9 @@ public class TwoBallAutoSimple extends SequentialCommandGroup {
                 new AutoIntake(intakeSystem, shooterSystem)
 
             ),
-            new Rotate(driveSystem, positioningSystem, 180, .3),
+            new Rotate(driveSystem, positioningSystem, 180, 1, .3),
             new MoveXInchesForward(driveSystem, positioningSystem, inchesForward, .45),
-            new AutoShoot(desiredRPM, shooterSystem)
+            new AutoShoot(shooterSystem)
 
         );
 
