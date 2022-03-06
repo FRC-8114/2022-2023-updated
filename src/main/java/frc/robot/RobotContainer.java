@@ -109,7 +109,7 @@ public class RobotContainer {
     oldLeftTriggerAxis = oldRightTriggerAxis = 0;
     oldPOV = -1;
     oldRightStickButton = false;
-    teleopShootSpeed = 2700;
+    teleopShootSpeed = 3000;
   }
 
   public void sendControlVariableSettersToShuffleboard() {
@@ -151,15 +151,17 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    SmartDashboard.putNumber("shooterDesiredRPM", teleopShootSpeed);
     //buttons
     //lower kicker reverse (A)
     new JoystickButton(controller, Button.kA.value)
       .whileHeld(() -> shooterSystem.LowerKickerReverse(lowerKickerReverseSpeed))
-      .whenReleased(() -> shooterSystem.LowerKickerStop());
+      .whileHeld(() -> shooterSystem.UpperKickerReverse(upperKickerReverseSpeed))
+      .whenReleased(() -> shooterSystem.LowerKickerStop())
+      .whenReleased(() -> shooterSystem.UpperKickerStop());
     //all kicker reverse (B)
     new JoystickButton(controller, Button.kB.value) 
-      .whileHeld(() -> new AllKickerReverse(upperKickerReverseSpeed, lowerKickerReverseSpeed, shooterSystem).schedule())
+      .whileHeld(() -> shooterSystem.LowerKickerRun(lowerKickerRunSpeed))
+      .whileHeld(() -> shooterSystem.UpperKickerRun(upperKickerRunSpeed))
       .whenReleased(() -> new AllKickerStop(shooterSystem).schedule());
     //shooter reverse (X)
     new JoystickButton(controller, Button.kX.value)
@@ -254,8 +256,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     return new SequentialCommandGroup(
       new AutoIntakeDown(m_driveSystem, positioningSystem),
-      new AutoShoot(shooterSystem),
-      new MoveXInchesBackwards(m_driveSystem, positioningSystem, 108, .50)
+      new AutoShoot(shooterSystem)
+      //new MoveXInchesBackwards(m_driveSystem, positioningSystem, 108, .50)
       //Two Ball Auto Original
       /*
       //shoot ball
