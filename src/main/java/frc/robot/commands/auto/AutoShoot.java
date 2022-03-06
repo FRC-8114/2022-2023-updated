@@ -12,13 +12,8 @@ public class AutoShoot extends CommandBase {
 
     public AutoShoot(ShooterSystem shooterSystem) {
         this.shooterSystem = shooterSystem;
-<<<<<<< HEAD
 
         timer = new Timer();
-=======
-        timer = new Timer();
-        
->>>>>>> all
     }
 
     public void initialize() {
