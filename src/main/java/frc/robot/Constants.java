@@ -15,7 +15,7 @@ public final class Constants {
     public static final boolean LEFT_MOTORS_INVERSED = true;
     public static final boolean STEERING_INVERSED = false;
 
-    public static final double INITIAL_MAX_INPUT = .8;
+    public static final double INITIAL_MAX_INPUT = .75;
   }
 
   public static final class ShooterConstants {
@@ -31,6 +31,7 @@ public final class Constants {
     public static final double VELOCITY_CONVERSION_FACTOR = 1/42 * Math.PI * 5;
     public static final double ENCODER_DISTANCE_PER_PULSE = 0;
     public static final double MAX_INPUT = 0;
+	  public static final int SHOOTER_SPIN_UP_TIME = 3;
   }
 
   public static final class IntakeConstants {
