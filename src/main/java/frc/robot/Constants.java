@@ -2,8 +2,8 @@ package frc.robot;
 
 public final class Constants {
   public static final double INCHES_TO_METERS = 0.0254;
-  public static final double RPM_TO_VOLTAGE = 463;
-  public static final double RPM_TO_VOLTAGE_CONSTANT = 9.04;
+  public static final double RPM_TO_VOLTAGE = 2.23*Math.pow(10,-3);
+  public static final double RPM_TO_VOLTAGE_CONSTANT = .685;
   public static final double BALL_RADIUS = 4.75;
 
   public static final class DriveConstants {
@@ -34,8 +34,9 @@ public final class Constants {
     public static final double MAX_INPUT = 0;
 	  public static final int SHOOTER_SPIN_UP_TIME = 3;
 
-    public static final double TELEOP_DESIRED_VOLTAGE = 5.5;
+    public static double TELEOP_DESIRED_VOLTAGE = 5.5;
     public static final double AUTO_DESIRED_VOLTAGE = 6.5;
+    public static double TELEOP_DESIRED_RPM = 3000;
   }
 
   public static final class IntakeConstants {

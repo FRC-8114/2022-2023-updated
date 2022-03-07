@@ -2,6 +2,10 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.networktables.EntryInfo;
+import edu.wpi.first.networktables.EntryListenerFlags;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -41,8 +45,13 @@ public class ShooterSystem extends SubsystemBase {
 
         lowerKickerController.setIdleMode(IdleMode.kBrake);
         lowerKickerController.setInverted(Constants.ShooterConstants.LOWER_KICKER_INVERSED);
-        
-    }
+     
+        Shuffleboard.getTab("Shooter").add("Desired Shooter RPMs", ShooterConstants.TELEOP_DESIRED_RPM).withWidget(BuiltInWidgets.kNumberSlider).getEntry()
+            .addListener(event -> {ShooterConstants.TELEOP_DESIRED_RPM = event.value.getDouble();}, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+        Shuffleboard.getTab("Shooter").add("Desired Shooter Voltage", ShooterConstants.TELEOP_DESIRED_VOLTAGE).withWidget(BuiltInWidgets.kNumberSlider).getEntry()
+            .addListener(event -> {ShooterConstants.TELEOP_DESIRED_VOLTAGE = event.value.getDouble();}, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+        }
+
 
     // Run repeatedly to update certain values
     public void periodic () {

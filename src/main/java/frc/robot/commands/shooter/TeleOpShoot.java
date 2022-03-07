@@ -10,22 +10,19 @@ import frc.robot.subsystems.ShooterSystem;
 public class TeleOpShoot extends CommandBase {
     private double lowerKickerSpeed, upperKickerSpeed;
     private ShooterSystem shooterSystem;
-    private Timer timer;
 
     public TeleOpShoot(double lowerKickerSpeed, double upperKickerSpeed, ShooterSystem shooterSystem) {
         this.lowerKickerSpeed = lowerKickerSpeed;
         this.upperKickerSpeed = upperKickerSpeed;
         this.shooterSystem = shooterSystem;
-        timer = new Timer();
 
     }
     public void initialize() {
-        timer.start();
 
     }
     public void execute() {
-        shooterSystem.ShooterRunVoltage(ShooterConstants.TELEOP_DESIRED_VOLTAGE);
-        if (timer.get() > ShooterConstants.SHOOTER_SPIN_UP_TIME) {
+        shooterSystem.ShooterRunVoltage(ShooterConstants.TELEOP_DESIRED_RPM*Constants.RPM_TO_VOLTAGE + Constants.RPM_TO_VOLTAGE_CONSTANT);
+        if (shooterSystem.ShooterRPM > ShooterConstants.TELEOP_DESIRED_RPM*.975) {
             shooterSystem.LowerKickerRun(lowerKickerSpeed);
             shooterSystem.UpperKickerRun(upperKickerSpeed);
 
@@ -34,7 +31,6 @@ public class TeleOpShoot extends CommandBase {
     }
 
     public void end() {
-        timer.stop();
     }
 
     public boolean isFinished() {
