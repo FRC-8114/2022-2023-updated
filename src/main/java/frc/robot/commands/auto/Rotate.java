@@ -7,32 +7,20 @@ import frc.robot.subsystems.FieldPositioningSystem;
 public class Rotate extends CommandBase {
     FieldPositioningSystem positioningSystem;
     DriveSystem driveSystem;
-    private double currentAngle, endAngle, marginOfError, velocity;
-    private int direction;
-    public Rotate (DriveSystem driveSystem, FieldPositioningSystem positioningSystem, double degrees, double marginOfError, double velocity){
+    private double desiredAngle, marginOfErrorDegrees, velocity;
+    public Rotate (DriveSystem driveSystem, FieldPositioningSystem positioningSystem, double degrees, double marginOfErrorDegrees, double velocity){
         this.driveSystem = driveSystem;
         this.positioningSystem = positioningSystem;
-
-        currentAngle = positioningSystem.angle;
-        //convert current angle to unit circle
-        if (currentAngle < 0)
-            currentAngle = 2 * Math.PI + currentAngle;
-        degrees = Math.toRadians(degrees);
-        endAngle = currentAngle + degrees;
-        this.marginOfError = Math.PI * marginOfError / 180;
-        this.velocity = velocity;
+        this.desiredAngle = positioningSystem.angle + Math.toRadians(degrees);
+        this.marginOfErrorDegrees = marginOfErrorDegrees;
 
     }
     public void initialize() {
-
+        new RotateToAngle(driveSystem, positioningSystem, desiredAngle, velocity);
 
     }
     public void execute() {
-        currentAngle = positioningSystem.angle;
-        //convert current angle to unit circle
-        if (currentAngle < 0)
-            currentAngle = 2 * Math.PI + currentAngle;
-        driveSystem.tankDrive(direction * -velocity, direction * velocity);
+        
 
     }
     public void end(boolean interrupted) {
@@ -40,9 +28,7 @@ public class Rotate extends CommandBase {
 
     }
     public boolean isFinished() {
-        if (Math.abs(endAngle - currentAngle) <= marginOfError || Math.abs(endAngle - (2 * Math.PI + currentAngle)) <= marginOfError)
-            return true;
-        return false;
+        return true;
 
     }
 

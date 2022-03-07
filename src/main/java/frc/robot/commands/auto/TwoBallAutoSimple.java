@@ -2,6 +2,7 @@ package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.PositioningConstants;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.FieldPositioningSystem;
@@ -12,7 +13,7 @@ public class TwoBallAutoSimple extends SequentialCommandGroup {
     public TwoBallAutoSimple(DriveSystem driveSystem, IntakeSystem intakeSystem, FieldPositioningSystem positioningSystem, ShooterSystem shooterSystem, int location, double angleOfNet, double distanceFromBall) {
         addCommands(
             new ParallelRaceGroup(
-                new MoveXInchesForward(driveSystem, positioningSystem, distanceFromBall + 10, .5),
+                new MoveXInchesForward(driveSystem, positioningSystem, distanceFromBall + IntakeConstants.INTAKE_LENGTH, .5),
                 new AutoIntake(intakeSystem, shooterSystem)
 
             ),
