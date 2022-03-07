@@ -35,7 +35,7 @@ public class Rotate extends CommandBase {
         driveSystem.tankDrive(direction * -velocity, direction * velocity);
 
     }
-    public void end() {
+    public void end(boolean interrupted) {
         driveSystem.tankDrive(0, 0);
 
     }

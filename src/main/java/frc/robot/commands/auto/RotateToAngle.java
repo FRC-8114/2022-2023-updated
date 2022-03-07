@@ -46,7 +46,7 @@ public class RotateToAngle extends CommandBase {
         SmartDashboard.putBoolean("done", Math.abs(desiredAngle - fieldPositioningSystem.angle) <= marginOfError);
     }
 
-    public void end() {
+    public void end(boolean interrupted) {
         driveSystem.arcadeDrive(0,0);
     }
 

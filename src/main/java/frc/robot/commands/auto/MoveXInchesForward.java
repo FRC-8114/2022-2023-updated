@@ -47,7 +47,7 @@ public class MoveXInchesForward extends CommandBase {
     /**
      * This method runs when the command terminates
      */
-    public void end() {
+    public void end(boolean interrupted) {
         driveSystem.tankDrive(0, 0);
     }
 

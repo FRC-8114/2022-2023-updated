@@ -26,7 +26,7 @@ public class AutoIntake extends CommandBase {
         shooterSystem.LowerKickerReverse(lowerKickerReverseSpeed);
 
     }
-    public void end() {
+    public void end(boolean interrupted) {
         intakeSystem.IntakeStop();
         shooterSystem.UpperKickerStop();
         shooterSystem.LowerKickerStop();
