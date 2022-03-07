@@ -9,7 +9,7 @@ public class AutoIntakeDown extends SequentialCommandGroup {
     public AutoIntakeDown(DriveSystem driveSystem, FieldPositioningSystem fieldPositioningSystem) {
         addCommands(
             new MoveXInchesBackwards(driveSystem, fieldPositioningSystem, 100, .6),
-            new Wait(driveSystem, .5),
+            new Wait(.5),
             new MoveXInchesForward(driveSystem, fieldPositioningSystem, 75, .5)
 
         );
