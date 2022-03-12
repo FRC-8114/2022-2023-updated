@@ -143,7 +143,7 @@ public class RobotContainer {
       Method intakeReverseSpeedSetter = RobotContainer.class.getMethod("setIntakeReverseSpeed", Double.class);
       Method maxDriveInputSetter = DriveSystem.class.getMethod("setMaxInput", Double.class);
       Method autoRotateSpeedSetter = RobotContainer.class.getMethod("setAutoRotateSpeed", Double.class);
-      Method teleopShootSpeedSetter = RobotContainer.class.getMethod("teleopShootSpeedSetter", Double.class);
+      Method teleopShootSpeedSetter = RobotContainer.class.getMethod("setTeleopShootSpeed", Double.class);
 
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, lowerKickerRunSpeedSetter, "Control Variables", "lowerKickerRunSpeed", lowerKickerRunSpeed);
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, lowerKickerReverseSpeedSetter, "Control Variables", "lowerKickerReverseSpeed", lowerKickerReverseSpeed);
