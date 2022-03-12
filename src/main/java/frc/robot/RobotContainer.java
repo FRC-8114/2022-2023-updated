@@ -14,7 +14,8 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.RunShooter;
+import frc.robot.commands.VoltageToRPM;
 import frc.robot.commands.auto.*;
 import frc.robot.commands.shooter.*;
 
@@ -35,6 +36,8 @@ public class RobotContainer {
 
   public XboxController controller = new XboxController(0);
 
+  private int oldLeftTriggerAxis, oldRightTriggerAxis, oldPOV;
+
   public double lowerKickerRunSpeed, lowerKickerReverseSpeed;
   public double upperKickerRunSpeed, upperKickerReverseSpeed;
   public double shooterRunSpeed, shooterReverseSpeed;
@@ -42,17 +45,17 @@ public class RobotContainer {
   public double autoRotateSpeed;
   public double climberRunnerRunSpeed, climberRunnerReverseSpeed;
   public double climberDeployerRunSpeed, climberDeployerReverseSpeed;
-  public double teleopShootRPM;
-  public boolean teleopShooting;
+  public double teleopShootSpeed;
 
-  private int oldLeftTriggerAxis, oldRightTriggerAxis, oldPOV;
   private boolean oldRightStickButton;
-  
-  final private int startLocation = 1;
+
   private double[] startPosition;
   private double[] almostStartPosition;
   private double[] ballPosition;
   private double[] almostBallPosition;
+  
+  private final int startLocation = 1;
+  private final boolean complexAuto = false;
 
   // The container for the robot. Contains subsystems, OI devices, and commands.
   public RobotContainer() {
@@ -61,35 +64,44 @@ public class RobotContainer {
     initializeControlVariables();
     sendControlVariableSettersToShuffleboard();
 
-    double angle = Math.PI;
+    //Initializes field positioning system with the correct start position and angle
     almostStartPosition = new double[2];
     almostBallPosition = new double[2];
+    startPosition = new double[2];
+    ballPosition = new double[2];
+    if (complexAuto) {
+      double angle = 0;
+      switch (startLocation) {
+        case 1: 
+          startPosition = Constants.PositioningConstants.SPAWN_ONE;
+          ballPosition = Constants.PositioningConstants.BALL_ONE; 
+          angle = Math.PI + Math.atan((ballPosition[1] - startPosition[1]) / (ballPosition[0] - startPosition[0]));
+          break;
+        case 2: 
+          startPosition = Constants.PositioningConstants.SPAWN_TWO; 
+          ballPosition = Constants.PositioningConstants.BALL_TWO; 
+          angle = -Math.PI + Math.atan((ballPosition[1] - startPosition[1]) / (ballPosition[0] - startPosition[0]));
+          break;
+        case 3: 
+          startPosition = Constants.PositioningConstants.SPAWN_THREE;
+          ballPosition = Constants.PositioningConstants.BALL_THREE; 
+          angle = -Math.PI + Math.atan((ballPosition[1] - startPosition[1]) / (ballPosition[0] - startPosition[0]));
+          break;
+        default:
+          angle = Math.PI;
 
-    switch (startLocation) {
-      case 1: 
-        startPosition = Constants.PositioningConstants.SPAWN_ONE;
-        ballPosition = Constants.PositioningConstants.BALL_ONE; 
-        angle = Math.PI + Math.atan((ballPosition[1] - startPosition[1]) / (ballPosition[0] - startPosition[0]));
-        break;
-      case 2: 
-        startPosition = Constants.PositioningConstants.SPAWN_TWO; 
-        ballPosition = Constants.PositioningConstants.BALL_TWO; 
-        angle = -Math.PI + Math.atan((ballPosition[1] - startPosition[1]) / (ballPosition[0] - startPosition[0]));
-        break;
-      case 3: 
-        startPosition = Constants.PositioningConstants.SPAWN_THREE;
-        ballPosition = Constants.PositioningConstants.BALL_THREE; 
-        angle = -Math.PI + Math.atan((ballPosition[1] - startPosition[1]) / (ballPosition[0] - startPosition[0]));
-        break;
+      }
 
+      positioningSystem = new FieldPositioningSystem(m_driveSystem, startPosition, angle);
+      almostStartPosition[0] = startPosition[0] + 1.5 * Constants.IntakeConstants.INTAKE_LENGTH * Math.cos(angle);
+      almostStartPosition[1] = startPosition[1] + 1.5 * Constants.IntakeConstants.INTAKE_LENGTH  * Math.sin(angle);
+      almostBallPosition[0] = ballPosition[0] - 2 * Constants.BALL_RADIUS * Math.cos(angle);
+      almostBallPosition[1] = ballPosition[1] - 2 * Constants.BALL_RADIUS * Math.sin(angle);
+      positioningSystem = new FieldPositioningSystem(m_driveSystem);
+    
     }
-
-    positioningSystem = new FieldPositioningSystem(m_driveSystem, startPosition, angle);
-    almostStartPosition[0] = startPosition[0] + 1.5 * Constants.IntakeConstants.INTAKE_LENGTH * Math.cos(angle);
-    almostStartPosition[1] = startPosition[1] + 1.5 * Constants.IntakeConstants.INTAKE_LENGTH  * Math.sin(angle);
-    almostBallPosition[0] = ballPosition[0] - 2 * Constants.BALL_RADIUS * Math.cos(angle);
-    almostBallPosition[1] = ballPosition[1] - 2 * Constants.BALL_RADIUS * Math.sin(angle);
-    positioningSystem = new FieldPositioningSystem(m_driveSystem); 
+    else
+      positioningSystem = new FieldPositioningSystem(m_driveSystem);
 
   }
 
@@ -114,7 +126,7 @@ public class RobotContainer {
     oldLeftTriggerAxis = oldRightTriggerAxis = 0;
     oldPOV = -1;
     oldRightStickButton = false;
-    teleopShooting = false;
+    teleopShootSpeed = 2700;
   }
 
   public void sendControlVariableSettersToShuffleboard() {
@@ -131,7 +143,7 @@ public class RobotContainer {
       Method intakeReverseSpeedSetter = RobotContainer.class.getMethod("setIntakeReverseSpeed", Double.class);
       Method maxDriveInputSetter = DriveSystem.class.getMethod("setMaxInput", Double.class);
       Method autoRotateSpeedSetter = RobotContainer.class.getMethod("setAutoRotateSpeed", Double.class);
-      Method teleopShootRPMSetter = RobotContainer.class.getMethod("teleopShootRPMSetter", Double.class);
+      Method teleopShootSpeedSetter = RobotContainer.class.getMethod("teleopShootSpeedSetter", Double.class);
 
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, lowerKickerRunSpeedSetter, "Control Variables", "lowerKickerRunSpeed", lowerKickerRunSpeed);
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, lowerKickerReverseSpeedSetter, "Control Variables", "lowerKickerReverseSpeed", lowerKickerReverseSpeed);
@@ -143,7 +155,7 @@ public class RobotContainer {
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, intakeReverseSpeedSetter, "Control Variables", "intakeReverseSpeed", intakeReverseSpeed);
       RobotUtils.sendNumberSetterToShuffleboard(m_driveSystem, maxDriveInputSetter, "Control Variables", "maxDriveInput", Constants.DriveConstants.INITIAL_MAX_INPUT);
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, autoRotateSpeedSetter, "Control Variables", "autoRotateSpeed", autoRotateSpeed);
-      RobotUtils.sendNumberSetterToShuffleboard(robotContainer, teleopShootRPMSetter, "Control Variables", "teleopShootRPM", shooterSystem.ShooterRPM);
+      RobotUtils.sendNumberSetterToShuffleboard(robotContainer, teleopShootSpeedSetter, "Control Variables", "teleopShootSpeed", teleopShootSpeed);
     } catch (NoSuchMethodException | SecurityException e) {
       SmartDashboard.putString("depressing_error", e.toString());
     }
@@ -178,7 +190,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    SmartDashboard.putNumber("shooterDesiredRPM", teleopShootRPM);
+    SmartDashboard.putNumber("shooterDesiredRPM", teleopShootSpeed);
     //buttons
     //lower kicker reverse (A)
     new JoystickButton(controller, Button.kA.value)
@@ -192,10 +204,14 @@ public class RobotContainer {
     new JoystickButton(controller, Button.kX.value)
       .whileHeld(() -> shooterSystem.ShooterReverse(shooterReverseSpeed))
       .whenReleased(() -> shooterSystem.ShooterStop());
-    //shooter (Y)
+    //shooter (Y) -- temp kickers
     new JoystickButton(controller, Button.kY.value)
-      .whileHeld(() -> shooterSystem.ShooterRunVoltage(6))
-      .whenReleased(() -> shooterSystem.ShooterStop());
+    .whileHeld(() -> shooterSystem.UpperKickerRun(1))
+    .whileHeld(() -> shooterSystem.LowerKickerRun(1))
+    .whenReleased(() -> shooterSystem.UpperKickerStop())
+    .whenReleased(() -> shooterSystem.LowerKickerStop());
+      // .whileHeld(() -> shooterSystem.ShooterRunVoltage(6))
+      // .whenReleased(() -> shooterSystem.ShooterStop());
 
     //bumpers
     //intake reverse (LB)
@@ -214,6 +230,7 @@ public class RobotContainer {
   }
 
   public void periodic() {
+    SmartDashboard.putNumber("angle", positioningSystem.angle);
     //triggers
     //intake and kickers (LT)
     if(controller.getLeftTriggerAxis() == 1) {
@@ -229,13 +246,9 @@ public class RobotContainer {
 
     }
     //auto shoot (RT)
-    if(controller.getRightTriggerAxis() == 1 && oldRightTriggerAxis == 0)
-      teleopShooting = !teleopShooting;
-
-    if (teleopShooting) {
+    if(controller.getRightTriggerAxis() == 1)
       new TeleOpShoot(lowerKickerRunSpeed, upperKickerRunSpeed, shooterSystem).schedule();
-    }
-    else {
+    else if (oldRightTriggerAxis == 1) {
       shooterSystem.ShooterStop();
       shooterSystem.LowerKickerStop();
       shooterSystem.UpperKickerStop();
@@ -283,11 +296,18 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    return new SequentialCommandGroup(
+      new VoltageToRPM(shooterSystem, 4),
+      new Wait(10)
+
+    );
+    //return new MoveXInchesForward(m_driveSystem, positioningSystem, 50, .2);
+    //return new Rotate2(m_driveSystem, 22.5, .4);
     //return new OneBallAuto(m_driveSystem, positioningSystem, shooterSystem);
-    return new TwoBallAutoSimple(m_driveSystem, intakeSystem, positioningSystem, shooterSystem, startLocation, 0, Math.sqrt(Math.pow(ballPosition[0] - startPosition[0], 2) + Math.pow(ballPosition[1] - startPosition[1], 2)));
+    //return new TwoBallAutoSimple(m_driveSystem, intakeSystem, positioningSystem, shooterSystem, 0, 40); //Math.sqrt(Math.pow(ballPosition[0] - startPosition[0], 2) + Math.pow(ballPosition[1] - startPosition[1], 2))
     //return new TwoBallAutoComplex(ballSystem, m_driveSystem, positioningSystem, intakeSystem, shooterSystem, almostBallPosition, almostStartPosition);
     
-  }   
+  }
 
   /**
    * Setters
@@ -329,7 +349,7 @@ public class RobotContainer {
     autoRotateSpeed = speed;
   }
 
-  public void setTeleopShootRPM (Double RPM) {
-    shooterSystem.ShooterRPM = RPM;
+  public void setTeleopShootSpeed (Double speed) {
+    teleopShootSpeed = speed;
   }
 }

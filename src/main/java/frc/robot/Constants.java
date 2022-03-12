@@ -59,9 +59,15 @@ public final class Constants {
   public static final class PositioningConstants {
     public static final double GEAR_RATIO = 1 / 10.75;
 
+    public static final double ROTATIONS_PER_PULSE = 1/4;
+
+    public static final double DRIVE_MOTOR_RADIUS = 6;
+
     public static final double WHEEL_DIAMETER_INCHES = 6;
     public static final double WHEEL_DIAMETER_METERS = WHEEL_DIAMETER_INCHES * INCHES_TO_METERS;
     public static final double WHEEL_CIRCUMFRENCE = WHEEL_DIAMETER_INCHES * Math.PI;
+    public static final double DISTANCE_BETWEEN_WHEELS = 21.75;
+    public static final double DISTANCE_BETWEEN_SPARK_MAXES = 8 + 3/16;
     // The comments describe what point is assigned to what letter on the whiteboard.
     public static double[] SPAWN_ONE = new double[] {296.563, -139.023}; //A
     public static double[] SPAWN_TWO = new double[] {300.661, -189.075}; //B
@@ -84,7 +90,7 @@ public final class Constants {
     public static final double UPPER_KICKER_INITIAL_RUN_SPEED = .35;
     public static final double UPPER_KICKER_INITIAL_REVERSE_SPEED = .35;
     public static final double SHOOTER_INITIAL_RUN_SPEED = .8;
-    public static final double SHOOTER_INITIAL_REVERSE_SPEED = .25;
+    public static final double SHOOTER_INITIAL_REVERSE_SPEED = .4;
     public static final double INTAKE_INITIAL_RUN_SPEED = .4;
     public static final double INTAKE_INITIAL_REVERSE_SPEED = .25;
     public static final double CLIMBER_RUNNER_INITIAL_RUN_SPEED = .6;

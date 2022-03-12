@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.auto.Wait;
 import frc.robot.subsystems.ShooterSystem;
 
 public class TeleOpShoot extends CommandBase {
@@ -21,10 +22,11 @@ public class TeleOpShoot extends CommandBase {
 
     }
     public void execute() {
-        shooterSystem.ShooterRunVoltage(ShooterConstants.TELEOP_DESIRED_RPM*Constants.RPM_TO_VOLTAGE + Constants.RPM_TO_VOLTAGE_CONSTANT);
-        if (shooterSystem.ShooterRPM > ShooterConstants.TELEOP_DESIRED_RPM*.975) {
-            shooterSystem.LowerKickerRun(lowerKickerSpeed);
-            shooterSystem.UpperKickerRun(upperKickerSpeed);
+        shooterSystem.ShooterRunVoltage(ShooterConstants.TELEOP_DESIRED_VOLTAGE);
+        if (ShooterConstants.TELEOP_DESIRED_VOLTAGE <= shooterSystem.shooterController.getBusVoltage()) {
+            // new Wait(1);
+            // shooterSystem.LowerKickerRun(lowerKickerSpeed);
+            // shooterSystem.UpperKickerRun(upperKickerSpeed);
 
         }
             

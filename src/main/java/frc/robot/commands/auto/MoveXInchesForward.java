@@ -1,5 +1,6 @@
 package frc.robot.commands.auto;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotUtils;
 import frc.robot.subsystems.DriveSystem;
@@ -7,7 +8,7 @@ import frc.robot.subsystems.FieldPositioningSystem;
 
 public class MoveXInchesForward extends CommandBase {
     private double[] startingPos;
-    private double desiredDistance, velocity;
+    private double desiredDistance, velocity, changeInPosition, oldPosition;
     private DriveSystem driveSystem;
     private FieldPositioningSystem fieldPositioningSystem;
 
@@ -17,12 +18,16 @@ public class MoveXInchesForward extends CommandBase {
         
         this.desiredDistance = desiredDistance;
         this.velocity = velocity;
+        changeInPosition = 0;
     }
 
     /**
      * This method runs whenever the command is scheduled
      */
     public void initialize() {
+        //mine initialized (is it the same)
+        oldPosition = driveSystem.getLeftDistance();
+        //jack's initialized (is it the same)
         startingPos = new double[2];
         startingPos[0] = fieldPositioningSystem.position[0];
         startingPos[1] = fieldPositioningSystem.position[1];
@@ -35,13 +40,15 @@ public class MoveXInchesForward extends CommandBase {
      * and the command terminating
      */
     public void execute() {
-
+        changeInPosition += driveSystem.getLeftDistance() - oldPosition;
+        oldPosition = driveSystem.getLeftDistance();
         // Move at the given velocity
         driveSystem.tankDrive(-velocity, -velocity);
 
         // Sent for debugging purposes
         RobotUtils.sendNumberToShuffleboard("autoDistance", fieldPositioningSystem.averageEncoderDistance());
-        RobotUtils.sendNumberToShuffleboard("traveledDistance", fieldPositioningSystem.distanceFrom(startingPos));
+        RobotUtils.sendNumberToShuffleboard("MoveXInchesForward traveledDistance", fieldPositioningSystem.distanceFrom(startingPos));
+        SmartDashboard.putNumber("MoveXInchesForward traveledDistance from encoders", changeInPosition);
     }
 
     /**

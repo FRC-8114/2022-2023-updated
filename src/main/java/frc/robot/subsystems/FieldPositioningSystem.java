@@ -40,6 +40,7 @@ public class FieldPositioningSystem extends SubsystemBase {
      * gearbox and wheel size.
      */
     public double rotationsToDistance(double rotations) {
+        //works?
         return rotations * Constants.PositioningConstants.GEAR_RATIO * Constants.PositioningConstants.WHEEL_CIRCUMFRENCE;
     }
 

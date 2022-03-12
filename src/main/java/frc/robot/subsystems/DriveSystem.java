@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.PositioningConstants;
 
 public class DriveSystem extends SubsystemBase {
   // The motors on the left side of the drive.
@@ -42,7 +43,6 @@ public class DriveSystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSystem () {
-  
     /* Initialize the drivetrain motors */
 
     // Left Leader Initialization
@@ -66,15 +66,16 @@ public class DriveSystem extends SubsystemBase {
     rightMotorFollower.setIdleMode(IdleMode.kCoast);
     rightMotorFollower.setInverted(DriveConstants.RIGHT_MOTORS_INVERSED);
     rightMotorFollower.follow(rightMotorLeader, false);
+
+    leftLeaderEncoder.setPositionConversionFactor(PositioningConstants.GEAR_RATIO * PositioningConstants.ROTATIONS_PER_PULSE * PositioningConstants.WHEEL_CIRCUMFRENCE);
+    leftFollowerEncoder.setPositionConversionFactor(PositioningConstants.GEAR_RATIO * PositioningConstants.ROTATIONS_PER_PULSE * PositioningConstants.WHEEL_CIRCUMFRENCE);
+    rightLeaderEncoder.setPositionConversionFactor(PositioningConstants.GEAR_RATIO * PositioningConstants.ROTATIONS_PER_PULSE * PositioningConstants.WHEEL_CIRCUMFRENCE);
+    rightFollowerEncoder.setPositionConversionFactor(PositioningConstants.GEAR_RATIO * PositioningConstants.ROTATIONS_PER_PULSE * PositioningConstants.WHEEL_CIRCUMFRENCE);
   }
 
   // Switches which side of the robot is considered front
   public void switchMotorPorts () {
     steeringInversed = !steeringInversed;
-  }
-
-  // For use in cheesy drive, will switch back and forth from curvature drive to arcade drive
-  public void switchDriveSystem () {
     isArcade = !isArcade;
   }
 
