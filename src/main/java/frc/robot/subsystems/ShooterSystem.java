@@ -15,6 +15,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import com.revrobotics.RelativeEncoder;
 
+import frc.robot.AdjustablePID;
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants;
 
@@ -23,6 +24,8 @@ public class ShooterSystem extends SubsystemBase {
     public final static CANSparkMax shooterController = new CANSparkMax(ShooterConstants.SHOOTER_CONTROLLER_PORT, MotorType.kBrushless);
     public final static CANSparkMax upperKickerController = new CANSparkMax(ShooterConstants.UPPER_KICKER_CONTROLLER_PORT, MotorType.kBrushed);
     public final static CANSparkMax lowerKickerController = new CANSparkMax(ShooterConstants.LOWER_KICKER_CONTROLLER_PORT, MotorType.kBrushed);
+
+    public static AdjustablePID shooterPID;
 
     // Shooter motor controller encoders
     final RelativeEncoder shooterControllerEncoder = shooterController.getEncoder();
@@ -36,6 +39,8 @@ public class ShooterSystem extends SubsystemBase {
         shooterController.restoreFactoryDefaults();
         shooterController.setIdleMode(IdleMode.kCoast);
         shooterController.setInverted(Constants.ShooterConstants.SHOOTER_INVERSED);
+
+        shooterPID = new AdjustablePID(shooterController, "shooterPID");
 
         shooterControllerEncoder.setPositionConversionFactor(ShooterConstants.SHOOTER_DISTANCE_PER_PULSE);
         shooterControllerEncoder.setVelocityConversionFactor(ShooterConstants.VELOCITY_CONVERSION_FACTOR);
@@ -69,6 +74,14 @@ public class ShooterSystem extends SubsystemBase {
         return speed;
     }
 
+    public void runShooterAt(double rpm) {
+        SmartDashboard.putNumber("Flywheel Set Velocity", rpm);
+    }
+
+    public void reverseShooterAt(double rpm) {
+        SmartDashboard.putNumber("Flywheel Set Velocity", rpm);
+    }
+
     // Run the shooter at a speed from 0 to 1.0
     public void ShooterRun (double speed) {
         shooterController.set(speed);
@@ -87,6 +100,7 @@ public class ShooterSystem extends SubsystemBase {
     // Stop any motion of the shooter
     public void ShooterStop () {
         shooterController.setVoltage(0);
+        SmartDashboard.putNumber("Flywheel Set Velocity", 0);
     }
 
     // Reverse the shooter at a speed from 0 to 1.0
