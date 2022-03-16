@@ -64,6 +64,8 @@ public class ShooterSystem extends SubsystemBase {
         ShooterVoltage = shooterController.getBusVoltage();
         SmartDashboard.putNumber("rpm", ShooterRPM);
         SmartDashboard.putNumber("voltage", ShooterVoltage);
+
+        shooterPID.periodic();
     }
 
     // Ensure that the speed passed into a function is not over the maximum input
@@ -75,11 +77,15 @@ public class ShooterSystem extends SubsystemBase {
     }
 
     public void runShooterAt(double rpm) {
-        SmartDashboard.putNumber("Flywheel Set Velocity", rpm);
+        SmartDashboard.putNumber("shooterPID Max Output", 1);
+        SmartDashboard.putNumber("shooterPID Min Output", 0);
+        SmartDashboard.putNumber("shooterPID Set Velocity", rpm);
     }
 
     public void reverseShooterAt(double rpm) {
-        SmartDashboard.putNumber("Flywheel Set Velocity", rpm);
+        SmartDashboard.putNumber("shooterPID Max Output", 0);
+        SmartDashboard.putNumber("shooterPID Min Output", -0.5);
+        SmartDashboard.putNumber("shooterPID Set Velocity", -rpm);
     }
 
     // Run the shooter at a speed from 0 to 1.0
@@ -100,7 +106,7 @@ public class ShooterSystem extends SubsystemBase {
     // Stop any motion of the shooter
     public void ShooterStop () {
         shooterController.setVoltage(0);
-        SmartDashboard.putNumber("Flywheel Set Velocity", 0);
+        SmartDashboard.putNumber("shooterPID Set Velocity", 0);
     }
 
     // Reverse the shooter at a speed from 0 to 1.0

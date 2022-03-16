@@ -36,6 +36,8 @@ public class RobotContainer {
 
   public XboxController controller = new XboxController(0);
 
+  public TeleOpShoot shoot;
+
   private int oldLeftTriggerAxis, oldRightTriggerAxis, oldPOV;
 
   public double lowerKickerRunSpeed, lowerKickerReverseSpeed;
@@ -202,14 +204,14 @@ public class RobotContainer {
       .whenReleased(() -> new AllKickerStop(shooterSystem).schedule());
     //shooter reverse (X)
     new JoystickButton(controller, Button.kX.value)
-      .whileHeld(() -> shooterSystem.ShooterReverse(shooterReverseSpeed))
+      .whileHeld(() -> shooterSystem.reverseShooterAt(800))
       .whenReleased(() -> shooterSystem.ShooterStop());
     //shooter (Y) -- temp kickers
     new JoystickButton(controller, Button.kY.value)
-    .whileHeld(() -> shooterSystem.UpperKickerRun(1))
-    .whileHeld(() -> shooterSystem.LowerKickerRun(1))
-    .whenReleased(() -> shooterSystem.UpperKickerStop())
-    .whenReleased(() -> shooterSystem.LowerKickerStop());
+      .whileHeld(() -> shooterSystem.UpperKickerRun(1))
+      .whileHeld(() -> shooterSystem.LowerKickerRun(1))
+      .whenReleased(() -> shooterSystem.UpperKickerStop())
+      .whenReleased(() -> shooterSystem.LowerKickerStop());
       // .whileHeld(() -> shooterSystem.ShooterRunVoltage(6))
       // .whenReleased(() -> shooterSystem.ShooterStop());
 
@@ -219,6 +221,7 @@ public class RobotContainer {
       .whileHeld(() -> intakeSystem.IntakeReverse(intakeReverseSpeed))
       .whenReleased(() -> intakeSystem.IntakeStop());
 
+    shoot = new TeleOpShoot(lowerKickerRunSpeed, upperKickerRunSpeed, shooterSystem);
   }
 
   public XboxController getXboxController() {
@@ -246,13 +249,17 @@ public class RobotContainer {
 
     }
     //auto shoot (RT)
-    if(controller.getRightTriggerAxis() == 1)
-      new TeleOpShoot(lowerKickerRunSpeed, upperKickerRunSpeed, shooterSystem).schedule();
-    else if (oldRightTriggerAxis == 1) {
-      shooterSystem.ShooterStop();
+    if(controller.getRightTriggerAxis() == 1) {
+      shooterSystem.runShooterAt(3000);
+      if (shooterSystem.ShooterRPM >= 2950) {
+        shooterSystem.LowerKickerRun(lowerKickerRunSpeed);
+        shooterSystem.UpperKickerRun(upperKickerRunSpeed);
+      }  
+      System.out.println("I want to die");
+    } else if (oldRightTriggerAxis == 1) {
       shooterSystem.LowerKickerStop();
       shooterSystem.UpperKickerStop();
-
+      shooterSystem.ShooterStop();
     }
 
     //d-pad
