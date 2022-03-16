@@ -264,10 +264,10 @@ public class RobotContainer {
       climberSystem.ClimberRunnerDown(climberRunnerReverseSpeed);
     //climber deployer up (Left)
     else if (controller.getPOV() == 270)
-      climberSystem.ClimberDeployerUp(climberDeployerRunSpeed);
+      climberSystem.ClimberDeployerDown(climberDeployerReverseSpeed);
     //climber deployer down (Right)
     else if (controller.getPOV() == 90)
-      climberSystem.ClimberDeployerDown(climberDeployerReverseSpeed);
+      climberSystem.ClimberDeployerUp(climberDeployerRunSpeed);
     else if (controller.getPOV() < 0 && oldPOV >= 0) {
       climberSystem.ClimberStop();
       climberSystem.ClimberDeployerStop();
