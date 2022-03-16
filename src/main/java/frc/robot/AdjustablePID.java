@@ -49,7 +49,7 @@ public class AdjustablePID {
   public String pidName;
   public NetworkTableEntry processVariableEntry, outputEntry, actualP;
 
-  public AdjustablePID(CANSparkMax motor, String pidName) {
+  public AdjustablePID(CANSparkMax motor, String pidName, double[] outputRange) {
     // initialize motor
     this.motor = motor;
     this.pidName = pidName;
@@ -71,7 +71,7 @@ public class AdjustablePID {
     pidController.setD(0);
     pidController.setIZone(0);
     pidController.setFF(0.000156);
-    pidController.setOutputRange(-1, 1);
+    pidController.setOutputRange(outputRange[0], outputRange[1]);
 
     /**
      * Smart Motion coefficients are set on a CANPIDController object
@@ -97,8 +97,8 @@ public class AdjustablePID {
     SmartDashboard.putNumber(pidName + " D Gain", 0);
     SmartDashboard.putNumber(pidName + " I Zone", 0);
     SmartDashboard.putNumber(pidName + " Feed Forward", 0.000156);
-    SmartDashboard.putNumber(pidName + " Max Output", 1);
-    SmartDashboard.putNumber(pidName + " Min Output", -1);
+    SmartDashboard.putNumber(pidName + " Max Output", outputRange[0]);
+    SmartDashboard.putNumber(pidName + " Min Output", outputRange[1]);
 
     // display Smart Motion coefficients
     SmartDashboard.putNumber(pidName + " Max Velocity", 2000);
@@ -113,7 +113,7 @@ public class AdjustablePID {
     SmartDashboard.putBoolean(pidName + " Mode", true);
   }
 
-  public AdjustablePID(CANSparkMax motor, String pidName, double kP, double kI, double kD, double kIz, double kFF) {
+  public AdjustablePID(CANSparkMax motor, String pidName, double kP, double kI, double kD, double kIz, double kFF, double[] outputRange) {
     // initialize motor
     this.motor = motor;
     this.pidName = pidName;
@@ -135,7 +135,7 @@ public class AdjustablePID {
     pidController.setD(kD);
     pidController.setIZone(kIz);
     pidController.setFF(kFF);
-    pidController.setOutputRange(-1, 1);
+    pidController.setOutputRange(outputRange[0], outputRange[1]);
 
     /**
      * Smart Motion coefficients are set on a CANPIDController object
@@ -161,8 +161,8 @@ public class AdjustablePID {
     SmartDashboard.putNumber(pidName + " D Gain", kD);
     SmartDashboard.putNumber(pidName + " I Zone", kIz);
     SmartDashboard.putNumber(pidName + " Feed Forward", kFF);
-    SmartDashboard.putNumber(pidName + " Max Output", 1);
-    SmartDashboard.putNumber(pidName + " Min Output", -1);
+    SmartDashboard.putNumber(pidName + " Max Output", outputRange[0]);
+    SmartDashboard.putNumber(pidName + " Min Output", outputRange[1]);
 
     // display Smart Motion coefficients
     SmartDashboard.putNumber(pidName + " Max Velocity", 2000);

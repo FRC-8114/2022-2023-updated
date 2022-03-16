@@ -40,7 +40,7 @@ public class ShooterSystem extends SubsystemBase {
         shooterController.setIdleMode(IdleMode.kCoast);
         shooterController.setInverted(Constants.ShooterConstants.SHOOTER_INVERSED);
 
-        shooterPID = new AdjustablePID(shooterController, "shooterPID");
+        shooterPID = new AdjustablePID(shooterController, "shooterPID", new double[] {0, 1});
 
         shooterControllerEncoder.setPositionConversionFactor(ShooterConstants.SHOOTER_DISTANCE_PER_PULSE);
         shooterControllerEncoder.setVelocityConversionFactor(ShooterConstants.VELOCITY_CONVERSION_FACTOR);
