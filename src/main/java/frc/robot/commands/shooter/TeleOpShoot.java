@@ -11,6 +11,7 @@ import frc.robot.subsystems.ShooterSystem;
 public class TeleOpShoot extends CommandBase {
     private double lowerKickerSpeed, upperKickerSpeed;
     private ShooterSystem shooterSystem;
+    private boolean done;
 
     public TeleOpShoot(double lowerKickerSpeed, double upperKickerSpeed, ShooterSystem shooterSystem) {
         this.lowerKickerSpeed = lowerKickerSpeed;
@@ -18,26 +19,17 @@ public class TeleOpShoot extends CommandBase {
         this.shooterSystem = shooterSystem;
 
     }
+
     public void initialize() {
 
     }
+
     public void execute() {
-        shooterSystem.ShooterRunVoltage(ShooterConstants.TELEOP_DESIRED_VOLTAGE);
-        if (ShooterConstants.TELEOP_DESIRED_VOLTAGE <= shooterSystem.shooterController.getBusVoltage()) {
-            // new Wait(1);
-            // shooterSystem.LowerKickerRun(lowerKickerSpeed);
-            // shooterSystem.UpperKickerRun(upperKickerSpeed);
-
-        }
-            
-    }
-
-    public void end() {
+             
     }
 
     public boolean isFinished() {
-        return true;
-
+        return done;
     }
     
 }

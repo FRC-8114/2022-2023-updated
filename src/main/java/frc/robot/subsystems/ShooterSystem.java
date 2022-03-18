@@ -65,7 +65,7 @@ public class ShooterSystem extends SubsystemBase {
         SmartDashboard.putNumber("rpm", ShooterRPM);
         SmartDashboard.putNumber("voltage", ShooterVoltage);
 
-        shooterPID.periodic();
+        //shooterPID.periodic();
     }
 
     // Ensure that the speed passed into a function is not over the maximum input

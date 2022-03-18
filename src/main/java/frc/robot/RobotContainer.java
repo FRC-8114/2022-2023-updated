@@ -204,7 +204,7 @@ public class RobotContainer {
       .whenReleased(() -> new AllKickerStop(shooterSystem).schedule());
     //shooter reverse (X)
     new JoystickButton(controller, Button.kX.value)
-      .whileHeld(() -> shooterSystem.reverseShooterAt(800))
+      .whileHeld(() -> shooterSystem.ShooterReverseVoltage(7))
       .whenReleased(() -> shooterSystem.ShooterStop());
     //shooter (Y) -- temp kickers
     new JoystickButton(controller, Button.kY.value)
@@ -250,8 +250,9 @@ public class RobotContainer {
     }
     //auto shoot (RT)
     if(controller.getRightTriggerAxis() == 1) {
-      shooterSystem.runShooterAt(3000);
-      if (shooterSystem.ShooterRPM >= 2950) {
+      shooterSystem.ShooterRunVoltage(7);
+      //shooterSystem.runShooterAt(2100);
+      if (shooterSystem.ShooterRPM >= 2450 && shooterSystem.ShooterRPM <- 2600) {
         shooterSystem.LowerKickerRun(lowerKickerRunSpeed);
         shooterSystem.UpperKickerRun(upperKickerRunSpeed);
       }  
@@ -303,17 +304,21 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    positioningSystem.zeroPosition();
     return new SequentialCommandGroup(
-      new VoltageToRPM(shooterSystem, 4),
-      new Wait(10)
-
+      new AutoIntakeDownForward(m_driveSystem, positioningSystem),
+      new ParallelRaceGroup(
+        new AutoIntake(intakeSystem, shooterSystem),
+        new MoveXInchesForward(m_driveSystem, positioningSystem, 12 * 8, 0.5)),
+      new RotateToAngle(m_driveSystem, positioningSystem, 180, .3),
+      new MoveXInchesForward(m_driveSystem, positioningSystem, 12 * 7.5, 0.5),
+      new AutoShoot(intakeSystem, shooterSystem)
     );
     //return new MoveXInchesForward(m_driveSystem, positioningSystem, 50, .2);
     //return new Rotate2(m_driveSystem, 22.5, .4);
     //return new OneBallAuto(m_driveSystem, positioningSystem, shooterSystem);
     //return new TwoBallAutoSimple(m_driveSystem, intakeSystem, positioningSystem, shooterSystem, 0, 40); //Math.sqrt(Math.pow(ballPosition[0] - startPosition[0], 2) + Math.pow(ballPosition[1] - startPosition[1], 2))
     //return new TwoBallAutoComplex(ballSystem, m_driveSystem, positioningSystem, intakeSystem, shooterSystem, almostBallPosition, almostStartPosition);
-    
   }
 
   /**

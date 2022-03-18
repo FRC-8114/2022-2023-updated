@@ -8,7 +8,7 @@ import frc.robot.subsystems.FieldPositioningSystem;
 
 public class MoveXInchesForward extends CommandBase {
     private double[] startingPos;
-    private double desiredDistance, velocity, changeInPosition, oldPosition;
+    private double desiredDistance, velocity, changeInLeftPosition, changeInRightPosition, oldLeftPosition, oldRightPosition;
     private DriveSystem driveSystem;
     private FieldPositioningSystem fieldPositioningSystem;
 
@@ -18,7 +18,6 @@ public class MoveXInchesForward extends CommandBase {
         
         this.desiredDistance = desiredDistance;
         this.velocity = velocity;
-        changeInPosition = 0;
     }
 
     /**
@@ -26,7 +25,13 @@ public class MoveXInchesForward extends CommandBase {
      */
     public void initialize() {
         //mine initialized (is it the same)
-        oldPosition = driveSystem.getLeftDistance();
+        oldLeftPosition = driveSystem.getLeftDistance();
+        oldRightPosition = driveSystem.getRightDistance();
+
+
+        changeInLeftPosition = 0;
+        changeInRightPosition = 0;
+
         //jack's initialized (is it the same)
         startingPos = new double[2];
         startingPos[0] = fieldPositioningSystem.position[0];
@@ -40,15 +45,23 @@ public class MoveXInchesForward extends CommandBase {
      * and the command terminating
      */
     public void execute() {
-        changeInPosition += driveSystem.getLeftDistance() - oldPosition;
-        oldPosition = driveSystem.getLeftDistance();
-        // Move at the given velocity
-        driveSystem.tankDrive(-velocity, -velocity);
+        changeInLeftPosition += driveSystem.getLeftDistance() - oldLeftPosition;
+        changeInRightPosition += driveSystem.getRightDistance() - oldRightPosition;
+        oldLeftPosition = driveSystem.getLeftDistance();
+        oldRightPosition = driveSystem.getRightDistance();
+        // Move at the given velocity if we are less than 1 tenth an inch off straight
+        if(Math.abs(Math.abs(changeInLeftPosition) - Math.abs(changeInRightPosition)) <= 0.1) {
+            driveSystem.tankDrive(-velocity, -velocity);
+        } else if(Math.abs(changeInLeftPosition) > Math.abs(changeInRightPosition)) {
+            driveSystem.tankDrive(-velocity * .98, -velocity);
+        } else {
+            driveSystem.tankDrive(-velocity, -velocity * .98);
+        }
 
         // Sent for debugging purposes
         RobotUtils.sendNumberToShuffleboard("autoDistance", fieldPositioningSystem.averageEncoderDistance());
         RobotUtils.sendNumberToShuffleboard("MoveXInchesForward traveledDistance", fieldPositioningSystem.distanceFrom(startingPos));
-        SmartDashboard.putNumber("MoveXInchesForward traveledDistance from encoders", changeInPosition);
+        SmartDashboard.putNumber("MoveXInchesForward traveledDistance from encoders", changeInLeftPosition);
     }
 
     /**
