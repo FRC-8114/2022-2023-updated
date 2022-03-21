@@ -1,5 +1,6 @@
 package frc.robot.commands.auto;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotUtils;
 import frc.robot.subsystems.DriveSystem;
@@ -7,7 +8,7 @@ import frc.robot.subsystems.FieldPositioningSystem;
 
 public class MoveXInchesBackwards extends CommandBase {
     private double[] startingPos;
-    private double desiredDistance, velocity;
+    private double desiredDistance, velocity, changeInLeftPosition, changeInRightPosition, oldLeftPosition, oldRightPosition;
     private DriveSystem driveSystem;
     private FieldPositioningSystem fieldPositioningSystem;
 
@@ -35,13 +36,23 @@ public class MoveXInchesBackwards extends CommandBase {
      * and the command terminating
      */
     public void execute() {
-
-        // Move at the given velocity
-        driveSystem.tankDrive(velocity, velocity);
+        changeInLeftPosition += driveSystem.getLeftDistance() - oldLeftPosition;
+        changeInRightPosition += driveSystem.getRightDistance() - oldRightPosition;
+        oldLeftPosition = driveSystem.getLeftDistance();
+        oldRightPosition = driveSystem.getRightDistance();
+        // Move at the given velocity if we are less than 1 tenth an inch off straight
+        if(Math.abs(Math.abs(changeInLeftPosition) - Math.abs(changeInRightPosition)) <= 0.1) {
+            driveSystem.tankDrive(velocity, velocity);
+        } else if(Math.abs(changeInLeftPosition) > Math.abs(changeInRightPosition)) {
+            driveSystem.tankDrive(velocity * .98, velocity);
+        } else {
+            driveSystem.tankDrive(velocity, velocity * .98);
+        }
 
         // Sent for debugging purposes
         RobotUtils.sendNumberToShuffleboard("autoDistance", fieldPositioningSystem.averageEncoderDistance());
-        RobotUtils.sendNumberToShuffleboard("traveledDistance", fieldPositioningSystem.distanceFrom(startingPos));
+        RobotUtils.sendNumberToShuffleboard("MoveXInchesForward traveledDistance", fieldPositioningSystem.distanceFrom(startingPos));
+        RobotUtils.sendNumberToShuffleboard("MoveXInchesForward traveledDistance from encoders", changeInLeftPosition);
     }
 
     /**

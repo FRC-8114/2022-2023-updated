@@ -1,20 +1,15 @@
 package frc.robot.commands.auto;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.FieldPositioningSystem;
 
 public class RotateToAngle extends CommandBase {
     private DriveSystem driveSystem;
     private FieldPositioningSystem fieldPositioningSystem;
-    private NetworkTableEntry maxDriveInput;
 
-    private double desiredAngle, velocity, marginOfError, formerMaxDriveInput;
+    private double desiredAngle, velocity, marginOfError, angleDifference;
 
     public RotateToAngle(DriveSystem driveSystem, FieldPositioningSystem fieldPositioningSystem, double desiredAngle, double velocity) {
         this.driveSystem = driveSystem;
@@ -25,25 +20,26 @@ public class RotateToAngle extends CommandBase {
     }
 
     public void initialize() {
-        marginOfError = 0.25;
-        if(velocity > 0.2) {
+        marginOfError = 0.5;
+        if(velocity > 0.3) {
             marginOfError *= 2;
         }
-        
-        maxDriveInput = NetworkTableInstance.getDefault().getTable("Control Variables").getEntry("maxDriveInput");
-        formerMaxDriveInput = maxDriveInput.getDouble(Constants.DriveConstants.INITIAL_MAX_INPUT);
     
         SmartDashboard.putNumber("desiredAngle", desiredAngle);
     }
 
     public void execute() {
-        double angleDifference = desiredAngle - fieldPositioningSystem.angle;
+        angleDifference = Math.abs(Math.abs(desiredAngle) - Math.abs(fieldPositioningSystem.angle));
 
-        driveSystem.tankDrive(-velocity, velocity);
+        if(!(Math.abs(Math.abs(desiredAngle) - Math.abs(fieldPositioningSystem.angle)) <= marginOfError)) {
+            if(angleDifference <= 4) {
+                driveSystem.tankDrive(-velocity * .85, velocity * .85);
+            } else {
+                driveSystem.tankDrive(-velocity, velocity);
+            }
+        }
 
-        SmartDashboard.putNumber("fieldPositioningAngle", fieldPositioningSystem.angle);
-        SmartDashboard.putNumber("diff", Math.abs(desiredAngle - fieldPositioningSystem.angle));
-        SmartDashboard.putBoolean("done", Math.abs(desiredAngle - fieldPositioningSystem.angle) <= marginOfError);
+        SmartDashboard.putNumber("angleDifference", angleDifference);
     }
 
     public void end(boolean interrupted) {
@@ -51,6 +47,6 @@ public class RotateToAngle extends CommandBase {
     }
 
     public boolean isFinished() {
-        return Math.abs(Math.abs(desiredAngle) - Math.abs(fieldPositioningSystem.angle)) <= marginOfError;
+        return angleDifference <= marginOfError;
     }
 }

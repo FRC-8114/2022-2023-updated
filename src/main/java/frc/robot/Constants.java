@@ -91,12 +91,12 @@ public final class Constants {
     public static final double UPPER_KICKER_INITIAL_REVERSE_SPEED = .35;
     public static final double SHOOTER_INITIAL_RUN_SPEED = .8;
     public static final double SHOOTER_INITIAL_REVERSE_SPEED = .4;
-    public static final double INTAKE_INITIAL_RUN_SPEED = .4;
+    public static final double INTAKE_INITIAL_RUN_SPEED = .6;
     public static final double INTAKE_INITIAL_REVERSE_SPEED = .25;
     public static final double CLIMBER_RUNNER_INITIAL_RUN_SPEED = .6;
     public static final double CLIMBER_RUNNER_INITIAL_REVERSE_SPEED = .6;
-    public static final double CLIMBER_DEPLOYER_INITIAL_RUN_SPEED = .8;
-    public static final double CLIMBER_DEPLOYER_INITIAL_REVERSE_SPEED = .75;
+    public static final double CLIMBER_DEPLOYER_INITIAL_RUN_SPEED = .6;
+    public static final double CLIMBER_DEPLOYER_INITIAL_REVERSE_SPEED = .6;
   }
 
   public static final class AutoConstants {

@@ -124,7 +124,7 @@ public class RobotContainer {
     climberRunnerRunSpeed = Constants.ControlConstants.CLIMBER_RUNNER_INITIAL_RUN_SPEED;
     climberRunnerReverseSpeed = Constants.ControlConstants.CLIMBER_RUNNER_INITIAL_REVERSE_SPEED;
     climberDeployerRunSpeed = Constants.ControlConstants.CLIMBER_DEPLOYER_INITIAL_RUN_SPEED;
-    climberDeployerReverseSpeed = Constants.ControlConstants.INTAKE_INITIAL_REVERSE_SPEED;
+    climberDeployerReverseSpeed = Constants.ControlConstants.CLIMBER_DEPLOYER_INITIAL_REVERSE_SPEED;
     oldLeftTriggerAxis = oldRightTriggerAxis = 0;
     oldPOV = -1;
     oldRightStickButton = false;
@@ -146,6 +146,8 @@ public class RobotContainer {
       Method maxDriveInputSetter = DriveSystem.class.getMethod("setMaxInput", Double.class);
       Method autoRotateSpeedSetter = RobotContainer.class.getMethod("setAutoRotateSpeed", Double.class);
       Method teleopShootSpeedSetter = RobotContainer.class.getMethod("setTeleopShootSpeed", Double.class);
+      Method climberDeployerRunSpeedSetter = RobotContainer.class.getMethod("setClimberDeployerRunSpeed", Double.class);
+      Method climberDeployerReverseSpeedSetter = RobotContainer.class.getMethod("setClimberDeployerReverseSpeed", Double.class);
 
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, lowerKickerRunSpeedSetter, "Control Variables", "lowerKickerRunSpeed", lowerKickerRunSpeed);
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, lowerKickerReverseSpeedSetter, "Control Variables", "lowerKickerReverseSpeed", lowerKickerReverseSpeed);
@@ -158,6 +160,8 @@ public class RobotContainer {
       RobotUtils.sendNumberSetterToShuffleboard(m_driveSystem, maxDriveInputSetter, "Control Variables", "maxDriveInput", Constants.DriveConstants.INITIAL_MAX_INPUT);
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, autoRotateSpeedSetter, "Control Variables", "autoRotateSpeed", autoRotateSpeed);
       RobotUtils.sendNumberSetterToShuffleboard(robotContainer, teleopShootSpeedSetter, "Control Variables", "teleopShootSpeed", teleopShootSpeed);
+      RobotUtils.sendNumberSetterToShuffleboard(robotContainer, climberDeployerRunSpeedSetter, "Control Variables", "setClimberDeployerRunSpeed", climberDeployerRunSpeed);
+      RobotUtils.sendNumberSetterToShuffleboard(robotContainer, climberDeployerReverseSpeedSetter, "Control Variables", "setClimberDeployerReverseSpeed", climberDeployerReverseSpeed);
     } catch (NoSuchMethodException | SecurityException e) {
       SmartDashboard.putString("depressing_error", e.toString());
     }
@@ -305,6 +309,18 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     positioningSystem.zeroPosition();
+
+    //return new RotateToAngle(m_driveSystem, positioningSystem, 180, .4);
+
+    
+    return new SequentialCommandGroup(
+      new AutoIntakeDownBackward(m_driveSystem, positioningSystem),
+      new AutoShoot(intakeSystem, shooterSystem),
+      new MoveXInchesBackwards(m_driveSystem, positioningSystem, 6 * 12, 0.6)
+    );
+    
+
+    /*
     return new SequentialCommandGroup(
       new AutoIntakeDownForward(m_driveSystem, positioningSystem),
       new ParallelRaceGroup(
@@ -314,6 +330,8 @@ public class RobotContainer {
       new MoveXInchesForward(m_driveSystem, positioningSystem, 12 * 7.5, 0.5),
       new AutoShoot(intakeSystem, shooterSystem)
     );
+    */
+
     //return new MoveXInchesForward(m_driveSystem, positioningSystem, 50, .2);
     //return new Rotate2(m_driveSystem, 22.5, .4);
     //return new OneBallAuto(m_driveSystem, positioningSystem, shooterSystem);
@@ -363,5 +381,13 @@ public class RobotContainer {
 
   public void setTeleopShootSpeed (Double speed) {
     teleopShootSpeed = speed;
+  }
+
+  public void setClimberDeployerRunSpeed(Double speed) {
+    climberDeployerRunSpeed = speed;
+  }
+
+  public void setClimberDeployerReverseSpeed(Double speed) {
+    climberDeployerReverseSpeed = speed;
   }
 }
