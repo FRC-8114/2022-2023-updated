@@ -34,9 +34,9 @@ public final class Constants {
     public static final double MAX_INPUT = 0;
 	  public static final int SHOOTER_SPIN_UP_TIME = 3;
 
-    public static double TELEOP_DESIRED_VOLTAGE = 5.5;
+    public static final double TELEOP_DESIRED_VOLTAGE = 5.5;
     public static final double AUTO_DESIRED_VOLTAGE = 6.5;
-    public static double TELEOP_DESIRED_RPM = 3000;
+    public static final double TELEOP_DESIRED_RPM = 3000;
   }
 
   public static final class IntakeConstants {
@@ -69,19 +69,19 @@ public final class Constants {
     public static final double DISTANCE_BETWEEN_WHEELS = 21.75;
     public static final double DISTANCE_BETWEEN_SPARK_MAXES = 8 + 3/16;
     // The comments describe what point is assigned to what letter on the whiteboard.
-    public static double[] SPAWN_ONE = new double[] {296.563, -139.023}; //A
-    public static double[] SPAWN_TWO = new double[] {300.661, -189.075}; //B
-    public static double[] SPAWN_THREE = new double[] {324.997, -198.840}; //C
-    public static double[] RED_SPAWN_ONE = new double[] {350.714, -184.977}; //D
-    public static double[] RED_SPAWN_TWO = new double[] {346.616, -134.925}; //E
-    public static double[] RED_SPAWN_THREE = new double[] {325.356, -126.340}; //F
+    public static final double[] SPAWN_ONE = new double[] {296.563, -139.023}; //A
+    public static final double[] SPAWN_TWO = new double[] {300.661, -189.075}; //B
+    public static final double[] SPAWN_THREE = new double[] {324.997, -198.840}; //C
+    public static final double[] RED_SPAWN_ONE = new double[] {350.714, -184.977}; //D
+    public static final double[] RED_SPAWN_TWO = new double[] {346.616, -134.925}; //E
+    public static final double[] RED_SPAWN_THREE = new double[] {325.356, -126.340}; //F
     //Number is in order of what is closest to the spawns (ex: Ball One = Spawn one...)
-    public static double[] BALL_ONE = new double[] {194.242, -80.357};
-    public static double[] BALL_TWO = new double[] {198.693, -250.303};
-    public static double[] BALL_THREE = new double[] {297.728, -312.790};
-    public static double[] RED_BALL_ONE = new double[] {453.035, -243.643};
-    public static double[] RED_BALL_TWO = new double[] {448.585, -73.697};
-    public static double[] RED_BALL_THREE = new double[] {349.549, -11.210};
+    public static final double[] BALL_ONE = new double[] {194.242, -80.357};
+    public static final double[] BALL_TWO = new double[] {198.693, -250.303};
+    public static final double[] BALL_THREE = new double[] {297.728, -312.790};
+    public static final double[] RED_BALL_ONE = new double[] {453.035, -243.643};
+    public static final double[] RED_BALL_TWO = new double[] {448.585, -73.697};
+    public static final double[] RED_BALL_THREE = new double[] {349.549, -11.210};
   }
 
   public static final class ControlConstants {

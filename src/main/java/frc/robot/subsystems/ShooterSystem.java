@@ -34,6 +34,10 @@ public class ShooterSystem extends SubsystemBase {
 	public static double ShooterRPM = 0;
     public static double ShooterVoltage = 0;
 
+
+    public static double desiredRPM;
+    public static double desiredVoltage;
+
     // Creates the ShooterSubsystem
     public ShooterSystem () {
         shooterController.restoreFactoryDefaults();
@@ -51,10 +55,13 @@ public class ShooterSystem extends SubsystemBase {
         lowerKickerController.setIdleMode(IdleMode.kBrake);
         lowerKickerController.setInverted(Constants.ShooterConstants.LOWER_KICKER_INVERSED);
      
+        desiredRPM = ShooterConstants.TELEOP_DESIRED_RPM;
+        desiredVoltage = ShooterConstants.TELEOP_DESIRED_VOLTAGE;
+
         Shuffleboard.getTab("Shooter").add("Desired Shooter RPMs", ShooterConstants.TELEOP_DESIRED_RPM).withWidget(BuiltInWidgets.kNumberSlider).getEntry()
-            .addListener(event -> {ShooterConstants.TELEOP_DESIRED_RPM = event.value.getDouble();}, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+            .addListener(event -> {desiredRPM = event.value.getDouble();}, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
         Shuffleboard.getTab("Shooter").add("Desired Shooter Voltage", ShooterConstants.TELEOP_DESIRED_VOLTAGE).withWidget(BuiltInWidgets.kNumberSlider).getEntry()
-            .addListener(event -> {ShooterConstants.TELEOP_DESIRED_VOLTAGE = event.value.getDouble();}, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
+            .addListener(event -> {desiredVoltage = event.value.getDouble();}, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
         }
 
 
