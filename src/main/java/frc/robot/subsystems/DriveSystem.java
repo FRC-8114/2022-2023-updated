@@ -67,10 +67,10 @@ public class DriveSystem extends SubsystemBase {
     rightMotorFollower.setInverted(DriveConstants.RIGHT_MOTORS_INVERSED);
     rightMotorFollower.follow(rightMotorLeader, false);
 
-    leftLeaderEncoder.setPositionConversionFactor(PositioningConstants.GEAR_RATIO * PositioningConstants.ROTATIONS_PER_PULSE * PositioningConstants.WHEEL_CIRCUMFRENCE);
-    leftFollowerEncoder.setPositionConversionFactor(PositioningConstants.GEAR_RATIO * PositioningConstants.ROTATIONS_PER_PULSE * PositioningConstants.WHEEL_CIRCUMFRENCE);
-    rightLeaderEncoder.setPositionConversionFactor(PositioningConstants.GEAR_RATIO * PositioningConstants.ROTATIONS_PER_PULSE * PositioningConstants.WHEEL_CIRCUMFRENCE);
-    rightFollowerEncoder.setPositionConversionFactor(PositioningConstants.GEAR_RATIO * PositioningConstants.ROTATIONS_PER_PULSE * PositioningConstants.WHEEL_CIRCUMFRENCE);
+    leftLeaderEncoder.setPositionConversionFactor(PositioningConstants.POSITION_CONVERSION_FACTOR);
+    leftFollowerEncoder.setPositionConversionFactor(PositioningConstants.POSITION_CONVERSION_FACTOR);
+    rightLeaderEncoder.setPositionConversionFactor(PositioningConstants.POSITION_CONVERSION_FACTOR);
+    rightFollowerEncoder.setPositionConversionFactor(PositioningConstants.POSITION_CONVERSION_FACTOR);
   }
 
   // Switches which side of the robot is considered front
