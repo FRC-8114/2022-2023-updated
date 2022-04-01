@@ -58,11 +58,10 @@ public final class Constants {
 
   public static final class PositioningConstants {
     public static final double GEAR_RATIO = 1 / 10.75;
-    public static final double PULSES_PER_ROTATION = 42;
     public static final double DRIVE_WHEEL_DIAMETER = 6;
     public static final double DRIVE_WHEEL_CIRCUMFRENCE = Math.PI * DRIVE_WHEEL_DIAMETER;
 
-    public static final double POSITION_CONVERSION_FACTOR = GEAR_RATIO * DRIVE_WHEEL_CIRCUMFRENCE / PULSES_PER_ROTATION;
+    public static final double POSITION_CONVERSION_FACTOR = GEAR_RATIO * DRIVE_WHEEL_CIRCUMFRENCE;
 
     public static final double WHEEL_DIAMETER_INCHES = 6;
     public static final double WHEEL_DIAMETER_METERS = WHEEL_DIAMETER_INCHES * INCHES_TO_METERS;

@@ -310,14 +310,15 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     positioningSystem.zeroPosition();
 
-    //return new RotateToAngle(m_driveSystem, positioningSystem, 180, .4);
+    return new RotateToAngle(m_driveSystem, positioningSystem, 180, .4);
 
-    
+    /*
     return new SequentialCommandGroup(
       new AutoIntakeDownBackward(m_driveSystem, positioningSystem),
       new AutoShoot(intakeSystem, shooterSystem),
       new MoveXInchesBackwards(m_driveSystem, positioningSystem, 6 * 12, 0.6)
     );
+    */
     
 
     /*
