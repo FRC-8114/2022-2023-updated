@@ -29,13 +29,26 @@ public class RotateToAngle extends CommandBase {
     }
 
     public void execute() {
+        boolean clockwise  = true;
+        if(fieldPositioningSystem.angle + 180 > desiredAngle) {
+            clockwise = false;
+        }
+
         angleDifference = Math.abs(Math.abs(desiredAngle) - Math.abs(fieldPositioningSystem.angle));
 
         if(!(Math.abs(Math.abs(desiredAngle) - Math.abs(fieldPositioningSystem.angle)) <= marginOfError)) {
             if(angleDifference <= 4) {
-                driveSystem.tankDrive(-velocity * .85, velocity * .85);
+                if(clockwise) {
+                    driveSystem.tankDrive(-velocity * .85, velocity * .85);
+                } else {
+                    driveSystem.tankDrive(velocity * .85, -velocity * .85);
+                }
             } else {
-                driveSystem.tankDrive(-velocity, velocity);
+                if(clockwise) {
+                    driveSystem.tankDrive(-velocity, velocity);
+                } else {
+                    driveSystem.tankDrive(velocity, -velocity);
+                }
             }
         }
 
