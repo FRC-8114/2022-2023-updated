@@ -7,6 +7,7 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
@@ -66,11 +67,6 @@ public class DriveSystem extends SubsystemBase {
     rightMotorFollower.setIdleMode(IdleMode.kCoast);
     rightMotorFollower.setInverted(DriveConstants.RIGHT_MOTORS_INVERSED);
     rightMotorFollower.follow(rightMotorLeader, false);
-
-    leftLeaderEncoder.setPositionConversionFactor(PositioningConstants.POSITION_CONVERSION_FACTOR);
-    leftFollowerEncoder.setPositionConversionFactor(PositioningConstants.POSITION_CONVERSION_FACTOR);
-    rightLeaderEncoder.setPositionConversionFactor(PositioningConstants.POSITION_CONVERSION_FACTOR);
-    rightFollowerEncoder.setPositionConversionFactor(PositioningConstants.POSITION_CONVERSION_FACTOR);
   }
 
   // Switches which side of the robot is considered front

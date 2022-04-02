@@ -36,6 +36,14 @@ public class FieldPositioningSystem extends SubsystemBase {
     }
 
     /**
+     * Converts motor shaft rotations into distance, accounts for both the
+     * gearbox and wheel size.
+     */
+    public double rotationsToDistance(double rotations) {
+        return rotations * Constants.PositioningConstants.GEAR_RATIO * Constants.PositioningConstants.WHEEL_CIRCUMFRENCE;
+    }
+
+    /**
      * Sets the robot's location to 0,0 and the angle to zero
      */
     public void zeroPosition() {
@@ -76,7 +84,8 @@ public class FieldPositioningSystem extends SubsystemBase {
      * it to the robot's current position
      */
     public void updatePosition() {
-        double distanceCovered = averageEncoderDistance();
+        double rotations = averageEncoderDistance();
+        double distanceCovered = rotationsToDistance(rotations);
 
         angle = navx.getYaw() + angleOffset;
         RobotUtils.sendNumberToShuffleboard("yawDegrees", angle);
