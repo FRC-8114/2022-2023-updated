@@ -10,6 +10,7 @@ public class RotateToAngle extends CommandBase {
     private FieldPositioningSystem fieldPositioningSystem;
 
     private double desiredAngle, velocity, marginOfError, angleDifference;
+    private boolean clockwise;
 
     public RotateToAngle(DriveSystem driveSystem, FieldPositioningSystem fieldPositioningSystem, double desiredAngle, double velocity) {
         this.driveSystem = driveSystem;
@@ -17,38 +18,36 @@ public class RotateToAngle extends CommandBase {
 
         this.desiredAngle = desiredAngle;
         this.velocity = velocity;
+        clockwise = true;
     }
 
     public void initialize() {
         marginOfError = 0.5;
-        if(velocity > 0.3) {
+        if(velocity > 0.5) {
             marginOfError *= 2;
+        }
+
+        if(fieldPositioningSystem.angle + 180 > desiredAngle) {
+            clockwise = false;
         }
     
         SmartDashboard.putNumber("desiredAngle", desiredAngle);
     }
 
     public void execute() {
-        boolean clockwise  = true;
-        if(fieldPositioningSystem.angle + 180 > desiredAngle) {
-            clockwise = false;
-        }
+        angleDifference = Math.abs(desiredAngle - fieldPositioningSystem.angle);
 
-        angleDifference = Math.abs(Math.abs(desiredAngle) - Math.abs(fieldPositioningSystem.angle));
-
-        if(!(Math.abs(Math.abs(desiredAngle) - Math.abs(fieldPositioningSystem.angle)) <= marginOfError)) {
-            if(angleDifference <= 4) {
-                if(clockwise) {
-                    driveSystem.tankDrive(-velocity * .85, velocity * .85);
-                } else {
-                    driveSystem.tankDrive(velocity * .85, -velocity * .85);
-                }
+        if(angleDifference <= 4) {
+            if(clockwise) {
+                driveSystem.tankDrive(-velocity * .85, velocity * .85);
             } else {
-                if(clockwise) {
-                    driveSystem.tankDrive(-velocity, velocity);
-                } else {
-                    driveSystem.tankDrive(velocity, -velocity);
-                }
+                driveSystem.tankDrive(velocity * .85, -velocity * .85);
+            }
+        } else {
+            if(clockwise) {
+                driveSystem.tankDrive(-velocity, velocity);
+            } else {
+                driveSystem.tankDrive(velocity, -velocity);
             }
         }
 

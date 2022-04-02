@@ -57,7 +57,7 @@ public final class Constants {
   }
 
   public static final class PositioningConstants {
-    public static final double GEAR_RATIO = 1 / 10.75;
+    public static final double GEAR_RATIO = 1 / 10.71;
     public static final double DRIVE_WHEEL_DIAMETER = 6;
     public static final double DRIVE_WHEEL_CIRCUMFRENCE = Math.PI * DRIVE_WHEEL_DIAMETER;
 
@@ -66,7 +66,7 @@ public final class Constants {
     public static final double WHEEL_DIAMETER_INCHES = 6;
     public static final double WHEEL_DIAMETER_METERS = WHEEL_DIAMETER_INCHES * INCHES_TO_METERS;
     public static final double WHEEL_CIRCUMFRENCE = WHEEL_DIAMETER_INCHES * Math.PI;
-    public static final double DISTANCE_BETWEEN_WHEELS = 21.75;
+    public static final double DISTANCE_BETWEEN_WHEELS = 21.5;
     public static final double DISTANCE_BETWEEN_SPARK_MAXES = 8 + 3/16;
     // The comments describe what point is assigned to what letter on the whiteboard.
     public static final double[] SPAWN_ONE = new double[] {296.563, -139.023}; //A
