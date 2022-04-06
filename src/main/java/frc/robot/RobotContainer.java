@@ -236,7 +236,6 @@ public class RobotContainer {
   }
 
   public void periodic() {
-    SmartDashboard.putNumber("angle", positioningSystem.angle);
     //triggers
     //intake and kickers (LT)
     if(controller.getLeftTriggerAxis() == 1) {

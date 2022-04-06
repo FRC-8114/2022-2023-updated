@@ -21,7 +21,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    m_robotContainer.positioningSystem.updatePosition();
+    m_robotContainer.positioningSystem.updatePositionUsingNavx();
+    m_robotContainer.positioningSystem.updatePositionUsingEncoders();
     
     updateShuffleboardValues();
 
@@ -29,13 +30,10 @@ public class Robot extends TimedRobot {
   }
 
   public void updateShuffleboardValues() {
-    RobotUtils.sendNumberToShuffleboard("xPos", m_robotContainer.positioningSystem.position[0]);
-    RobotUtils.sendNumberToShuffleboard("yPos", m_robotContainer.positioningSystem.position[1]);
-
-    double averageOldLeftEncoders = (m_robotContainer.positioningSystem.oldLeftEncoderValues[0] + m_robotContainer.positioningSystem.oldLeftEncoderValues[1]) / 2;
-    RobotUtils.sendNumberToShuffleboard("oldLeftEncoders", averageOldLeftEncoders);
-    double averageOldRightEncoders = (m_robotContainer.positioningSystem.oldRightEncoderValues[0] + m_robotContainer.positioningSystem.oldRightEncoderValues[1]) / 2;
-    RobotUtils.sendNumberToShuffleboard("oldRightEncoders", averageOldRightEncoders);
+    RobotUtils.sendNumberToShuffleboard("xLoc using navx", m_robotContainer.positioningSystem.locationUsingNavx[0]);
+    RobotUtils.sendNumberToShuffleboard("yLoc using navx", m_robotContainer.positioningSystem.locationUsingNavx[1]);
+    RobotUtils.sendNumberToShuffleboard("xLoc using encoders", m_robotContainer.positioningSystem.locationUsingEncoders[0]);
+    RobotUtils.sendNumberToShuffleboard("yLoc using encoders", m_robotContainer.positioningSystem.locationUsingEncoders[1]);
 
     RobotUtils.sendNumberToShuffleboard("leftLeaderEncoder", m_robotContainer.m_driveSystem.leftLeaderEncoder.getPosition());
     RobotUtils.sendNumberToShuffleboard("leftFollowerEncoder", m_robotContainer.m_driveSystem.leftFollowerEncoder.getPosition());
@@ -46,11 +44,6 @@ public class Robot extends TimedRobot {
     RobotUtils.sendNumberToShuffleboard("rightFollowerEncoder", m_robotContainer.m_driveSystem.rightFollowerEncoder.getPosition());
     double averageRightEncoders = (m_robotContainer.m_driveSystem.rightLeaderEncoder.getPosition() + m_robotContainer.m_driveSystem.rightFollowerEncoder.getPosition()) / 2;
     RobotUtils.sendNumberToShuffleboard("rightEncoders", averageRightEncoders);
-
-    double absoluteAverageLeftDifference = Math.abs(averageLeftEncoders - averageOldLeftEncoders);
-    RobotUtils.sendNumberToShuffleboard("leftDifference", absoluteAverageLeftDifference);
-    double absoluteAverageRightDifference = Math.abs(averageRightEncoders - averageOldRightEncoders);
-    RobotUtils.sendNumberToShuffleboard("rightDifference", absoluteAverageRightDifference);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
