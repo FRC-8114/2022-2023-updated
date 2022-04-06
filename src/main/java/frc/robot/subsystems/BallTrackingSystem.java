@@ -5,8 +5,10 @@ import java.util.Scanner;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotUtils;
 
-public class BallTrackingSystem {
+public class BallTrackingSystem extends SubsystemBase {
     public NetworkTableEntry ballInfo;
     public double diagonalCameraFOV, diagonalCameraResolution;
     
@@ -15,6 +17,36 @@ public class BallTrackingSystem {
         this.diagonalCameraResolution = diagonalCameraResolution;
     
         ballInfo = NetworkTableInstance.getDefault().getTable("ML").getEntry("detections");
+    }
+
+    /**
+     * Periodically outputs the details of the best ball for debugging
+     */
+    public void periodic() {
+        // Grabs the latest detection data
+        String axonJson = ballInfo.getString("[]");
+
+        // Don't attempt to operate on a nonexistend json
+        if(axonJson.equals("[]")) {
+            return;
+        }
+
+        // Parses the detection data
+        ArrayList<String> entities = entitiesFromJson(axonJson);
+        ArrayList<double[]> entitiesData = entitiesDataFromJSon(axonJson);
+
+        // Important information regarding the best ball
+        double[] bestBall = mostConfidentEntity(entitiesData);
+        double[] bestBallPos = entityCenter(bestBall);
+        double bestBallAngle = pixelPosToAngle(bestBallPos[0]);
+
+        // Send debugging data to Shuffleboard
+        RobotUtils.sendToShuffleboard("rawBallJson(s)", axonJson);
+        
+        RobotUtils.sendToShuffleboard("ballJson(s)", entities.toString());
+        RobotUtils.sendToShuffleboard("bestBallPos", "x = "+ bestBallPos[0] +" | y = "+ bestBallPos[1]);
+        RobotUtils.sendToShuffleboard("bestBallConfidence", bestBall[4]);
+        RobotUtils.sendToShuffleboard("bestBallAngle", bestBallAngle);
     }
 
     /**
@@ -112,33 +144,23 @@ public class BallTrackingSystem {
          * The method below is incredibly stupid, but it does work
          * 
          * All json entities sent by follow the format:
-         * {
-         *  "label": *label*,
-         *  "box": {
-         *      "ymin": *ymin*,
-         *      "xmin": *xmin*,
-         *      "ymax": *ymax*,
-         *      "xmax": *xmax*,
-         *  },
-         *  "confidence": *confidence*
-         *  },
+         * {"label": *label*, "box": {"ymin": *ymin*, "xmin": *xmin*, "ymax": *ymax*, "xmax": *xmax*}, "confidence": *confidence*}
          * 
-         * This means that an entity is 8 lines long, the only non-entity portions
-         * of an axon json are the leading and tailing square brackets
+         * All entities in the same json are seperated by commas & whitespace
+         * entity(ies) are always surrounded by square brackets
+         * 
+         * This means that an entity is 13 whitespace gaps long
          **/
         Scanner jsonScanner = new Scanner(axonJson);
-        // Burns the leading bracket
-        jsonScanner.nextLine();
-
-        // Due to the nature of this loop, the trailing bracket will be read but won't be used
-        while(jsonScanner.hasNextLine()) {
+        // Due to the nature of this loop
+        while(jsonScanner.hasNext()) {
             // Check if you have already parsed a full entity
-            if(temp.size() == 10) {
+            if(temp.size() == 13) {
                 // Reconstruct entity with original newlines
                 String entity = "";
 
                 for(String entityPart : temp) {
-                    entity += entityPart +"\n";
+                    entity += entityPart +" ";
                 }
 
                 output.add(entity);
@@ -147,7 +169,7 @@ public class BallTrackingSystem {
             }
 
             // Read the next line of the json
-            temp.add(jsonScanner.nextLine());
+            temp.add(jsonScanner.next());
         }
 
         // Closes the scanner utilized
@@ -170,20 +192,10 @@ public class BallTrackingSystem {
          * The method below is incredibly stupid, but it does work
          * 
          * All json entities sent by follow the format:
-         * {
-         *  "label": *label*,
-         *  "box": {
-         *      "ymin": *ymin*,
-         *      "xmin": *xmin*,
-         *      "ymax": *ymax*,
-         *      "xmax": *xmax*,
-         *  },
-         *  "confidence": *confidence*
-         *  },
+         * {"label": *label*, "box": {"ymin": *ymin*, "xmin": *xmin*, "ymax": *ymax*, "xmax": *xmax*}, "confidence": *confidence*}
          * 
          * thus breaking the string on whitespace yeilds the sequence:
-         * {
-         * "label":
+         * {"label":
          * *label*,
          * "box":
          * {
@@ -193,20 +205,21 @@ public class BallTrackingSystem {
          * *xmin,
          * ...
          * 
-         * Thus the terms of interest are at indicies 2, 6, 8, 10, 12, 15 and all contain 1 character beyond the integer
+         * Thus the terms of interest are at indicies 1, 4, 6, 8, 10, 12 and most contain 1 character beyond the integer
          * or floating point number in question (ie *ymin*, == 5,) (ie *confidence*} == .99})
+         * 
+         * The two exceptions to the aboce are all instances of xmax "*xmax*}," and the final instance
+         * of confidence in a file "*confidence*}]"
          **/
         Scanner entityScanner = new Scanner(entityJson);
         String temp = ""; // Overwritten to store a read String for extra character removal
         
-        entityScanner.next();
         entityScanner.next();
 
         // Skips label because the AI is currently color-blind \\
         // (Later this will be used to avoid cargo of opposing alliance)
         entityScanner.next();
 
-        entityScanner.next();
         entityScanner.next();
         entityScanner.next();
 
@@ -233,15 +246,18 @@ public class BallTrackingSystem {
 
         // Handles Length \\
         temp = entityScanner.next(); // Reads in xmax
-        temp = temp.substring(0,temp.length()-1); // Removes extraneous character
+        temp = temp.substring(0,temp.length()-1); // Removes extraneous "}" character
+        temp = temp.substring(0,temp.length()-1); // Removes extraneous "," character
         entityData[2] = (double)Integer.parseInt(temp) - entityData[0];// Assigns length
 
-        entityScanner.next();
         entityScanner.next();
 
         // Handles Confidence \\
         temp = entityScanner.next(); // Reads in confidence
-        entityData[4] = (double)Double.parseDouble(temp) - entityData[0];// Assigns confidence
+        // The last confidence of the last potential ball will be followed by a } and a ]
+        temp = temp.substring(0,temp.length()-1); // Sometimes removes a desired character, but confidence percision is high enough that this is negligable
+        temp = temp.substring(0,temp.length()-1); // Removes extraneous character
+        entityData[4] = Double.parseDouble(temp);// Assigns confidence
 
         // Closes the scanner utilized
         entityScanner.close();
