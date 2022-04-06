@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.RunShooter;
-import frc.robot.commands.VoltageToRPM;
 import frc.robot.commands.auto.*;
 import frc.robot.commands.shooter.*;
 
@@ -236,7 +235,6 @@ public class RobotContainer {
   }
 
   public void periodic() {
-    RobotUtils.sendToShuffleboard("angle", positioningSystem.angle);
     //triggers
     //intake and kickers (LT)
     if(controller.getLeftTriggerAxis() == 1) {
@@ -309,31 +307,11 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     positioningSystem.zeroPosition();
 
-    return new RotateToAngle(m_driveSystem, positioningSystem, 180, .4);
+    //return new RotateToAngle(m_driveSystem, positioningSystem, 180, .35);
 
-    /*
-    return new SequentialCommandGroup(
-      new AutoIntakeDownBackward(m_driveSystem, positioningSystem),
-      new AutoShoot(intakeSystem, shooterSystem),
-      new MoveXInchesBackwards(m_driveSystem, positioningSystem, 6 * 12, 0.6)
-    );
-    */
-    
-
-    /*
-    return new SequentialCommandGroup(
-      new AutoIntakeDownForward(m_driveSystem, positioningSystem),
-      new ParallelRaceGroup(
-        new AutoIntake(intakeSystem, shooterSystem),
-        new MoveXInchesForward(m_driveSystem, positioningSystem, 12 * 8, 0.5)),
-      new RotateToAngle(m_driveSystem, positioningSystem, 180, .3),
-      new MoveXInchesForward(m_driveSystem, positioningSystem, 12 * 7.5, 0.5),
-      new AutoShoot(intakeSystem, shooterSystem)
-    );
-    */
+    return new MoveXInchesForward(m_driveSystem, positioningSystem, 50, .35);
 
     //return new MoveXInchesForward(m_driveSystem, positioningSystem, 50, .2);
-    //return new Rotate2(m_driveSystem, 22.5, .4);
     //return new OneBallAuto(m_driveSystem, positioningSystem, shooterSystem);
     //return new TwoBallAutoSimple(m_driveSystem, intakeSystem, positioningSystem, shooterSystem, 0, 40); //Math.sqrt(Math.pow(ballPosition[0] - startPosition[0], 2) + Math.pow(ballPosition[1] - startPosition[1], 2))
     //return new TwoBallAutoComplex(ballSystem, m_driveSystem, positioningSystem, intakeSystem, shooterSystem, almostBallPosition, almostStartPosition);
