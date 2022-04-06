@@ -1,7 +1,7 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotUtils;
 import frc.robot.subsystems.ShooterSystem;
 
 public class RunShooter extends CommandBase{
@@ -19,7 +19,7 @@ public class RunShooter extends CommandBase{
     }
     public void end(boolean interrupted) {
         shooterSystem.ShooterStop();
-        SmartDashboard.putNumber("RunShooter voltage", voltage);
+        RobotUtils.sendToShuffleboard("RunShooter voltage", voltage);
 
     }
     

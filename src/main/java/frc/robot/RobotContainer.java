@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
@@ -149,21 +148,21 @@ public class RobotContainer {
       Method climberDeployerRunSpeedSetter = RobotContainer.class.getMethod("setClimberDeployerRunSpeed", Double.class);
       Method climberDeployerReverseSpeedSetter = RobotContainer.class.getMethod("setClimberDeployerReverseSpeed", Double.class);
 
-      RobotUtils.sendNumberSetterToShuffleboard(robotContainer, lowerKickerRunSpeedSetter, "Control Variables", "lowerKickerRunSpeed", lowerKickerRunSpeed);
-      RobotUtils.sendNumberSetterToShuffleboard(robotContainer, lowerKickerReverseSpeedSetter, "Control Variables", "lowerKickerReverseSpeed", lowerKickerReverseSpeed);
-      RobotUtils.sendNumberSetterToShuffleboard(robotContainer, upperKickerRunSpeedSetter, "Control Variables", "upperKickerRunSpeed", upperKickerRunSpeed);
-      RobotUtils.sendNumberSetterToShuffleboard(robotContainer, upperKickerReverseSpeedSetter, "Control Variables", "upperKickerReverseSpeed", upperKickerReverseSpeed);
-      RobotUtils.sendNumberSetterToShuffleboard(robotContainer, shooterRunSpeedSetter, "Control Variables", "shooterRunSpeed", shooterRunSpeed);
-      RobotUtils.sendNumberSetterToShuffleboard(robotContainer, shooterReverseSpeedSetter, "Control Variables", "shooterReverseSpeed", shooterReverseSpeed);
-      RobotUtils.sendNumberSetterToShuffleboard(robotContainer, intakeRunSpeedSetter, "Control Variables", "intakeRunSpeed", intakeRunSpeed);
-      RobotUtils.sendNumberSetterToShuffleboard(robotContainer, intakeReverseSpeedSetter, "Control Variables", "intakeReverseSpeed", intakeReverseSpeed);
-      RobotUtils.sendNumberSetterToShuffleboard(m_driveSystem, maxDriveInputSetter, "Control Variables", "maxDriveInput", Constants.DriveConstants.INITIAL_MAX_INPUT);
-      RobotUtils.sendNumberSetterToShuffleboard(robotContainer, autoRotateSpeedSetter, "Control Variables", "autoRotateSpeed", autoRotateSpeed);
-      RobotUtils.sendNumberSetterToShuffleboard(robotContainer, teleopShootSpeedSetter, "Control Variables", "teleopShootSpeed", teleopShootSpeed);
-      RobotUtils.sendNumberSetterToShuffleboard(robotContainer, climberDeployerRunSpeedSetter, "Control Variables", "setClimberDeployerRunSpeed", climberDeployerRunSpeed);
-      RobotUtils.sendNumberSetterToShuffleboard(robotContainer, climberDeployerReverseSpeedSetter, "Control Variables", "setClimberDeployerReverseSpeed", climberDeployerReverseSpeed);
+      RobotUtils.sendSetterToShuffleboard(robotContainer, lowerKickerRunSpeedSetter, "Control Variables", "lowerKickerRunSpeed", lowerKickerRunSpeed);
+      RobotUtils.sendSetterToShuffleboard(robotContainer, lowerKickerReverseSpeedSetter, "Control Variables", "lowerKickerReverseSpeed", lowerKickerReverseSpeed);
+      RobotUtils.sendSetterToShuffleboard(robotContainer, upperKickerRunSpeedSetter, "Control Variables", "upperKickerRunSpeed", upperKickerRunSpeed);
+      RobotUtils.sendSetterToShuffleboard(robotContainer, upperKickerReverseSpeedSetter, "Control Variables", "upperKickerReverseSpeed", upperKickerReverseSpeed);
+      RobotUtils.sendSetterToShuffleboard(robotContainer, shooterRunSpeedSetter, "Control Variables", "shooterRunSpeed", shooterRunSpeed);
+      RobotUtils.sendSetterToShuffleboard(robotContainer, shooterReverseSpeedSetter, "Control Variables", "shooterReverseSpeed", shooterReverseSpeed);
+      RobotUtils.sendSetterToShuffleboard(robotContainer, intakeRunSpeedSetter, "Control Variables", "intakeRunSpeed", intakeRunSpeed);
+      RobotUtils.sendSetterToShuffleboard(robotContainer, intakeReverseSpeedSetter, "Control Variables", "intakeReverseSpeed", intakeReverseSpeed);
+      RobotUtils.sendSetterToShuffleboard(m_driveSystem, maxDriveInputSetter, "Control Variables", "maxDriveInput", Constants.DriveConstants.INITIAL_MAX_INPUT);
+      RobotUtils.sendSetterToShuffleboard(robotContainer, autoRotateSpeedSetter, "Control Variables", "autoRotateSpeed", autoRotateSpeed);
+      RobotUtils.sendSetterToShuffleboard(robotContainer, teleopShootSpeedSetter, "Control Variables", "teleopShootSpeed", teleopShootSpeed);
+      RobotUtils.sendSetterToShuffleboard(robotContainer, climberDeployerRunSpeedSetter, "Control Variables", "setClimberDeployerRunSpeed", climberDeployerRunSpeed);
+      RobotUtils.sendSetterToShuffleboard(robotContainer, climberDeployerReverseSpeedSetter, "Control Variables", "setClimberDeployerReverseSpeed", climberDeployerReverseSpeed);
     } catch (NoSuchMethodException | SecurityException e) {
-      SmartDashboard.putString("depressing_error", e.toString());
+      RobotUtils.sendToShuffleboard("depressing_error", e.toString());
     }
   }
 
@@ -178,14 +177,14 @@ public class RobotContainer {
       Method setLowerKickerInverted = ShooterSystem.class.getMethod("setLowerKickerInverted", boolean.class);
       Method setUpperKickerInverted = ShooterSystem.class.getMethod("setUpperKickerInverted", boolean.class);
 
-      RobotUtils.sendBooleanSetterToShuffleboard(climberSystem, setClimberRunInverted, "Motor Inversions", "setClimberRunInverted", Constants.ClimberConstants.CLIMBER_RUN_INVERSED);
-      RobotUtils.sendBooleanSetterToShuffleboard(climberSystem, setClimberDeployInverted, "Motor Inversions", "setClimberDeployInverted", Constants.ClimberConstants.CLIMBER_DEPLOY_INVERSED);
-      RobotUtils.sendBooleanSetterToShuffleboard(intakeSystem, setIntakeInverted, "Motor Inversions", "setIntakeInverted", Constants.IntakeConstants.INTAKE_RUN_INVERSED);
-      RobotUtils.sendBooleanSetterToShuffleboard(shooterSystem, setShooterInverted, "Motor Inversions", "setShooterInverted", Constants.ShooterConstants.SHOOTER_INVERSED);
-      RobotUtils.sendBooleanSetterToShuffleboard(shooterSystem, setLowerKickerInverted, "Motor Inversions", "setLowerKickerInverted", Constants.ShooterConstants.LOWER_KICKER_INVERSED);
-      RobotUtils.sendBooleanSetterToShuffleboard(shooterSystem, setUpperKickerInverted, "Motor Inversions", "setUpperKickerInverted", Constants.ShooterConstants.UPPER_KICKER_INVERSED);
+      RobotUtils.sendSetterToShuffleboard(climberSystem, setClimberRunInverted, "Motor Inversions", "setClimberRunInverted", Constants.ClimberConstants.CLIMBER_RUN_INVERSED);
+      RobotUtils.sendSetterToShuffleboard(climberSystem, setClimberDeployInverted, "Motor Inversions", "setClimberDeployInverted", Constants.ClimberConstants.CLIMBER_DEPLOY_INVERSED);
+      RobotUtils.sendSetterToShuffleboard(intakeSystem, setIntakeInverted, "Motor Inversions", "setIntakeInverted", Constants.IntakeConstants.INTAKE_RUN_INVERSED);
+      RobotUtils.sendSetterToShuffleboard(shooterSystem, setShooterInverted, "Motor Inversions", "setShooterInverted", Constants.ShooterConstants.SHOOTER_INVERSED);
+      RobotUtils.sendSetterToShuffleboard(shooterSystem, setLowerKickerInverted, "Motor Inversions", "setLowerKickerInverted", Constants.ShooterConstants.LOWER_KICKER_INVERSED);
+      RobotUtils.sendSetterToShuffleboard(shooterSystem, setUpperKickerInverted, "Motor Inversions", "setUpperKickerInverted", Constants.ShooterConstants.UPPER_KICKER_INVERSED);
     } catch (NoSuchMethodException | SecurityException e) {
-      SmartDashboard.putString("depressing_error", e.toString());
+      RobotUtils.sendToShuffleboard("depressing_error", e.toString());
     }
   }
 
@@ -196,7 +195,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    SmartDashboard.putNumber("shooterDesiredRPM", teleopShootSpeed);
+    RobotUtils.sendToShuffleboard("shooterDesiredRPM", teleopShootSpeed);
     //buttons
     //lower kicker reverse (A)
     new JoystickButton(controller, Button.kA.value)
@@ -237,7 +236,7 @@ public class RobotContainer {
   }
 
   public void periodic() {
-    SmartDashboard.putNumber("angle", positioningSystem.angle);
+    RobotUtils.sendToShuffleboard("angle", positioningSystem.angle);
     //triggers
     //intake and kickers (LT)
     if(controller.getLeftTriggerAxis() == 1) {

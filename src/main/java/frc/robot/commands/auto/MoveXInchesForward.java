@@ -1,6 +1,5 @@
 package frc.robot.commands.auto;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotUtils;
 import frc.robot.subsystems.DriveSystem;
@@ -30,7 +29,7 @@ public class MoveXInchesForward extends CommandBase {
         oldLeftPosition = fieldPositioningSystem.rotationsToDistance(driveSystem.getLeftDistance());
         oldRightPosition = fieldPositioningSystem.rotationsToDistance(driveSystem.getRightDistance());
 
-        RobotUtils.sendNumberToShuffleboard("desiredDistance", desiredDistance);
+        RobotUtils.sendToShuffleboard("desiredDistance", desiredDistance);
     }
 
     /**

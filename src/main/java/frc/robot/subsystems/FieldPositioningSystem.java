@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotUtils;
@@ -88,7 +87,7 @@ public class FieldPositioningSystem extends SubsystemBase {
         double distanceCovered = rotationsToDistance(rotations);
 
         angle = navx.getYaw() + angleOffset;
-        RobotUtils.sendNumberToShuffleboard("yawDegrees", angle);
+        RobotUtils.sendToShuffleboard("yawDegrees", angle);
 
         double xDisplacement = distanceCovered * Math.cos(Math.toRadians(angle));
         double yDisplacement = distanceCovered * Math.sin(Math.toRadians(angle));
@@ -157,8 +156,8 @@ public class FieldPositioningSystem extends SubsystemBase {
     }
 
     public double angleToPoint(double[] anglePos) {
-        SmartDashboard.putNumber("tan", yDistanceFrom(anglePos) / xDistanceFrom(anglePos));
-        SmartDashboard.putNumber("arctan", Math.atan(yDistanceFrom(anglePos) / xDistanceFrom(anglePos)));
+        RobotUtils.sendToShuffleboard("tan", yDistanceFrom(anglePos) / xDistanceFrom(anglePos));
+        RobotUtils.sendToShuffleboard("arctan", Math.atan(yDistanceFrom(anglePos) / xDistanceFrom(anglePos)));
 
         if(xDistanceFrom(anglePos) != 0 && yDistanceFrom(anglePos) != 0) {
             return Math.toDegrees(Math.atan(yDistanceFrom(anglePos) / xDistanceFrom(anglePos)));

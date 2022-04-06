@@ -6,7 +6,6 @@ import edu.wpi.first.networktables.EntryInfo;
 import edu.wpi.first.networktables.EntryListenerFlags;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkMax;
@@ -17,6 +16,7 @@ import com.revrobotics.RelativeEncoder;
 
 import frc.robot.AdjustablePID;
 import frc.robot.Constants;
+import frc.robot.RobotUtils;
 import frc.robot.Constants.ShooterConstants;
 
 public class ShooterSystem extends SubsystemBase {
@@ -69,8 +69,8 @@ public class ShooterSystem extends SubsystemBase {
     public void periodic () {
         ShooterRPM = shooterControllerEncoder.getVelocity();
         ShooterVoltage = shooterController.getBusVoltage();
-        SmartDashboard.putNumber("rpm", ShooterRPM);
-        SmartDashboard.putNumber("voltage", ShooterVoltage);
+        RobotUtils.sendToShuffleboard("rpm", ShooterRPM);
+        RobotUtils.sendToShuffleboard("voltage", ShooterVoltage);
 
         //shooterPID.periodic();
     }
@@ -84,15 +84,15 @@ public class ShooterSystem extends SubsystemBase {
     }
 
     public void runShooterAt(double rpm) {
-        SmartDashboard.putNumber("shooterPID Max Output", 1);
-        SmartDashboard.putNumber("shooterPID Min Output", 0);
-        SmartDashboard.putNumber("shooterPID Set Velocity", rpm);
+        RobotUtils.sendToShuffleboard("shooterPID Max Output", 1);
+        RobotUtils.sendToShuffleboard("shooterPID Min Output", 0);
+        RobotUtils.sendToShuffleboard("shooterPID Set Velocity", rpm);
     }
 
     public void reverseShooterAt(double rpm) {
-        SmartDashboard.putNumber("shooterPID Max Output", 0);
-        SmartDashboard.putNumber("shooterPID Min Output", -0.5);
-        SmartDashboard.putNumber("shooterPID Set Velocity", -rpm);
+        RobotUtils.sendToShuffleboard("shooterPID Max Output", 0);
+        RobotUtils.sendToShuffleboard("shooterPID Min Output", -0.5);
+        RobotUtils.sendToShuffleboard("shooterPID Set Velocity", -rpm);
     }
 
     // Run the shooter at a speed from 0 to 1.0
@@ -113,7 +113,7 @@ public class ShooterSystem extends SubsystemBase {
     // Stop any motion of the shooter
     public void ShooterStop () {
         shooterController.setVoltage(0);
-        SmartDashboard.putNumber("shooterPID Set Velocity", 0);
+        RobotUtils.sendToShuffleboard("shooterPID Set Velocity", 0);
     }
 
     // Reverse the shooter at a speed from 0 to 1.0

@@ -6,8 +6,8 @@ import java.math.RoundingMode;
 import java.util.*;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotUtils;
 import frc.robot.subsystems.ShooterSystem;
 
 public class VoltageToRPM extends CommandBase{
@@ -39,7 +39,7 @@ public class VoltageToRPM extends CommandBase{
             Object[] arrayRPMs = RPMs.toArray();
             Arrays.sort(arrayRPMs);
 
-            SmartDashboard.putString("VoltageToRPM medianRPM", arrayRPMs[arrayRPMs.length / 2].toString());
+            RobotUtils.sendToShuffleboard("VoltageToRPM medianRPM", arrayRPMs[arrayRPMs.length / 2].toString());
 
         }
     

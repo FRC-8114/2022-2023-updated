@@ -6,7 +6,6 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
@@ -92,25 +91,25 @@ public class AdjustablePID {
     pidController.setSmartMotionAllowedClosedLoopError(0, smartMotionSlot);
 
     // display PID coefficients on SmartDashboard
-    SmartDashboard.putNumber(pidName + " P Gain", 5e-5);
-    SmartDashboard.putNumber(pidName + " I Gain", 1e-6);
-    SmartDashboard.putNumber(pidName + " D Gain", 0);
-    SmartDashboard.putNumber(pidName + " I Zone", 0);
-    SmartDashboard.putNumber(pidName + " Feed Forward", 0.000156);
-    SmartDashboard.putNumber(pidName + " Max Output", outputRange[0]);
-    SmartDashboard.putNumber(pidName + " Min Output", outputRange[1]);
+    RobotUtils.sendToShuffleboard(pidName + " P Gain", 5e-5);
+    RobotUtils.sendToShuffleboard(pidName + " I Gain", 1e-6);
+    RobotUtils.sendToShuffleboard(pidName + " D Gain", 0);
+    RobotUtils.sendToShuffleboard(pidName + " I Zone", 0);
+    RobotUtils.sendToShuffleboard(pidName + " Feed Forward", 0.000156);
+    RobotUtils.sendToShuffleboard(pidName + " Max Output", outputRange[0]);
+    RobotUtils.sendToShuffleboard(pidName + " Min Output", outputRange[1]);
 
     // display Smart Motion coefficients
-    SmartDashboard.putNumber(pidName + " Max Velocity", 2000);
-    SmartDashboard.putNumber(pidName + " Min Velocity", 0);
-    SmartDashboard.putNumber(pidName + " Max Acceleration", 1500);
-    SmartDashboard.putNumber(pidName + " Allowed Closed Loop Error", 0);
-    SmartDashboard.putNumber(pidName + " Set Position", 0);
-    SmartDashboard.putNumber(pidName + " Set Velocity", 0);
-    SmartDashboard.putNumber(pidName + " SetPoint", 0);
+    RobotUtils.sendToShuffleboard(pidName + " Max Velocity", 2000);
+    RobotUtils.sendToShuffleboard(pidName + " Min Velocity", 0);
+    RobotUtils.sendToShuffleboard(pidName + " Max Acceleration", 1500);
+    RobotUtils.sendToShuffleboard(pidName + " Allowed Closed Loop Error", 0);
+    RobotUtils.sendToShuffleboard(pidName + " Set Position", 0);
+    RobotUtils.sendToShuffleboard(pidName + " Set Velocity", 0);
+    RobotUtils.sendToShuffleboard(pidName + " SetPoint", 0);
 
     // button to toggle between velocity and smart motion modes
-    SmartDashboard.putBoolean(pidName + " Mode", true);
+    RobotUtils.sendToShuffleboard(pidName + " Mode", true);
   }
 
   public AdjustablePID(CANSparkMax motor, String pidName, double kP, double kI, double kD, double kIz, double kFF, double[] outputRange) {
@@ -156,40 +155,40 @@ public class AdjustablePID {
     pidController.setSmartMotionAllowedClosedLoopError(0, smartMotionSlot);
 
     // display PID coefficients on SmartDashboard
-    SmartDashboard.putNumber(pidName + " P Gain", kP);
-    SmartDashboard.putNumber(pidName + " I Gain", kI);
-    SmartDashboard.putNumber(pidName + " D Gain", kD);
-    SmartDashboard.putNumber(pidName + " I Zone", kIz);
-    SmartDashboard.putNumber(pidName + " Feed Forward", kFF);
-    SmartDashboard.putNumber(pidName + " Max Output", outputRange[0]);
-    SmartDashboard.putNumber(pidName + " Min Output", outputRange[1]);
+    RobotUtils.sendToShuffleboard(pidName + " P Gain", kP);
+    RobotUtils.sendToShuffleboard(pidName + " I Gain", kI);
+    RobotUtils.sendToShuffleboard(pidName + " D Gain", kD);
+    RobotUtils.sendToShuffleboard(pidName + " I Zone", kIz);
+    RobotUtils.sendToShuffleboard(pidName + " Feed Forward", kFF);
+    RobotUtils.sendToShuffleboard(pidName + " Max Output", outputRange[0]);
+    RobotUtils.sendToShuffleboard(pidName + " Min Output", outputRange[1]);
 
     // display Smart Motion coefficients
-    SmartDashboard.putNumber(pidName + " Max Velocity", 2000);
-    SmartDashboard.putNumber(pidName + " Min Velocity", 0);
-    SmartDashboard.putNumber(pidName + " Max Acceleration", 1500);
-    SmartDashboard.putNumber(pidName + " Allowed Closed Loop Error", 0);
-    SmartDashboard.putNumber(pidName + " Set Position", 0);
-    SmartDashboard.putNumber(pidName + " Set Velocity", 0);
-    SmartDashboard.putNumber(pidName + " SetPoint", 0);
+    RobotUtils.sendToShuffleboard(pidName + " Max Velocity", 2000);
+    RobotUtils.sendToShuffleboard(pidName + " Min Velocity", 0);
+    RobotUtils.sendToShuffleboard(pidName + " Max Acceleration", 1500);
+    RobotUtils.sendToShuffleboard(pidName + " Allowed Closed Loop Error", 0);
+    RobotUtils.sendToShuffleboard(pidName + " Set Position", 0);
+    RobotUtils.sendToShuffleboard(pidName + " Set Velocity", 0);
+    RobotUtils.sendToShuffleboard(pidName + " SetPoint", 0);
 
     // button to toggle between velocity and smart motion modes
-    SmartDashboard.putBoolean(pidName + " Mode", true);
+    RobotUtils.sendToShuffleboard(pidName + " Mode", true);
   }
 
   public void periodic() {
     // read PID coefficients from SmartDashboard
-    double p = SmartDashboard.getNumber(pidName + " P Gain", 0);
-    double i = SmartDashboard.getNumber(pidName + " I Gain", 0);
-    double d = SmartDashboard.getNumber(pidName + " D Gain", 0);
-    double iz = SmartDashboard.getNumber(pidName + " I Zone", 0);
-    double ff = SmartDashboard.getNumber(pidName + " Feed Forward", 0);
-    double max = SmartDashboard.getNumber(pidName + " Max Output", 0);
-    double min = SmartDashboard.getNumber(pidName + " Min Output", 0);
-    double maxV = SmartDashboard.getNumber(pidName + " Max Velocity", 0);
-    double minV = SmartDashboard.getNumber(pidName + " Min Velocity", 0);
-    double maxA = SmartDashboard.getNumber(pidName + " Max Acceleration", 0);
-    double allE = SmartDashboard.getNumber(pidName + " Allowed Closed Loop Error", 0);
+    double p = RobotUtils.retrieveFromShuffleboard(pidName + " P Gain", 0);
+    double i = RobotUtils.retrieveFromShuffleboard(pidName + " I Gain", 0);
+    double d = RobotUtils.retrieveFromShuffleboard(pidName + " D Gain", 0);
+    double iz = RobotUtils.retrieveFromShuffleboard(pidName + " I Zone", 0);
+    double ff = RobotUtils.retrieveFromShuffleboard(pidName + " Feed Forward", 0);
+    double max = RobotUtils.retrieveFromShuffleboard(pidName + " Max Output", 0);
+    double min = RobotUtils.retrieveFromShuffleboard(pidName + " Min Output", 0);
+    double maxV = RobotUtils.retrieveFromShuffleboard(pidName + " Max Velocity", 0);
+    double minV = RobotUtils.retrieveFromShuffleboard(pidName + " Min Velocity", 0);
+    double maxA = RobotUtils.retrieveFromShuffleboard(pidName + " Max Acceleration", 0);
+    double allE = RobotUtils.retrieveFromShuffleboard(pidName + " Allowed Closed Loop Error", 0);
 
     double kP = pidController.getP();
     double kI = pidController.getI();
@@ -218,13 +217,13 @@ public class AdjustablePID {
     if((allE != allowedErr)) pidController.setSmartMotionAllowedClosedLoopError(allE,0);
 
     double setPoint, processVariable;
-    boolean mode = SmartDashboard.getBoolean(pidName + " Mode", false);
+    boolean mode = RobotUtils.retrieveFromShuffleboard(pidName + " Mode", false);
     if(mode) {
-      setPoint = SmartDashboard.getNumber(pidName + " Set Velocity", 0);
+      setPoint = RobotUtils.retrieveFromShuffleboard(pidName + " Set Velocity", 0);
       pidController.setReference(setPoint, ControlType.kVelocity);
       processVariable = encoder.getVelocity();
     } else {
-      setPoint = SmartDashboard.getNumber(pidName + " Set Position", 0);
+      setPoint = RobotUtils.retrieveFromShuffleboard(pidName + " Set Position", 0);
       /**
        * As with other PID modes, Smart Motion is set by calling the
        * setReference method on an existing pid object and setting
@@ -234,14 +233,14 @@ public class AdjustablePID {
       processVariable = encoder.getPosition();
     }
     
-    SmartDashboard.putNumber(pidName + " SetPoint", setPoint);
-    SmartDashboard.putNumber(pidName + " Process Variable", processVariable);
-    SmartDashboard.putNumber(pidName + " Output", motor.getAppliedOutput());
+    RobotUtils.sendToShuffleboard(pidName + " SetPoint", setPoint);
+    RobotUtils.sendToShuffleboard(pidName + " Process Variable", processVariable);
+    RobotUtils.sendToShuffleboard(pidName + " Output", motor.getAppliedOutput());
 
-    SmartDashboard.putNumber(pidName + " PID P", pidController.getP());
-    SmartDashboard.putNumber(pidName + " PID I", pidController.getI());
-    SmartDashboard.putNumber(pidName + " PID D", pidController.getD());
-    SmartDashboard.putNumber(pidName + " PID Iz", pidController.getIZone());
-    SmartDashboard.putNumber(pidName + " PID FF", pidController.getFF());
+    RobotUtils.sendToShuffleboard(pidName + " PID P", pidController.getP());
+    RobotUtils.sendToShuffleboard(pidName + " PID I", pidController.getI());
+    RobotUtils.sendToShuffleboard(pidName + " PID D", pidController.getD());
+    RobotUtils.sendToShuffleboard(pidName + " PID Iz", pidController.getIZone());
+    RobotUtils.sendToShuffleboard(pidName + " PID FF", pidController.getFF());
   }
 }
