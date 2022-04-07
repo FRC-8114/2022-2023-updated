@@ -1,10 +1,13 @@
 package frc.robot;
 
 
+import javax.swing.text.Position;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.subsystems.FieldPositioningSystem;
 import frc.robot.subsystems.ShooterSystem;
 
 public class Robot extends TimedRobot {
@@ -34,6 +37,9 @@ public class Robot extends TimedRobot {
     RobotUtils.sendToShuffleboard("yLoc using navx", m_robotContainer.positioningSystem.locationUsingNavx[1]);
     RobotUtils.sendToShuffleboard("xLoc using encoders", m_robotContainer.positioningSystem.locationUsingEncoders[0]);
     RobotUtils.sendToShuffleboard("yLoc using encoders", m_robotContainer.positioningSystem.locationUsingEncoders[1]);
+
+    RobotUtils.sendToShuffleboard("angle using encoders", m_robotContainer.positioningSystem.angleUsingEncoders);
+    RobotUtils.sendToShuffleboard("navx angle", m_robotContainer.positioningSystem.navxAngle);
 
     RobotUtils.sendToShuffleboard("leftLeaderEncoder", m_robotContainer.m_driveSystem.leftLeaderEncoder.getPosition());
     RobotUtils.sendToShuffleboard("leftFollowerEncoder", m_robotContainer.m_driveSystem.leftFollowerEncoder.getPosition());
