@@ -2,8 +2,10 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotUtils;
 
 public class FieldPositioningSystem extends SubsystemBase {
     public AHRS navx;
@@ -106,18 +108,21 @@ public class FieldPositioningSystem extends SubsystemBase {
         //angleUsingEncoders
         double leftDisplacement = rotationsToDistance(averageLeftDistance());
         double rightDisplacement = rotationsToDistance(averageRightDistance());
-        if (Math.signum(-leftDisplacement) == Math.signum(rightDisplacement))
+        //if (Math.signum(-leftDisplacement) == Math.signum(rightDisplacement))
             angleUsingEncoders += Math.toDegrees(leftDisplacement / radius);
+        RobotUtils.sendToShuffleboard("left displacement divided by radius", leftDisplacement);
         //locationUsingEncoders
+        /*
         else {
             double distanceCovered = rotationsToDistance(averageEncoderDistance());
-            updateEncoderValues();
             double xDisplacement = distanceCovered * Math.cos(Math.toRadians(angleUsingEncoders));
             double yDisplacement = distanceCovered * Math.sin(Math.toRadians(angleUsingEncoders));
-            locationUsingNavx[0] += xDisplacement;
-            locationUsingNavx[1] += yDisplacement;
+            locationUsingEncoders[0] += xDisplacement;
+            locationUsingEncoders[1] += yDisplacement;
 
         }
+        */
+        updateEncoderValues();
 
     }
 

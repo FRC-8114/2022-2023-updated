@@ -307,12 +307,12 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     positioningSystem.zeroPosition();
 
-    return new RotateToAngle(m_driveSystem, positioningSystem, 180, .35);
+    //return new RotateToAngle(m_driveSystem, positioningSystem, 180, .35);
 
-    //return new MoveXInchesForward(m_driveSystem, positioningSystem, 50, .35);
+    //return new MoveXInchesForward(m_driveSystem, positioningSystem, 20, .25);
 
     //return new MoveXInchesForward(m_driveSystem, positioningSystem, 50, .2);
-    //return new OneBallAuto(m_driveSystem, positioningSystem, shooterSystem);
+    return new OneBallAuto(m_driveSystem, positioningSystem, intakeSystem, shooterSystem);
     //return new TwoBallAutoSimple(m_driveSystem, intakeSystem, positioningSystem, shooterSystem, 0, 40); //Math.sqrt(Math.pow(ballPosition[0] - startPosition[0], 2) + Math.pow(ballPosition[1] - startPosition[1], 2))
     //return new TwoBallAutoComplex(ballSystem, m_driveSystem, positioningSystem, intakeSystem, shooterSystem, almostBallPosition, almostStartPosition);
   }

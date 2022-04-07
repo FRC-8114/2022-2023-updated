@@ -10,7 +10,7 @@ public class AutoIntakeDownBackward extends SequentialCommandGroup {
         addCommands(
             new MoveXInchesBackwards(driveSystem, positioningSystem, 40, .7),
             new Wait(.5),
-            new MoveXInchesForward(driveSystem, positioningSystem, 20, .5)
+            new MoveXInchesForward(driveSystem, positioningSystem, 15, .5)
 
         );
     }

@@ -13,7 +13,7 @@ public class OneBallAuto extends SequentialCommandGroup {
         addCommands(
             new AutoIntakeDownBackward(driveSystem, positioningSystem),
             new AutoShoot(intakeSystem, shooterSystem),
-            new MoveXInchesBackwards(driveSystem, positioningSystem, 100, .4)
+            new MoveXInchesBackwards(driveSystem, positioningSystem, 60, .4)
 
         );
 
