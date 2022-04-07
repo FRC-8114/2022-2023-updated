@@ -24,8 +24,8 @@ public class MoveXInchesBackwards extends CommandBase {
      */
     public void initialize() {
         startingPos = new double[2];
-        startingPos[0] = fieldPositioningSystem.position[0];
-        startingPos[1] = fieldPositioningSystem.position[1];
+        startingPos[0] = fieldPositioningSystem.locationUsingNavx[0];
+        startingPos[1] = fieldPositioningSystem.locationUsingNavx[1];
         oldLeftPosition = fieldPositioningSystem.rotationsToDistance(driveSystem.getLeftDistance());
         oldRightPosition = fieldPositioningSystem.rotationsToDistance(driveSystem.getRightDistance());
 
@@ -67,6 +67,6 @@ public class MoveXInchesBackwards extends CommandBase {
      */
     public boolean isFinished() {
         // Terminate if you have traveled the desired distance with a margin of error of 0.05 inches
-        return fieldPositioningSystem.distanceFrom(startingPos) >= desiredDistance - 0.05;
+        return fieldPositioningSystem.distanceToPointEncoders(startingPos) >= desiredDistance - 0.05;
     }
 }

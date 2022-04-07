@@ -11,7 +11,7 @@ public class RotateToBall extends SequentialCommandGroup {
     // Calculates the angle that the bot should rotate to, then rotates to said angle
     public RotateToBall(BallTrackingSystem ballSystem, FieldPositioningSystem positioningSystem, DriveSystem driveSystem) {
         // Begin with the current angle
-        double angle = positioningSystem.angle;
+        double angle = positioningSystem.navxAngle;
 
         ArrayList<double[]> balls = ballSystem.entitiesDataFromJSon(ballSystem.ballInfo.getString(""));
         double[] bestBall = ballSystem.mostConfidentEntity(balls);

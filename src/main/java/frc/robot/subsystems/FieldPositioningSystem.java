@@ -154,6 +154,28 @@ public class FieldPositioningSystem extends SubsystemBase {
 
     /**
      * Provides the distance from the current position to the provided
+     * distancePos using variables affected by the navx
+     * 
+     * @param distancePos
+     * @return distanceFromTo method
+     */
+    public double xDistanceToPointNavx(double[] distancePos) {
+        return distanceFromTo(locationUsingNavx, distancePos);
+    }
+
+    /**
+     * Provides the distance from the current position to the provided
+     * distancePos using variables affected by the navx
+     * 
+     * @param distancePos
+     * @return distanceFromTo method
+     */
+    public double yDistanceToPointNavx(double[] distancePos) {
+        return Math.abs(locationUsingNavx[1] - distancePos[1]);
+    }
+
+    /**
+     * Provides the distance from the current position to the provided
      * distancePos using variables affected by encoder values
      * 
      * @param distancePos
