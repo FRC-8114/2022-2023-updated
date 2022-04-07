@@ -307,9 +307,9 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     positioningSystem.zeroPosition();
 
-    //return new RotateToAngle(m_driveSystem, positioningSystem, 180, .35);
+    return new RotateToAngle(m_driveSystem, positioningSystem, 180, .35);
 
-    return new MoveXInchesForward(m_driveSystem, positioningSystem, 50, .35);
+    //return new MoveXInchesForward(m_driveSystem, positioningSystem, 50, .35);
 
     //return new MoveXInchesForward(m_driveSystem, positioningSystem, 50, .2);
     //return new OneBallAuto(m_driveSystem, positioningSystem, shooterSystem);

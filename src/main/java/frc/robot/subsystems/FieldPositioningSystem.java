@@ -104,8 +104,8 @@ public class FieldPositioningSystem extends SubsystemBase {
      */
     public void updatePositionUsingEncoders() {
         //angleUsingEncoders
-        double leftDisplacement = rotationsToDistance(driveSystem.getLeftDistance());
-        double rightDisplacement = rotationsToDistance(driveSystem.getRightDistance());
+        double leftDisplacement = rotationsToDistance(averageLeftDistance());
+        double rightDisplacement = rotationsToDistance(averageRightDistance());
         if (Math.signum(-leftDisplacement) == Math.signum(rightDisplacement))
             angleUsingEncoders += Math.toDegrees(leftDisplacement / radius);
         //locationUsingEncoders
@@ -132,12 +132,24 @@ public class FieldPositioningSystem extends SubsystemBase {
 
     }
 
+    public double averageLeftDistance() {
+        double averageOldLeftEncoders = (oldLeftEncoderValues[0] + oldLeftEncoderValues[1]) / 2;
+        return driveSystem.getLeftDistance() - averageOldLeftEncoders;
+
+    }
+
+    public double averageRightDistance() {
+        double averageOldRightEncoders = (oldRightEncoderValues[0] + oldRightEncoderValues[1]) / 2;
+        return driveSystem.getRightDistance() - averageOldRightEncoders;
+
+    }
+
     /**
      * Returns the average displacement of the encoders since the last update
      */
     public double averageEncoderDistance() {
-        double averageOldLeftEncoders = (oldLeftEncoderValues[0] + oldLeftEncoderValues[1] + oldRightEncoderValues[0] + oldRightEncoderValues[1]) / 4;
-        return driveSystem.getTotalDistance() - averageOldLeftEncoders;
+        double averageOldEncoders = (oldLeftEncoderValues[0] + oldLeftEncoderValues[1] + oldRightEncoderValues[0] + oldRightEncoderValues[1]) / 4;
+        return driveSystem.getTotalDistance() - averageOldEncoders;
 
     }
 
@@ -160,7 +172,7 @@ public class FieldPositioningSystem extends SubsystemBase {
      * @return distanceFromTo method
      */
     public double xDistanceToPointNavx(double[] distancePos) {
-        return distanceFromTo(locationUsingNavx, distancePos);
+        return Math.abs(locationUsingNavx[0] - distancePos[0]);
     }
 
     /**

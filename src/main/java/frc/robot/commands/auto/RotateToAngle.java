@@ -27,7 +27,7 @@ public class RotateToAngle extends CommandBase {
             marginOfError *= 2;
         }
 
-        if(fieldPositioningSystem.navxAngle + 180 > desiredAngle) {
+        if(fieldPositioningSystem.angleUsingEncoders + 180 > desiredAngle) {
             clockwise = false;
         }
     
@@ -35,7 +35,7 @@ public class RotateToAngle extends CommandBase {
     }
 
     public void execute() {
-        angleDifference = Math.abs(desiredAngle - fieldPositioningSystem.navxAngle);
+        angleDifference = Math.abs(desiredAngle - fieldPositioningSystem.angleUsingEncoders);
 
         if(angleDifference <= 4) {
             if(clockwise) {
