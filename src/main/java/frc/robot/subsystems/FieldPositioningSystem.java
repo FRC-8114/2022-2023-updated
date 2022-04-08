@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotUtils;
 
 public class FieldPositioningSystem extends SubsystemBase {
@@ -33,6 +34,55 @@ public class FieldPositioningSystem extends SubsystemBase {
         this.position = position;
         this.angleOffset = angle;
         this.angle = navx.getYaw() + angleOffset;
+    }
+
+    /**
+     * Runs periodically throughout the program's lifetime
+     */
+    public void periodic() {
+        updatePosition();
+    }
+
+    /**
+     * Sends important telemetry data to shuffleboard
+     */
+    public void updateShuffleboard() {
+        // navX state information
+        RobotUtils.sendToShuffleboard("isNavXCalibrating?", navx.isCalibrating());
+        RobotUtils.sendToShuffleboard("isNaxXMagnetometerCalibrated?", navx.isMagnetometerCalibrated());
+        RobotUtils.sendToShuffleboard("navXFirmwareVersion", navx.getFirmwareVersion());
+        RobotUtils.sendToShuffleboard("navXRequestedUpdateRate", navx.getRequestedUpdateRate());
+
+        // Important navX outputs
+        RobotUtils.sendToShuffleboard("navX.getRate()", navx.getRate()); // The current angular velocity of the gyro
+        RobotUtils.sendToShuffleboard("navX.getYaw()", navx.getYaw()); // The yaw angle
+        RobotUtils.sendToShuffleboard("navX.getAngle()", navx.getAngle()); // The yaw angle
+        RobotUtils.sendToShuffleboard("navX.getCompassHeading()", navx.getCompassHeading()); // The compass heading in degrees
+        RobotUtils.sendToShuffleboard("navX.getFusedHeading()", navx.getFusedHeading()); // The fused gyro-compass heading in degrees
+        RobotUtils.sendToShuffleboard("navX.isRotating()", navx.isRotating()); // If the navX thinks it is rotating
+
+        // Current bearing and position
+        RobotUtils.sendToShuffleboard("currentAngle", angle);
+        RobotUtils.sendToShuffleboard("currentPosition", position);
+    }
+
+    /**
+     * Updates the values for the current displacement vector before applying
+     * it to the robot's current position
+     */
+    public void updatePosition() {
+        double rotations = averageEncoderDistance();
+        double distanceCovered = rotationsToDistance(rotations);
+
+        angle = navx.getYaw() + angleOffset;
+
+        double xDisplacement = distanceCovered * Math.cos(Math.toRadians(angle));
+        double yDisplacement = distanceCovered * Math.sin(Math.toRadians(angle));
+
+        position[0] += xDisplacement;
+        position[1] += yDisplacement;
+
+        updateEncoderValues();
     }
 
     /**
@@ -77,26 +127,6 @@ public class FieldPositioningSystem extends SubsystemBase {
         navx.zeroYaw();
 
         angleOffset = angle;
-    }
-
-    /**
-     * Updates the values for the current displacement vector before applying
-     * it to the robot's current position
-     */
-    public void updatePosition() {
-        double rotations = averageEncoderDistance();
-        double distanceCovered = rotationsToDistance(rotations);
-
-        angle = navx.getYaw() + angleOffset;
-        RobotUtils.sendToShuffleboard("yawDegrees", angle);
-
-        double xDisplacement = distanceCovered * Math.cos(Math.toRadians(angle));
-        double yDisplacement = distanceCovered * Math.sin(Math.toRadians(angle));
-
-        position[0] += xDisplacement;
-        position[1] += yDisplacement;
-
-        updateEncoderValues();
     }
 
     /**

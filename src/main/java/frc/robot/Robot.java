@@ -26,39 +26,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotPeriodic() {
-    m_robotContainer.positioningSystem.updatePosition();
-    
     RuntimeMXBean mxbean = ManagementFactory.getRuntimeMXBean();
     long runtimeMilliseconds = mxbean.getUptime();
     RobotUtils.sendToShuffleboard("robotUptime", runtimeMilliseconds / 1000.0);
-    updateShuffleboardValues();
 
     CommandScheduler.getInstance().run();
-  }
-
-  public void updateShuffleboardValues() {
-    RobotUtils.sendToShuffleboard("xPos", m_robotContainer.positioningSystem.position[0]);
-    RobotUtils.sendToShuffleboard("yPos", m_robotContainer.positioningSystem.position[1]);
-
-    double averageOldLeftEncoders = (m_robotContainer.positioningSystem.oldLeftEncoderValues[0] + m_robotContainer.positioningSystem.oldLeftEncoderValues[1]) / 2;
-    RobotUtils.sendToShuffleboard("oldLeftEncoders", averageOldLeftEncoders);
-    double averageOldRightEncoders = (m_robotContainer.positioningSystem.oldRightEncoderValues[0] + m_robotContainer.positioningSystem.oldRightEncoderValues[1]) / 2;
-    RobotUtils.sendToShuffleboard("oldRightEncoders", averageOldRightEncoders);
-
-    RobotUtils.sendToShuffleboard("leftLeaderEncoder", m_robotContainer.m_driveSystem.leftLeaderEncoder.getPosition());
-    RobotUtils.sendToShuffleboard("leftFollowerEncoder", m_robotContainer.m_driveSystem.leftFollowerEncoder.getPosition());
-    double averageLeftEncoders = (m_robotContainer.m_driveSystem.leftLeaderEncoder.getPosition() + m_robotContainer.m_driveSystem.leftFollowerEncoder.getPosition()) / 2;
-    RobotUtils.sendToShuffleboard("leftEncoders", averageLeftEncoders);
-    
-    RobotUtils.sendToShuffleboard("rightLeaderEncoder", m_robotContainer.m_driveSystem.rightLeaderEncoder.getPosition());
-    RobotUtils.sendToShuffleboard("rightFollowerEncoder", m_robotContainer.m_driveSystem.rightFollowerEncoder.getPosition());
-    double averageRightEncoders = (m_robotContainer.m_driveSystem.rightLeaderEncoder.getPosition() + m_robotContainer.m_driveSystem.rightFollowerEncoder.getPosition()) / 2;
-    RobotUtils.sendToShuffleboard("rightEncoders", averageRightEncoders);
-
-    double absoluteAverageLeftDifference = Math.abs(averageLeftEncoders - averageOldLeftEncoders);
-    RobotUtils.sendToShuffleboard("leftDifference", absoluteAverageLeftDifference);
-    double absoluteAverageRightDifference = Math.abs(averageRightEncoders - averageOldRightEncoders);
-    RobotUtils.sendToShuffleboard("rightDifference", absoluteAverageRightDifference);
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
