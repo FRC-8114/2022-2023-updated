@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.ControlConstants;
 import frc.robot.commands.RunShooter;
 import frc.robot.commands.auto.*;
 import frc.robot.commands.shooter.*;
@@ -168,8 +169,6 @@ public class RobotContainer {
 
   public void sendMotorInversionsToShuffleboard() {
     try {
-      RobotContainer robotContainer = this;
-
       Method setClimberRunInverted = ClimberSystem.class.getMethod("setClimberRunInverted", boolean.class);
       Method setClimberDeployInverted = ClimberSystem.class.getMethod("setClimberDeployInverted", boolean.class);
       Method setIntakeInverted = IntakeSystem.class.getMethod("setIntakeInverted", boolean.class);
@@ -208,14 +207,10 @@ public class RobotContainer {
     new JoystickButton(controller, Button.kX.value)
       .whileHeld(() -> shooterSystem.ShooterReverseVoltage(7))
       .whenReleased(() -> shooterSystem.ShooterStop());
-    //shooter (Y) -- temp kickers
+    // Run Kickers forward
     new JoystickButton(controller, Button.kY.value)
-      .whileHeld(() -> shooterSystem.UpperKickerRun(1))
-      .whileHeld(() -> shooterSystem.LowerKickerRun(1))
-      .whenReleased(() -> shooterSystem.UpperKickerStop())
-      .whenReleased(() -> shooterSystem.LowerKickerStop());
-      // .whileHeld(() -> shooterSystem.ShooterRunVoltage(6))
-      // .whenReleased(() -> shooterSystem.ShooterStop());
+      .whenPressed(() -> new AllKickerRun(ControlConstants.UPPER_KICKER_INITIAL_RUN_SPEED, ControlConstants.LOWER_KICKER_INITIAL_RUN_SPEED, shooterSystem).schedule())
+      .whenReleased(() -> new AllKickerStop(shooterSystem).schedule());
 
     //bumpers
     //intake reverse (LB)
@@ -264,22 +259,24 @@ public class RobotContainer {
     }
 
     //d-pad
-    //climber runner up (Up)
-    if (controller.getPOV() == 0)
-      climberSystem.ClimberRunnerUp(climberRunnerRunSpeed);
-    //climber runner down (Down)
-    else if (controller.getPOV() == 180)
-      climberSystem.ClimberRunnerDown(climberRunnerReverseSpeed);
-    //climber deployer up (Left)
-    else if (controller.getPOV() == 270)
-      climberSystem.ClimberDeployerUp(climberDeployerReverseSpeed);
-    //climber deployer down (Right)
-    else if (controller.getPOV() == 90)
-      climberSystem.ClimberDeployerDown(climberDeployerRunSpeed);
-    else if (controller.getPOV() < 0 && oldPOV >= 0) {
-      climberSystem.ClimberStop();
-      climberSystem.ClimberDeployerStop();
-
+    switch (controller.getPOV()) {
+      case 0: // UP
+        climberSystem.ClimberRunnerUp(climberRunnerRunSpeed);
+        break;
+      case 90: // RIGHT
+        climberSystem.ClimberDeployerDown(climberDeployerRunSpeed);
+        break;
+      case 180: // DOWN
+        climberSystem.ClimberRunnerDown(climberRunnerReverseSpeed);
+        break;
+      case 270: // LEFT
+        climberSystem.ClimberDeployerUp(climberDeployerReverseSpeed);
+        break;
+      default: // NONE
+        if (oldPOV >= 0) {
+          climberSystem.ClimberStop();
+          climberSystem.ClimberDeployerStop();
+        }
     }
 
     //sticks
