@@ -12,7 +12,6 @@ public class RotateToAngle extends CommandBase {
 
     private double desiredAngle, velocity, marginOfError, angleDifference, startingError;
     private final double rampRate = 1;
-    private boolean clockwise;
 
     public RotateToAngle(DriveSystem driveSystem, FieldPositioningSystem fieldPositioningSystem, double desiredAngle, double velocity) {
         this.driveSystem = driveSystem;
@@ -24,14 +23,10 @@ public class RotateToAngle extends CommandBase {
     }
 
     public void initialize() {
-        marginOfError = 0.5;
-        if(velocity > 0.5) {
-            marginOfError *= 2;
-        }
+        fieldPositioningSystem.zeroPosition();
+        marginOfError = 2;
 
-        if(fieldPositioningSystem.angle + 180 > desiredAngle) {
-            clockwise = false;
-        }
+        startingError = Math.abs(desiredAngle);
     
         SmartDashboard.putNumber("desiredAngle", desiredAngle);
 
@@ -39,21 +34,21 @@ public class RotateToAngle extends CommandBase {
     }
 
     public void execute() {
-        angleDifference = Math.abs(desiredAngle - fieldPositioningSystem.angle);
+        double angle = (fieldPositioningSystem.angle < 0 ? fieldPositioningSystem.angle + 360 : fieldPositioningSystem.angle);
 
-        if(angleDifference <= 4) {
-            if(clockwise) {
-                driveSystem.tankDrive(-velocity * .85, velocity * .85);
-            } else {
-                driveSystem.tankDrive(velocity * .85, -velocity * .85);
-            }
-        } else {
-            if(clockwise) {
-                driveSystem.tankDrive(-velocity, velocity);
-            } else {
-                driveSystem.tankDrive(velocity, -velocity);
-            }
-        }
+        angleDifference = Math.abs(desiredAngle - angle); // Current angle discrepancy
+        double proportion = angleDifference / startingError;
+
+        // Determine the drive power to use
+        double proportionalPower = velocity * proportion;
+        double minPower = .35;
+        double power = Math.max(proportionalPower, minPower);
+
+
+        if (fieldPositioningSystem.angle < 0)
+            driveSystem.tankDrive(-power, power);
+        else
+            driveSystem.tankDrive(power, -power);
 
         RobotUtils.sendToShuffleboard("angleDifference", angleDifference);
     }
