@@ -60,8 +60,9 @@ public final class Constants {
     public static final double GEAR_RATIO = 1 / 10.71;
     public static final double DRIVE_WHEEL_DIAMETER = 6;
     public static final double DRIVE_WHEEL_CIRCUMFRENCE = Math.PI * DRIVE_WHEEL_DIAMETER;
-
     public static final double POSITION_CONVERSION_FACTOR = GEAR_RATIO * DRIVE_WHEEL_CIRCUMFRENCE;
+
+    public static final double NAVX_DRIFT = 1;
 
     public static final double WHEEL_DIAMETER_INCHES = 6;
     public static final double WHEEL_DIAMETER_METERS = WHEEL_DIAMETER_INCHES * INCHES_TO_METERS;
@@ -86,12 +87,12 @@ public final class Constants {
 
   public static final class ControlConstants {
     public static final double LOWER_KICKER_INITIAL_RUN_SPEED = .5;
-    public static final double LOWER_KICKER_INITIAL_REVERSE_SPEED = .75;
+    public static final double LOWER_KICKER_INITIAL_REVERSE_SPEED = 1;
     public static final double UPPER_KICKER_INITIAL_RUN_SPEED = .35;
     public static final double UPPER_KICKER_INITIAL_REVERSE_SPEED = .35;
     public static final double SHOOTER_INITIAL_RUN_SPEED = .8;
     public static final double SHOOTER_INITIAL_REVERSE_SPEED = .4;
-    public static final double INTAKE_INITIAL_RUN_SPEED = .6;
+    public static final double INTAKE_INITIAL_RUN_SPEED = .7;
     public static final double INTAKE_INITIAL_REVERSE_SPEED = .25;
     public static final double CLIMBER_RUNNER_INITIAL_RUN_SPEED = .8;
     public static final double CLIMBER_RUNNER_INITIAL_REVERSE_SPEED = .8;

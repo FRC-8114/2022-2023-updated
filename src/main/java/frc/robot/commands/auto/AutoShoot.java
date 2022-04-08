@@ -46,7 +46,7 @@ public class AutoShoot extends CommandBase {
     }
 
     public boolean isFinished() {
-        if (timer.get() > 7)
+        if (timer.get() > 5)
             return true;
         return false;
     }

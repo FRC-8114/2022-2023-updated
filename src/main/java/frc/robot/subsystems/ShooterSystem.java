@@ -31,7 +31,7 @@ public class ShooterSystem extends SubsystemBase {
     final RelativeEncoder shooterControllerEncoder = shooterController.getEncoder();
 
     // Shooter variables
-	public static double ShooterRPM = 0;
+	public double ShooterRPM = 0;
     public static double ShooterVoltage = 0;
 
 

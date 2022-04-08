@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
@@ -161,7 +162,7 @@ public class RobotContainer {
       RobotUtils.sendSetterToShuffleboard(robotContainer, climberDeployerRunSpeedSetter, "Control Variables", "setClimberDeployerRunSpeed", climberDeployerRunSpeed);
       RobotUtils.sendSetterToShuffleboard(robotContainer, climberDeployerReverseSpeedSetter, "Control Variables", "setClimberDeployerReverseSpeed", climberDeployerReverseSpeed);
     } catch (NoSuchMethodException | SecurityException e) {
-      RobotUtils.sendToShuffleboard("depressing_error", e.toString());
+      SmartDashboard.putString("Number Setter Sender Error", e.toString());
     }
   }
 
@@ -183,7 +184,7 @@ public class RobotContainer {
       RobotUtils.sendSetterToShuffleboard(shooterSystem, setLowerKickerInverted, "Motor Inversions", "setLowerKickerInverted", Constants.ShooterConstants.LOWER_KICKER_INVERSED);
       RobotUtils.sendSetterToShuffleboard(shooterSystem, setUpperKickerInverted, "Motor Inversions", "setUpperKickerInverted", Constants.ShooterConstants.UPPER_KICKER_INVERSED);
     } catch (NoSuchMethodException | SecurityException e) {
-      RobotUtils.sendToShuffleboard("depressing_error", e.toString());
+      SmartDashboard.putString("Boolean Setter Sender Error", e.toString());
     }
   }
 
@@ -194,7 +195,6 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    RobotUtils.sendToShuffleboard("shooterDesiredRPM", teleopShootSpeed);
     //buttons
     //lower kicker reverse (A)
     new JoystickButton(controller, Button.kA.value)
@@ -253,11 +253,10 @@ public class RobotContainer {
     if(controller.getRightTriggerAxis() == 1) {
       shooterSystem.ShooterRunVoltage(7);
       //shooterSystem.runShooterAt(2100);
-      if (shooterSystem.ShooterRPM >= 2450 && shooterSystem.ShooterRPM <- 2600) {
+      if (shooterSystem.ShooterRPM >= 2450 && shooterSystem.ShooterRPM <= 2600) {
         shooterSystem.LowerKickerRun(lowerKickerRunSpeed);
         shooterSystem.UpperKickerRun(upperKickerRunSpeed);
-      }  
-      System.out.println("I want to die");
+      } 
     } else if (oldRightTriggerAxis == 1) {
       shooterSystem.LowerKickerStop();
       shooterSystem.UpperKickerStop();
@@ -307,14 +306,9 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     positioningSystem.zeroPosition();
 
-    //return new RotateToAngle(m_driveSystem, positioningSystem, 180, .35);
-
-    //return new MoveXInchesForward(m_driveSystem, positioningSystem, 20, .25);
-
-    //return new MoveXInchesForward(m_driveSystem, positioningSystem, 50, .2);
-    return new OneBallAuto(m_driveSystem, positioningSystem, intakeSystem, shooterSystem);
-    //return new TwoBallAutoSimple(m_driveSystem, intakeSystem, positioningSystem, shooterSystem, 0, 40); //Math.sqrt(Math.pow(ballPosition[0] - startPosition[0], 2) + Math.pow(ballPosition[1] - startPosition[1], 2))
-    //return new TwoBallAutoComplex(ballSystem, m_driveSystem, positioningSystem, intakeSystem, shooterSystem, almostBallPosition, almostStartPosition);
+    //return new OneBallAuto(m_driveSystem, positioningSystem, intakeSystem, shooterSystem);
+    //return new TwoBallAutoSimple(m_driveSystem, intakeSystem, positioningSystem, shooterSystem, 50);
+    return new RotateToAngle(m_driveSystem, positioningSystem, 170, .6); 
   }
 
   /**

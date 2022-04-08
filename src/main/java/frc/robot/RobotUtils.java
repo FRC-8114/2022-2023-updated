@@ -87,11 +87,11 @@ public class RobotUtils {
         try {
             setter.invoke(object, event.value.getDouble());
         } catch (IllegalAccessException e) {
-            sendToShuffleboard("depressing_error", e.toString());
+            SmartDashboard.putString("Illegal Access", e.toString());
         } catch (IllegalArgumentException e) {
-            sendToShuffleboard("depressing_error", e.toString());
+            SmartDashboard.putString("Illegal Argument", e.toString());
         } catch (InvocationTargetException e) {
-            sendToShuffleboard("depressing_error", e.toString());
+            SmartDashboard.putString("Target Exception", e.toString());
         }
         }, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
     }
