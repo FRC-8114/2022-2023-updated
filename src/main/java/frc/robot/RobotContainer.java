@@ -2,29 +2,16 @@ package frc.robot;
 
 import java.lang.reflect.Method;
 
-import javax.lang.model.util.ElementScanner6;
-
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ControlConstants;
-import frc.robot.commands.RunShooter;
 import frc.robot.commands.auto.*;
 import frc.robot.commands.shooter.*;
-
-import frc.robot.subsystems.DriveSystem;
-import frc.robot.subsystems.FieldPositioningSystem;
-import frc.robot.subsystems.IntakeSystem;
-import frc.robot.subsystems.ShooterSystem;
-import frc.robot.subsystems.BallTrackingSystem;
-import frc.robot.subsystems.ClimberSystem;
+import frc.robot.subsystems.*;
 
 public class RobotContainer {
   public DriveSystem m_driveSystem = new DriveSystem();
@@ -35,8 +22,6 @@ public class RobotContainer {
   public BallTrackingSystem ballSystem = new BallTrackingSystem(74, Math.sqrt(Math.pow(640, 2) + Math.pow(480, 2)));
 
   public XboxController controller = new XboxController(0);
-
-  public TeleOpShoot shoot;
 
   private int oldLeftTriggerAxis, oldRightTriggerAxis, oldPOV;
 
@@ -217,8 +202,6 @@ public class RobotContainer {
     new JoystickButton(controller, Button.kLeftBumper.value)
       .whileHeld(() -> intakeSystem.IntakeReverse(intakeReverseSpeed))
       .whenReleased(() -> intakeSystem.IntakeStop());
-
-    shoot = new TeleOpShoot(lowerKickerRunSpeed, upperKickerRunSpeed, shooterSystem);
   }
 
   public XboxController getXboxController() {

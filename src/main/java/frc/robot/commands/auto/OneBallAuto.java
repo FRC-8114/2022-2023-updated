@@ -1,7 +1,5 @@
 package frc.robot.commands.auto;
 
-import java.lang.reflect.Field;
-
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.DriveSystem;
 import frc.robot.subsystems.FieldPositioningSystem;

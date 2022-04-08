@@ -5,41 +5,39 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.PositioningConstants;
 
 public class DriveSystem extends SubsystemBase {
   // The motors on the left side of the drive.
-  public static CANSparkMax leftMotorLeader = new CANSparkMax(DriveConstants.LEFT_MOTOR_1_PORT, MotorType.kBrushless);
-  public static CANSparkMax leftMotorFollower = new CANSparkMax(DriveConstants.LEFT_MOTOR_2_PORT, MotorType.kBrushless);
+  public CANSparkMax leftMotorLeader = new CANSparkMax(DriveConstants.LEFT_MOTOR_1_PORT, MotorType.kBrushless);
+  public CANSparkMax leftMotorFollower = new CANSparkMax(DriveConstants.LEFT_MOTOR_2_PORT, MotorType.kBrushless);
 
   // The motors on the right side of the drive.
-  public static CANSparkMax rightMotorLeader = new CANSparkMax(DriveConstants.RIGHT_MOTOR_1_PORT, MotorType.kBrushless);
-  public static CANSparkMax rightMotorFollower = new CANSparkMax(DriveConstants.RIGHT_MOTOR_2_PORT, MotorType.kBrushless);
+  public CANSparkMax rightMotorLeader = new CANSparkMax(DriveConstants.RIGHT_MOTOR_1_PORT, MotorType.kBrushless);
+  public CANSparkMax rightMotorFollower = new CANSparkMax(DriveConstants.RIGHT_MOTOR_2_PORT, MotorType.kBrushless);
 
   // Creates and initializes the encoders
-  public final static RelativeEncoder leftLeaderEncoder = leftMotorLeader.getEncoder();
-  public final static RelativeEncoder leftFollowerEncoder = leftMotorFollower.getEncoder();
-  public final static RelativeEncoder rightLeaderEncoder = rightMotorLeader.getEncoder();
-  public final static RelativeEncoder rightFollowerEncoder = rightMotorFollower.getEncoder();
+  public final RelativeEncoder leftLeaderEncoder = leftMotorLeader.getEncoder();
+  public final RelativeEncoder leftFollowerEncoder = leftMotorFollower.getEncoder();
+  public final RelativeEncoder rightLeaderEncoder = rightMotorLeader.getEncoder();
+  public final RelativeEncoder rightFollowerEncoder = rightMotorFollower.getEncoder();
 
   // Creates a DifferentialDrive object
-  private static final DifferentialDrive m_drive = new DifferentialDrive(leftMotorLeader, rightMotorLeader);
+  private final DifferentialDrive m_drive = new DifferentialDrive(leftMotorLeader, rightMotorLeader);
 
   // Measures which side of the robot is considered front
   private boolean steeringInversed = Constants.DriveConstants.STEERING_INVERSED;
 
-  private static DifferentialDriveOdometry m_odometry;
-  private static double curvatureMaxCurvature = 1.0;
-  private static double arcadeMaxCurvature;
-  private double[] currentSpeeds = new double[2];
+  //private DifferentialDriveOdometry m_odometry;
+  private double curvatureMaxCurvature = 1.0;
+  //private double arcadeMaxCurvature;
+  //private double[] currentSpeeds = new double[2];
 
-  public static boolean back = false;
-  public static boolean isArcade = false;
+  public boolean back = false;
+  public boolean isArcade = false;
 
   /** Creates a new DriveSubsystem. */
   public DriveSystem () {
@@ -102,9 +100,9 @@ public class DriveSystem extends SubsystemBase {
     return (getLeftDistance() + getRightDistance()) / 2;
   }
 
-  public static void cheesyDrive (double speed, double curvature, boolean isArcade) {
+  public void cheesyDrive (double speed, double curvature, boolean isArcade) {
     if (back) {
-      curvature = curvature;
+      curvature *= -1;
     }
     if (!isArcade) {
       // Applies a maximum curvature to curvature mode, limiting the minimum turn
