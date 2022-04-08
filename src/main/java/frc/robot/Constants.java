@@ -17,6 +17,7 @@ public final class Constants {
     public static final boolean STEERING_INVERSED = false;
 
     public static final double INITIAL_MAX_INPUT = .75;
+    public static final double INITIAL_RAMP_RATE = .5;
   }
 
   public static final class ShooterConstants {

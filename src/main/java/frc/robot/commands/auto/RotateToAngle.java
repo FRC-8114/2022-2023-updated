@@ -11,6 +11,7 @@ public class RotateToAngle extends CommandBase {
     private FieldPositioningSystem fieldPositioningSystem;
 
     private double desiredAngle, velocity, marginOfError, angleDifference, startingError;
+    private final double rampRate = 1;
 
     public RotateToAngle(DriveSystem driveSystem, FieldPositioningSystem fieldPositioningSystem, double desiredAngle, double velocity) {
         this.driveSystem = driveSystem;
@@ -29,10 +30,7 @@ public class RotateToAngle extends CommandBase {
     
         SmartDashboard.putNumber("desiredAngle", desiredAngle);
 
-        driveSystem.leftMotorLeader.setOpenLoopRampRate(1);
-        driveSystem.leftMotorFollower.setOpenLoopRampRate(1);
-        driveSystem.rightMotorLeader.setOpenLoopRampRate(1);
-        driveSystem.rightMotorFollower.setOpenLoopRampRate(1);
+        driveSystem.setRampRate(rampRate);
     }
 
     public void execute() {
@@ -57,11 +55,6 @@ public class RotateToAngle extends CommandBase {
 
     public void end(boolean interrupted) {
         driveSystem.tankDrive(0,0);
-
-        driveSystem.leftMotorLeader.setOpenLoopRampRate(0);
-        driveSystem.leftMotorFollower.setOpenLoopRampRate(0);
-        driveSystem.rightMotorLeader.setOpenLoopRampRate(0);
-        driveSystem.rightMotorFollower.setOpenLoopRampRate(0);
     }
 
     public boolean isFinished() {

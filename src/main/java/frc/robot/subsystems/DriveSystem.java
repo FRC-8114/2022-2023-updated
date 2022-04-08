@@ -49,23 +49,27 @@ public class DriveSystem extends SubsystemBase {
     leftMotorLeader.restoreFactoryDefaults();
     leftMotorLeader.setIdleMode(IdleMode.kCoast);
     leftMotorLeader.setInverted(DriveConstants.LEFT_MOTORS_INVERSED);
+    leftMotorLeader.setOpenLoopRampRate(DriveConstants.INITIAL_RAMP_RATE);
 
     // Left Follower Initialization
     leftMotorFollower.restoreFactoryDefaults();
     leftMotorFollower.setIdleMode(IdleMode.kCoast);
     leftMotorFollower.setInverted(DriveConstants.LEFT_MOTORS_INVERSED);
     leftMotorFollower.follow(leftMotorLeader, false);
+    leftMotorFollower.setOpenLoopRampRate(DriveConstants.INITIAL_RAMP_RATE);
 
     // Right Leader Initialization
     rightMotorLeader.restoreFactoryDefaults();
     rightMotorLeader.setIdleMode(IdleMode.kCoast);
     rightMotorLeader.setInverted(DriveConstants.RIGHT_MOTORS_INVERSED);
+    rightMotorLeader.setOpenLoopRampRate(DriveConstants.INITIAL_RAMP_RATE);
 
     // Right Follower Initialization
     rightMotorFollower.restoreFactoryDefaults();
     rightMotorFollower.setIdleMode(IdleMode.kCoast);
     rightMotorFollower.setInverted(DriveConstants.RIGHT_MOTORS_INVERSED);
     rightMotorFollower.follow(rightMotorLeader, false);
+    rightMotorFollower.setOpenLoopRampRate(DriveConstants.INITIAL_RAMP_RATE);
   }
 
   // Switches which side of the robot is considered front
@@ -144,5 +148,17 @@ public class DriveSystem extends SubsystemBase {
       rightMotorLeader.setIdleMode(IdleMode.kCoast);
       rightMotorFollower.setIdleMode(IdleMode.kCoast);
     }
+  }
+
+  /**
+   * Sets the ramp rate of the drive train motors
+   * 
+   * @param rampRate
+   */
+  public void setRampRate(double rampRate) {
+    leftMotorLeader.setOpenLoopRampRate(rampRate);
+    leftMotorFollower.setOpenLoopRampRate(rampRate);
+    rightMotorLeader.setOpenLoopRampRate(rampRate);
+    rightMotorFollower.setOpenLoopRampRate(rampRate);
   }
 }
