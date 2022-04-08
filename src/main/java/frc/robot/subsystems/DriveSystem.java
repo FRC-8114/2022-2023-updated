@@ -45,6 +45,13 @@ public class DriveSystem extends SubsystemBase {
   public DriveSystem () {
     /* Initialize the drivetrain motors */
 
+    configureDriveToDefault();
+  }
+
+  /**
+   * Sets the drive motors to their default configuration
+   */
+  public void configureDriveToDefault() {
     // Left Leader Initialization
     leftMotorLeader.restoreFactoryDefaults();
     leftMotorLeader.setIdleMode(IdleMode.kCoast);
@@ -70,6 +77,8 @@ public class DriveSystem extends SubsystemBase {
     rightMotorFollower.setInverted(DriveConstants.RIGHT_MOTORS_INVERSED);
     rightMotorFollower.follow(rightMotorLeader, false);
     rightMotorFollower.setOpenLoopRampRate(DriveConstants.INITIAL_RAMP_RATE);
+
+    setMaxInput(DriveConstants.INITIAL_MAX_INPUT);
   }
 
   // Switches which side of the robot is considered front

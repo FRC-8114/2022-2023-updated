@@ -86,7 +86,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     m_robotContainer.m_driveSystem.overwriteBrake(false);
-    m_robotContainer.m_driveSystem.setMaxInput(DriveConstants.INITIAL_MAX_INPUT);
+    m_robotContainer.m_driveSystem.configureDriveToDefault();
     // This makes sure that the autonomous stops running when
     // teleop starts running.
     if (m_autonomousCommand != null) {
