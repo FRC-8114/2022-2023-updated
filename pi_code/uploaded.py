@@ -142,6 +142,9 @@ class Tester:
             if not ret:
                 print("Image failed")
                 continue
+            #else:
+                #current_time = time()
+                #cv2.imwrite("frame-"+ str(current_time) +".jpg", frame_cv2)
 
             # input
             scale = self.set_input(frame_cv2)
