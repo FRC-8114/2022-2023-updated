@@ -1,6 +1,9 @@
 package frc.robot;
 
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.RuntimeMXBean;
+
 import javax.swing.text.Position;
 
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -26,6 +29,9 @@ public class Robot extends TimedRobot {
     m_robotContainer.positioningSystem.updatePositionUsingNavx();
     m_robotContainer.positioningSystem.updatePositionUsingEncoders();
     
+    RuntimeMXBean mxbean = ManagementFactory.getRuntimeMXBean();
+    long runtimeMilliseconds = mxbean.getUptime();
+    RobotUtils.sendToShuffleboard("robotUptime", runtimeMilliseconds / 1000.0);
     updateShuffleboardValues();
 
     CommandScheduler.getInstance().run();
