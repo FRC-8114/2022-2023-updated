@@ -10,8 +10,8 @@ import frc.robot.subsystems.FieldPositioningSystem;
 import frc.robot.subsystems.IntakeSystem;
 import frc.robot.subsystems.ShooterSystem;
 
-public class TwoBallAutoSimpleAlone extends SequentialCommandGroup {
-    public TwoBallAutoSimpleAlone(DriveSystem driveSystem, IntakeSystem intakeSystem, FieldPositioningSystem positioningSystem, ShooterSystem shooterSystem, double distanceFromBall) {
+public class TwoBallAutoSimpleWall extends SequentialCommandGroup {
+    public TwoBallAutoSimpleWall(DriveSystem driveSystem, IntakeSystem intakeSystem, FieldPositioningSystem positioningSystem, ShooterSystem shooterSystem, double distanceFromBall) {
         addCommands(
             new ParallelCommandGroup(
                 new AutoIntakeDownBackward(driveSystem, positioningSystem),
@@ -27,7 +27,7 @@ public class TwoBallAutoSimpleAlone extends SequentialCommandGroup {
                 ),
                 new AutoIntake(intakeSystem, shooterSystem)
             ),
-            new MoveXInchesForward(driveSystem, positioningSystem, distanceFromBall-5, .45),
+            new MoveXInchesForward(driveSystem, positioningSystem, distanceFromBall - 5, .45),
             new AutoShoot(intakeSystem, shooterSystem)
         );
 

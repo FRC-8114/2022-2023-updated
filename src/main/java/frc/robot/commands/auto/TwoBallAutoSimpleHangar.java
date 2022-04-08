@@ -4,8 +4,8 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj2.command.*;
 
-public class TwoBallAutoSimpleEdge extends SequentialCommandGroup{
-    public TwoBallAutoSimpleEdge(DriveSystem driveSystem, IntakeSystem intakeSystem, FieldPositioningSystem positioningSystem, ShooterSystem shooterSystem, double distanceFromBall){
+public class TwoBallAutoSimpleHangar extends SequentialCommandGroup{
+    public TwoBallAutoSimpleHangar(DriveSystem driveSystem, IntakeSystem intakeSystem, FieldPositioningSystem positioningSystem, ShooterSystem shooterSystem, double distanceFromBall){
         addCommands(
             new ParallelCommandGroup(
                 new AutoIntakeDownBackward(driveSystem, positioningSystem),
