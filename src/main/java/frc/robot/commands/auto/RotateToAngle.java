@@ -13,6 +13,8 @@ public class RotateToAngle extends CommandBase {
     private double desiredAngle, velocity, marginOfError, angleDifference, startingError;
     private final double rampRate = 0.5;
 
+    private int directionConstant;
+
     public RotateToAngle(DriveSystem driveSystem, FieldPositioningSystem fieldPositioningSystem, double desiredAngle, double velocity) {
         this.driveSystem = driveSystem;
         this.fieldPositioningSystem = fieldPositioningSystem;
@@ -20,6 +22,7 @@ public class RotateToAngle extends CommandBase {
         this.desiredAngle = desiredAngle;
         this.velocity = velocity;
         marginOfError = 2;
+
     }
 
     public void initialize() {
@@ -31,6 +34,12 @@ public class RotateToAngle extends CommandBase {
         SmartDashboard.putNumber("desiredAngle", desiredAngle);
 
         driveSystem.setRampRate(rampRate);
+
+    
+        if (fieldPositioningSystem.angle < 0)
+            directionConstant = -1;
+        else
+            directionConstant = 1;
     }
 
     public void execute() {
@@ -46,11 +55,7 @@ public class RotateToAngle extends CommandBase {
             double minPower = .325;
             double power = proportion * (velocity - minPower) + minPower;
 
-            driveSystem.tankDrive(power, -power);
-            // if (fieldPositioningSystem.navxAngle < 0)
-            //     driveSystem.tankDrive(-power, power);
-            // else
-            //     driveSystem.tankDrive(power, -power);
+            driveSystem.tankDrive((-1 * directionConstant) * power, directionConstant * power);
         }
         else {
             driveSystem.tankDrive(velocity, -velocity);
