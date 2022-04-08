@@ -26,7 +26,7 @@ public class AutoShoot extends CommandBase {
     public void execute() {
         shooterSystem.ShooterRunVoltage(ShooterConstants.AUTO_DESIRED_VOLTAGE);
 
-        if (timer.get() > ShooterConstants.SHOOTER_SPIN_UP_TIME) {
+        if (shooterSystem.ShooterRPM > 2350) {
             intakeSystem.IntakeRun(ControlConstants.INTAKE_INITIAL_RUN_SPEED);
             shooterSystem.UpperKickerRun(1);
             shooterSystem.LowerKickerRun(1);
@@ -46,7 +46,7 @@ public class AutoShoot extends CommandBase {
     }
 
     public boolean isFinished() {
-        if (timer.get() > 5)
+        if (timer.get() > 2.5)
             return true;
         return false;
     }

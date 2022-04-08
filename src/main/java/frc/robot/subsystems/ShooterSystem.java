@@ -41,7 +41,7 @@ public class ShooterSystem extends SubsystemBase {
     // Creates the ShooterSubsystem
     public ShooterSystem () {
         shooterController.restoreFactoryDefaults();
-        shooterController.setIdleMode(IdleMode.kCoast);
+        shooterController.setIdleMode(IdleMode.kBrake);
         shooterController.setInverted(Constants.ShooterConstants.SHOOTER_INVERSED);
 
         shooterPID = new AdjustablePID(shooterController, "shooterPID", new double[] {0, 1});

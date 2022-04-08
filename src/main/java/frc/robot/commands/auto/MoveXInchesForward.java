@@ -23,6 +23,10 @@ public class MoveXInchesForward extends CommandBase {
      * This method runs whenever the command is scheduled
      */
     public void initialize() {
+        driveSystem.leftMotorLeader.setOpenLoopRampRate(1);
+        driveSystem.leftMotorFollower.setOpenLoopRampRate(1);
+        driveSystem.rightMotorLeader.setOpenLoopRampRate(1);
+        driveSystem.rightMotorFollower.setOpenLoopRampRate(1);
         startingPos = new double[2];
         startingPos[0] = fieldPositioningSystem.position[0];
         startingPos[1] = fieldPositioningSystem.position[1];
@@ -59,6 +63,10 @@ public class MoveXInchesForward extends CommandBase {
      */
     public void end(boolean interrupted) {
         driveSystem.tankDrive(0, 0);
+        driveSystem.leftMotorLeader.setOpenLoopRampRate(0);
+        driveSystem.leftMotorFollower.setOpenLoopRampRate(0);
+        driveSystem.rightMotorLeader.setOpenLoopRampRate(0);
+        driveSystem.rightMotorFollower.setOpenLoopRampRate(0);
     }
 
     /**

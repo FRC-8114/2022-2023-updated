@@ -11,7 +11,7 @@ public class RotateToAngle extends CommandBase {
     private FieldPositioningSystem fieldPositioningSystem;
 
     private double desiredAngle, velocity, marginOfError, angleDifference, startingError;
-    private final double rampRate = 1;
+    private final double rampRate = 0.5;
 
     public RotateToAngle(DriveSystem driveSystem, FieldPositioningSystem fieldPositioningSystem, double desiredAngle, double velocity) {
         this.driveSystem = driveSystem;
@@ -37,18 +37,24 @@ public class RotateToAngle extends CommandBase {
         double angle = (fieldPositioningSystem.angle < 0 ? fieldPositioningSystem.angle + 360 : fieldPositioningSystem.angle);
 
         angleDifference = Math.abs(desiredAngle - angle); // Current angle discrepancy
-        double proportion = angleDifference / startingError;
+        
+        if (angleDifference < desiredAngle / 1.5) {
+        
+            double proportion = angleDifference / (startingError / 1.5);
 
-        // Determine the drive power to use
-        double proportionalPower = velocity * proportion;
-        double minPower = .35;
-        double power = Math.max(proportionalPower, minPower);
+            // Determine the drive power to use
+            double minPower = .325;
+            double power = proportion * (velocity - minPower) + minPower;
 
-
-        if (fieldPositioningSystem.angle < 0)
-            driveSystem.tankDrive(-power, power);
-        else
             driveSystem.tankDrive(power, -power);
+            // if (fieldPositioningSystem.navxAngle < 0)
+            //     driveSystem.tankDrive(-power, power);
+            // else
+            //     driveSystem.tankDrive(power, -power);
+        }
+        else {
+            driveSystem.tankDrive(velocity, -velocity);
+        }
 
         RobotUtils.sendToShuffleboard("angleDifference", angleDifference);
     }
