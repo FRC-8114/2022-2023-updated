@@ -8,33 +8,36 @@ import frc.robot.Constants;
 import frc.robot.RobotUtils;
 
 public class FieldPositioningSystem extends SubsystemBase {
+    private DriveSystem drive;
     public AHRS navx;
-    public double navxAngle, angleOffset;
-    public double angleUsingEncoders;
-    public double[] locationUsingNavx;
-    public double[] locationUsingEncoders;
-   
-    private DriveSystem driveSystem;
-    private double radius = Constants.PositioningConstants.DISTANCE_BETWEEN_WHEELS / 2;
-    private double[] oldLeftEncoderValues = new double[2], oldRightEncoderValues = new double[2];
+    public double[] position;
+    public double[] oldLeftEncoderValues = new double[2], oldRightEncoderValues = new double[2];
+    public double angle, angleOffset;
 
-    public FieldPositioningSystem(DriveSystem driveSystem) {
-        this.driveSystem = driveSystem;
-        initializePosition(new double[] {0, 0}, 0);
-
+    public FieldPositioningSystem(DriveSystem drive) {
+        this.drive = drive;
+        double[] position = {0, 0};
+        
+        initializePosition(position, 0);
     }
 
-    public FieldPositioningSystem(DriveSystem driveSystem, double[] position, double angle) {
-        this.driveSystem = driveSystem;
+    public FieldPositioningSystem(DriveSystem drive, double[] position, double angle) {
+        this.drive = drive;
+        
         initializePosition(position, angle);
+    }
 
+    public void initializePosition(double[] position, double angle) {
+        navx = new AHRS(SerialPort.Port.kUSB);
+        navx.calibrate();
+        this.position = position;
+        this.angleOffset = angle;
+        this.angle = navx.getYaw() + angleOffset;
     }
 
     /**
-     * Converts motor shaft rotations into distance, accounting for both the
-     * gearbox and wheel size
-     * 
-     * @param rotations rotations of the motor
+     * Converts motor shaft rotations into distance, accounts for both the
+     * gearbox and wheel size.
      */
     public double rotationsToDistance(double rotations) {
         return rotations * Constants.PositioningConstants.GEAR_RATIO * Constants.PositioningConstants.WHEEL_CIRCUMFRENCE;
@@ -44,234 +47,143 @@ public class FieldPositioningSystem extends SubsystemBase {
      * Sets the robot's location to 0,0 and the angle to zero
      */
     public void zeroPosition() {
-        overwritePosition(new double[] {0,0}, 0);
+        overwriteLocation(new double[] {0,0});
+        overwriteAngle(0);
     }
 
     /**
-     * Sets the robot's position to match the given location and angle
-     *
-     * @param location
-     * @param angle
+     * Sets the robot's location to match the given point and angle
      */
-    public void overwritePosition(double[] location, double angle) {
-        overwriteLocation(location);
+    public void overwritePosition(double[] point, double angle) {
+        overwriteLocation(new double[] {0,0});
         overwriteAngle(angle);
-
     }
 
     /**
-     * Sets the location of the robot to be the given location
+     * Sets the position of the robot to be the given position
      * 
-     * @param location
+     * @param position
      */
-    public void overwriteLocation(double[] location) {
-        locationUsingNavx = locationUsingEncoders = location;
+    public void overwriteLocation(double[] position) {
+        this.position = position;
     }
 
     /**
-     * Sets the angle of the robot to be the given angle
+     * Zeros the yaw angle of the navx
      * 
-     * @param angle
+     * @param position
      */
     public void overwriteAngle(double angle) {
-        //navxAngle
         navx.zeroYaw();
+
         angleOffset = angle;
-        //angleUsingEncoders
-        angleUsingEncoders = angle;
-
     }
 
     /**
-     * Updates the values for navx angle and location using navx by
-     * finding the distance covered and converting it to x displacement
-     * and y displacement
+     * Updates the values for the current displacement vector before applying
+     * it to the robot's current position
      */
-    public void updatePositionUsingNavx() {
-        //navxAngle
-        navxAngle = navx.getYaw() + angleOffset;
-        //locationUsingNavx
-        double distanceCovered = rotationsToDistance(averageEncoderDistance());
+    public void updatePosition() {
+        double rotations = averageEncoderDistance();
+        double distanceCovered = rotationsToDistance(rotations);
+
+        angle = navx.getYaw() + angleOffset;
+        RobotUtils.sendToShuffleboard("yawDegrees", angle);
+
+        double xDisplacement = distanceCovered * Math.cos(Math.toRadians(angle));
+        double yDisplacement = distanceCovered * Math.sin(Math.toRadians(angle));
+
+        position[0] += xDisplacement;
+        position[1] += yDisplacement;
+
         updateEncoderValues();
-        double xDisplacement = distanceCovered * Math.cos(Math.toRadians(navxAngle));
-        double yDisplacement = distanceCovered * Math.sin(Math.toRadians(navxAngle));
-        locationUsingNavx[0] += xDisplacement;
-        locationUsingNavx[1] += yDisplacement;
-
-    }
-
-    /**
-     * Updates the angle using encoders or the location using encoders
-     * depending on whether the robot is spinning or driving straight
-     */
-    public void updatePositionUsingEncoders() {
-        //angleUsingEncoders
-        double leftDisplacement = rotationsToDistance(averageLeftDistance());
-        double rightDisplacement = rotationsToDistance(averageRightDistance());
-        //if (Math.signum(-leftDisplacement) == Math.signum(rightDisplacement))
-            angleUsingEncoders += Math.toDegrees(leftDisplacement / radius);
-        RobotUtils.sendToShuffleboard("left displacement divided by radius", leftDisplacement);
-        //locationUsingEncoders
-        /*
-        else {
-            double distanceCovered = rotationsToDistance(averageEncoderDistance());
-            double xDisplacement = distanceCovered * Math.cos(Math.toRadians(angleUsingEncoders));
-            double yDisplacement = distanceCovered * Math.sin(Math.toRadians(angleUsingEncoders));
-            locationUsingEncoders[0] += xDisplacement;
-            locationUsingEncoders[1] += yDisplacement;
-
-        }
-        */
-        updateEncoderValues();
-
     }
 
     /**
      * Updates the old encoder value variables to have the current values
      */
     public void updateEncoderValues() {
-        oldLeftEncoderValues[0] = driveSystem.leftLeaderEncoder.getPosition();
-        oldLeftEncoderValues[1] = driveSystem.leftFollowerEncoder.getPosition();
-        oldRightEncoderValues[0] = driveSystem.rightLeaderEncoder.getPosition();
-        oldRightEncoderValues[1] = driveSystem.rightFollowerEncoder.getPosition();
-
+        oldLeftEncoderValues[0] = drive.leftLeaderEncoder.getPosition();
+        oldLeftEncoderValues[1] = drive.leftFollowerEncoder.getPosition();
+        oldRightEncoderValues[0] = drive.rightLeaderEncoder.getPosition();
+        oldRightEncoderValues[1] = drive.rightFollowerEncoder.getPosition();
     }
 
     public double averageLeftDistance() {
         double averageOldLeftEncoders = (oldLeftEncoderValues[0] + oldLeftEncoderValues[1]) / 2;
-        return driveSystem.getLeftDistance() - averageOldLeftEncoders;
+        return drive.getLeftDistance() - averageOldLeftEncoders;
 
     }
 
     public double averageRightDistance() {
         double averageOldRightEncoders = (oldRightEncoderValues[0] + oldRightEncoderValues[1]) / 2;
-        return driveSystem.getRightDistance() - averageOldRightEncoders;
+        return drive.getRightDistance() - averageOldRightEncoders;
 
     }
 
     /**
-     * Returns the average displacement of the encoders since the last update
+     * Returns the average displacement of the encoders since the alst update
      */
     public double averageEncoderDistance() {
-        double averageOldEncoders = (oldLeftEncoderValues[0] + oldLeftEncoderValues[1] + oldRightEncoderValues[0] + oldRightEncoderValues[1]) / 4;
-        return driveSystem.getTotalDistance() - averageOldEncoders;
+        double leftLeaderDistance = drive.leftLeaderEncoder.getPosition() - oldLeftEncoderValues[0];
+        double leftFollowerDistance = drive.leftFollowerEncoder.getPosition() - oldLeftEncoderValues[1];
+        double rightLeaderDistance = drive.rightLeaderEncoder.getPosition() - oldRightEncoderValues[0];
+        double rightFollowerDistance = drive.rightFollowerEncoder.getPosition() - oldRightEncoderValues[1];
 
+        return (leftFollowerDistance + leftLeaderDistance + rightFollowerDistance + rightLeaderDistance) / 4.0;
     }
 
     /**
-     * Provides the distance from the current position to the provided
-     * distancePos using variables affected by the navx
+     * Returns the distance from a given position to the robot
      * 
-     * @param distancePos
-     * @return distanceFromTo method
+     * @param pos   the position to check distance from
+     * @return      the distance from the given position
      */
-    public double distanceToPointNavx(double[] distancePos) {
-        return distanceFromTo(locationUsingNavx, distancePos);
-    }
-
-    /**
-     * Provides the distance from the current position to the provided
-     * distancePos using variables affected by the navx
-     * 
-     * @param distancePos
-     * @return distanceFromTo method
-     */
-    public double xDistanceToPointNavx(double[] distancePos) {
-        return Math.abs(locationUsingNavx[0] - distancePos[0]);
-    }
-
-    /**
-     * Provides the distance from the current position to the provided
-     * distancePos using variables affected by the navx
-     * 
-     * @param distancePos
-     * @return distanceFromTo method
-     */
-    public double yDistanceToPointNavx(double[] distancePos) {
-        return Math.abs(locationUsingNavx[1] - distancePos[1]);
-    }
-
-    /**
-     * Provides the distance from the current position to the provided
-     * distancePos using variables affected by encoder values
-     * 
-     * @param distancePos
-     * @return distanceFromTo method
-     */
-    public double distanceToPointEncoders(double[] distancePos) {
-        return distanceFromTo(locationUsingEncoders, distancePos);
-    }
-
-    /**
-     * Outputs the distance between two sets of coordinates using pythagoras's
-     * theorem
-     * 
-     * @param pos1
-     * @param pos2
-     * @return distance
-     */
-    public double distanceFromTo(double[] pos1, double[] pos2) {
-        double xDistance = pos2[0] - pos1[0];
-        double yDistance = pos2[1] - pos1[1];
+    public double distanceFrom(double[] distancePos) {
+        double xDistance = position[0] - distancePos[0];
+        double yDistance = position[1] - distancePos[1];
+        
         return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
     }
 
     /**
-     * Provides the angle from the current position to the provided
-     * anglePos using variables affected by the navx
+     * Returns the distance along the x-axis from a given position 
+     * to the robot
      * 
-     * @param anglePos
-     * @return angleFromTo method
+     * @param pos   the position to check distance from
+     * @return      the x distance from the given position
      */
-    public double angleToPointNavx(double[] anglePos) {
-        return angleFromTo(locationUsingNavx, anglePos);
+    public double xDistanceFrom(double[] distancePos) {
+        return position[0] - distancePos[0];
     }
 
     /**
-     * Provides the angle from the current position to the provided
-     * anglePos using variables affected by encoded values
+     * Returns the distance along the y-axis from a given position 
+     * to the robot
      * 
-     * @param anglePos
-     * @return angleFromTo method
+     * @param pos   the position to check distance from
+     * @return      the y distance from the given position
      */
-    public double angleToPointEncoders(double[] anglePos) {
-        return angleFromTo(locationUsingEncoders, anglePos);
+    public double yDistanceFrom(double[] distancePos) {
+        return position[1] - distancePos[1];
     }
 
-    /**
-     * Outputs the angle between two sets of coordinates using arc
-     * tangent calculation
-     * @param pos1
-     * @param pos2
-     * @return angle
-     */
-    public double angleFromTo(double[] pos1, double[] pos2) {
-        double xDistance = pos2[0] - pos1[0];
-        double yDistance = pos2[1] - pos1[1];
+    public double angleToPoint(double[] anglePos) {
+        SmartDashboard.putNumber("tan", yDistanceFrom(anglePos) / xDistanceFrom(anglePos));
+        SmartDashboard.putNumber("arctan", Math.atan(yDistanceFrom(anglePos) / xDistanceFrom(anglePos)));
 
-        if (xDistance != 0)
-            return Math.toDegrees(Math.atan(yDistance / xDistance));
-        else if (yDistance > 0)
-            return 90;
-        return -90;
-
+        if(xDistanceFrom(anglePos) != 0 && yDistanceFrom(anglePos) != 0) {
+            return Math.toDegrees(Math.atan(yDistanceFrom(anglePos) / xDistanceFrom(anglePos)));
+        } else if(xDistanceFrom(anglePos) == 0) {
+            if(yDistanceFrom(anglePos) > 0) {
+                return 90;
+            }
+            return -90;
+        } else {
+            if(xDistanceFrom(anglePos) > 0) {
+                return 0;
+            }
+            return 180;
+        }
     }
-
-    /**
-     * Initializes the position of the robot when this class object is created
-     * 
-     * @param location
-     * @param angle
-     */
-    private void initializePosition(double[] location, double angle) {
-            //location
-            locationUsingNavx = locationUsingEncoders = location;
-            //angle
-            navx = new AHRS(SerialPort.Port.kUSB);
-            navx.calibrate();
-            this.angleOffset = angle;
-            navxAngle = angleUsingEncoders = navx.getYaw() + angleOffset;
-
-    }
-
 }

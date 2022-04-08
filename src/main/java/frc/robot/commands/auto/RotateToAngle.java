@@ -12,6 +12,7 @@ public class RotateToAngle extends CommandBase {
 
     private double desiredAngle, velocity, marginOfError, angleDifference, startingError;
     private final double rampRate = 1;
+    private boolean clockwise;
 
     public RotateToAngle(DriveSystem driveSystem, FieldPositioningSystem fieldPositioningSystem, double desiredAngle, double velocity) {
         this.driveSystem = driveSystem;
@@ -23,10 +24,14 @@ public class RotateToAngle extends CommandBase {
     }
 
     public void initialize() {
-        fieldPositioningSystem.zeroPosition();
-        marginOfError = 2;
+        marginOfError = 0.5;
+        if(velocity > 0.5) {
+            marginOfError *= 2;
+        }
 
-        startingError = Math.abs(desiredAngle);
+        if(fieldPositioningSystem.angle + 180 > desiredAngle) {
+            clockwise = false;
+        }
     
         SmartDashboard.putNumber("desiredAngle", desiredAngle);
 
@@ -34,21 +39,21 @@ public class RotateToAngle extends CommandBase {
     }
 
     public void execute() {
-        double angle = (fieldPositioningSystem.navxAngle < 0 ? fieldPositioningSystem.navxAngle + 360 : fieldPositioningSystem.navxAngle);
+        angleDifference = Math.abs(desiredAngle - fieldPositioningSystem.angle);
 
-        angleDifference = Math.abs(desiredAngle - angle); // Current angle discrepancy
-        double proportion = angleDifference / startingError;
-
-        // Determine the drive power to use
-        double proportionalPower = velocity * proportion;
-        double minPower = .35;
-        double power = Math.max(proportionalPower, minPower);
-
-
-        if (fieldPositioningSystem.navxAngle < 0)
-            driveSystem.tankDrive(-power, power);
-        else
-            driveSystem.tankDrive(power, -power);
+        if(angleDifference <= 4) {
+            if(clockwise) {
+                driveSystem.tankDrive(-velocity * .85, velocity * .85);
+            } else {
+                driveSystem.tankDrive(velocity * .85, -velocity * .85);
+            }
+        } else {
+            if(clockwise) {
+                driveSystem.tankDrive(-velocity, velocity);
+            } else {
+                driveSystem.tankDrive(velocity, -velocity);
+            }
+        }
 
         RobotUtils.sendToShuffleboard("angleDifference", angleDifference);
     }

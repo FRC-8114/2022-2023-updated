@@ -7,13 +7,13 @@ import frc.robot.subsystems.FieldPositioningSystem;
 
 public class MoveToPosition extends SequentialCommandGroup {
     public MoveToPosition(DriveSystem drive, FieldPositioningSystem fieldPositioning, double[] desiredPos) {
-        RobotUtils.sendToShuffleboard("xDist", fieldPositioning.xDistanceToPointNavx(desiredPos));
-        RobotUtils.sendToShuffleboard("yDist", fieldPositioning.yDistanceToPointNavx(desiredPos));
+        RobotUtils.sendToShuffleboard("xDist", fieldPositioning.xDistanceFrom(desiredPos));
+        RobotUtils.sendToShuffleboard("yDist", fieldPositioning.yDistanceFrom(desiredPos));
 
         addCommands(
-            new RotateToAngle(drive, fieldPositioning, fieldPositioning.angleToPointNavx(desiredPos), 0.3),
+            new RotateToAngle(drive, fieldPositioning, fieldPositioning.angleToPoint(desiredPos), 0.3),
 
-            new MoveXInchesForward(drive, fieldPositioning, fieldPositioning.distanceToPointNavx(desiredPos), 0.4)
+            new MoveXInchesForward(drive, fieldPositioning, fieldPositioning.distanceFrom(desiredPos), 0.4)
         );
     }
 }
