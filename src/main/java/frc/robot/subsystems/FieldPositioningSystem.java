@@ -72,7 +72,7 @@ public class FieldPositioningSystem extends SubsystemBase {
         double rotations = averageEncoderDistance();
         double distanceCovered = rotationsToDistance(rotations);
 
-        angle = navx.getYaw() + angleOffset;
+        angle = (navx.getYaw() + angleOffset < 0 ? 360 + angleOffset + navx.getYaw() : angleOffset + navx.getYaw());
 
         double xDisplacement = distanceCovered * Math.cos(Math.toRadians(angle));
         double yDisplacement = distanceCovered * Math.sin(Math.toRadians(angle));

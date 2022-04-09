@@ -43,7 +43,7 @@ public class RotateToAngle extends CommandBase {
     }
 
     public void execute() {
-        double angle = (fieldPositioningSystem.angle < 0 ? fieldPositioningSystem.angle + 360 : fieldPositioningSystem.angle);
+        double angle = fieldPositioningSystem.angle;
 
         angleDifference = Math.abs(desiredAngle - angle); // Current angle discrepancy
         
