@@ -14,15 +14,14 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.AdjustablePID;
-import frc.robot.Constants;
 import frc.robot.RobotUtils;
-import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants;
 
 public class ShooterSystem extends SubsystemBase {
     // Shooter motor controllers
-    public final static CANSparkMax shooterController = new CANSparkMax(ShooterConstants.SHOOTER_CONTROLLER_PORT, MotorType.kBrushless);
-    public final static CANSparkMax upperKickerController = new CANSparkMax(ShooterConstants.UPPER_KICKER_CONTROLLER_PORT, MotorType.kBrushed);
-    public final static CANSparkMax lowerKickerController = new CANSparkMax(ShooterConstants.LOWER_KICKER_CONTROLLER_PORT, MotorType.kBrushed);
+    public final static CANSparkMax shooterController = new CANSparkMax(Constants.ShooterConstants.SHOOTER_CONTROLLER_PORT, MotorType.kBrushless);
+    public final static CANSparkMax upperKickerController = new CANSparkMax(Constants.ShooterConstants.UPPER_KICKER_CONTROLLER_PORT, MotorType.kBrushed);
+    public final static CANSparkMax lowerKickerController = new CANSparkMax(Constants.ShooterConstants.LOWER_KICKER_CONTROLLER_PORT, MotorType.kBrushed);
 
     public static AdjustablePID shooterPID;
 
@@ -45,8 +44,8 @@ public class ShooterSystem extends SubsystemBase {
 
         shooterPID = new AdjustablePID(shooterController, "shooterPID", new double[] {0, 1});
 
-        shooterControllerEncoder.setPositionConversionFactor(ShooterConstants.SHOOTER_DISTANCE_PER_PULSE);
-        shooterControllerEncoder.setVelocityConversionFactor(ShooterConstants.VELOCITY_CONVERSION_FACTOR);
+        shooterControllerEncoder.setPositionConversionFactor(Constants.ShooterConstants.SHOOTER_DISTANCE_PER_PULSE);
+        shooterControllerEncoder.setVelocityConversionFactor(Constants.ShooterConstants.VELOCITY_CONVERSION_FACTOR);
 
         upperKickerController.setIdleMode(IdleMode.kCoast);
         upperKickerController.setInverted(Constants.ShooterConstants.UPPER_KICKER_INVERSED);
@@ -54,12 +53,12 @@ public class ShooterSystem extends SubsystemBase {
         lowerKickerController.setIdleMode(IdleMode.kBrake);
         lowerKickerController.setInverted(Constants.ShooterConstants.LOWER_KICKER_INVERSED);
      
-        desiredRPM = ShooterConstants.TELEOP_DESIRED_RPM;
-        desiredVoltage = ShooterConstants.TELEOP_DESIRED_VOLTAGE;
+        desiredRPM = Constants.ControlConstants.TeleOp.SHOOTER_DESIRED_RPM;
+        desiredVoltage = Constants.ControlConstants.TeleOp.SHOOTER_DESIRED_VOLTAGE;
 
-        Shuffleboard.getTab("Shooter").add("Desired Shooter RPMs", ShooterConstants.TELEOP_DESIRED_RPM).withWidget(BuiltInWidgets.kNumberSlider).getEntry()
+        Shuffleboard.getTab("Shooter").add("Desired Shooter RPMs", Constants.ControlConstants.TeleOp.SHOOTER_DESIRED_RPM).withWidget(BuiltInWidgets.kNumberSlider).getEntry()
             .addListener(event -> {desiredRPM = event.value.getDouble();}, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
-        Shuffleboard.getTab("Shooter").add("Desired Shooter Voltage", ShooterConstants.TELEOP_DESIRED_VOLTAGE).withWidget(BuiltInWidgets.kNumberSlider).getEntry()
+        Shuffleboard.getTab("Shooter").add("Desired Shooter Voltage", Constants.ControlConstants.TeleOp.SHOOTER_DESIRED_VOLTAGE).withWidget(BuiltInWidgets.kNumberSlider).getEntry()
             .addListener(event -> {desiredVoltage = event.value.getDouble();}, EntryListenerFlags.kNew | EntryListenerFlags.kUpdate);
         }
 
@@ -72,14 +71,6 @@ public class ShooterSystem extends SubsystemBase {
         RobotUtils.sendToShuffleboard("voltage", ShooterVoltage);
 
         //shooterPID.periodic();
-    }
-
-    // Ensure that the speed passed into a function is not over the maximum input
-    public double verifyVelocity (double speed) {
-        int sign = (int) (speed / Math.abs(speed));
-        if (Math.abs(speed) > ShooterConstants.MAX_INPUT)
-            return sign * ShooterConstants.MAX_INPUT;
-        return speed;
     }
 
     public void runShooterAt(double rpm) {

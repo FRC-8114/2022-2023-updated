@@ -31,13 +31,6 @@ public final class Constants {
 
     public static final double SHOOTER_DISTANCE_PER_PULSE = 1/42 * Math.PI * 5;
     public static final double VELOCITY_CONVERSION_FACTOR = 1/42 * Math.PI * 5;
-    public static final double ENCODER_DISTANCE_PER_PULSE = 0;
-    public static final double MAX_INPUT = 0;
-	  public static final int SHOOTER_SPIN_UP_TIME = 3;
-
-    public static final double TELEOP_DESIRED_VOLTAGE = 5.5;
-    public static final double AUTO_DESIRED_VOLTAGE = 7;
-    public static final double TELEOP_DESIRED_RPM = 3000;
   }
 
   public static final class IntakeConstants {
@@ -87,18 +80,30 @@ public final class Constants {
   }
 
   public static final class ControlConstants {
-    public static final double LOWER_KICKER_INITIAL_RUN_SPEED = .5;
-    public static final double LOWER_KICKER_INITIAL_REVERSE_SPEED = 1;
-    public static final double UPPER_KICKER_INITIAL_RUN_SPEED = .35;
-    public static final double UPPER_KICKER_INITIAL_REVERSE_SPEED = .35;
-    public static final double SHOOTER_INITIAL_RUN_SPEED = .8;
-    public static final double SHOOTER_INITIAL_REVERSE_SPEED = .4;
-    public static final double INTAKE_INITIAL_RUN_SPEED = .7;
-    public static final double INTAKE_INITIAL_REVERSE_SPEED = .25;
-    public static final double CLIMBER_RUNNER_INITIAL_RUN_SPEED = .8;
-    public static final double CLIMBER_RUNNER_INITIAL_REVERSE_SPEED = .8;
-    public static final double CLIMBER_DEPLOYER_INITIAL_RUN_SPEED = .6;
-    public static final double CLIMBER_DEPLOYER_INITIAL_REVERSE_SPEED = .6;
+    public static final class TeleOp {
+      public static final double SHOOTER_DESIRED_VOLTAGE = 5.5;
+      public static final double SHOOTER_DESIRED_RPM = 3000;
+      public static final double LOWER_KICKER_INITIAL_RUN_SPEED = .5;
+      public static final double LOWER_KICKER_INITIAL_REVERSE_SPEED = 1;
+      public static final double UPPER_KICKER_INITIAL_RUN_SPEED = .35;
+      public static final double UPPER_KICKER_INITIAL_REVERSE_SPEED = .35;
+      public static final double CLIMBER_RUNNER_INITIAL_RUN_SPEED = .8;
+      public static final double CLIMBER_RUNNER_INITIAL_REVERSE_SPEED = .8;
+      public static final double CLIMBER_DEPLOYER_INITIAL_RUN_SPEED = .6;
+      public static final double CLIMBER_DEPLOYER_INITIAL_REVERSE_SPEED = .6;
+      public static final double INTAKE_INITIAL_RUN_SPEED = .7;
+      public static final double INTAKE_INITIAL_REVERSE_SPEED = .25;
+    }
+    public static final class Auto {
+      public static final double SHOOTER_DESIRED_VOLTAGE = 7;
+      public static final double SHOOTER_DESIRED_RPM = 2351;
+      public static final double LOWER_KICKER_INITIAL_RUN_SPEED = .5;
+      public static final double LOWER_KICKER_INITIAL_REVERSE_SPEED = 1;
+      public static final double UPPER_KICKER_INITIAL_RUN_SPEED = .35;
+      public static final double UPPER_KICKER_INITIAL_REVERSE_SPEED = .35;
+      public static final double INTAKE_INITIAL_RUN_SPEED = .55;
+      public static final double INTAKE_INITIAL_REVERSE_SPEED = .25;
+    }
   }
 
   public static final class AutoConstants {

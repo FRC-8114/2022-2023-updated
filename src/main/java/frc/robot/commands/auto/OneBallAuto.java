@@ -9,8 +9,7 @@ import frc.robot.subsystems.ShooterSystem;
 public class OneBallAuto extends SequentialCommandGroup {
     public OneBallAuto(DriveSystem driveSystem, FieldPositioningSystem positioningSystem, IntakeSystem intakeSystem, ShooterSystem shooterSystem) {
         addCommands(
-            new AutoIntakeDownBackward(driveSystem, positioningSystem),
-            new AutoShoot(intakeSystem, shooterSystem),
+            new ShootFromStart(driveSystem, positioningSystem, intakeSystem, shooterSystem),
             new MoveXInchesBackwards(driveSystem, positioningSystem, 60, .4)
 
         );

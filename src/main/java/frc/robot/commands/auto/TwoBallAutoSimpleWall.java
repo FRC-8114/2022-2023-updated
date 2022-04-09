@@ -13,10 +13,7 @@ import frc.robot.subsystems.ShooterSystem;
 public class TwoBallAutoSimpleWall extends SequentialCommandGroup {
     public TwoBallAutoSimpleWall(DriveSystem driveSystem, IntakeSystem intakeSystem, FieldPositioningSystem positioningSystem, ShooterSystem shooterSystem, double distanceFromBall) {
         addCommands(
-            new ParallelCommandGroup(
-                new AutoIntakeDownBackward(driveSystem, positioningSystem),
-                new AutoShoot(intakeSystem, shooterSystem)
-            ),
+            new ShootFromStart(driveSystem, positioningSystem, intakeSystem, shooterSystem),
             new RotateToAngle(driveSystem, positioningSystem, 164, .6),
             new ParallelRaceGroup(
                 new SequentialCommandGroup(
@@ -25,7 +22,7 @@ public class TwoBallAutoSimpleWall extends SequentialCommandGroup {
                     new MoveXInchesBackwards(driveSystem, positioningSystem, 10, 0.7),
                     new RotateToAngle(driveSystem, positioningSystem, 164, .6)
                 ),
-                new AutoIntake(intakeSystem, shooterSystem)
+                new AutoIntake(intakeSystem)
             ),
             new MoveXInchesForward(driveSystem, positioningSystem, distanceFromBall - 5, .45),
             new AutoShoot(intakeSystem, shooterSystem)

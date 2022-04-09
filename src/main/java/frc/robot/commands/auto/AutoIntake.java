@@ -2,40 +2,31 @@ package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IntakeSystem;
-import frc.robot.subsystems.ShooterSystem;
 import frc.robot.Constants.ControlConstants;
 
 public class AutoIntake extends CommandBase {
     private IntakeSystem intakeSystem;
-    private ShooterSystem shooterSystem;
 
-    final private double intakeRunSpeed = ControlConstants.INTAKE_INITIAL_RUN_SPEED - .15;
-    final private double upperKickerRunSpeed = ControlConstants.UPPER_KICKER_INITIAL_RUN_SPEED;
-    final private double lowerKickerReverseSpeed = ControlConstants.LOWER_KICKER_INITIAL_REVERSE_SPEED;
+    final private double intakeRunSpeed = ControlConstants.Auto.INTAKE_INITIAL_RUN_SPEED;
     
-    public AutoIntake (IntakeSystem intakeSystem, ShooterSystem shooterSystem) {
+    public AutoIntake (IntakeSystem intakeSystem) {
         this.intakeSystem = intakeSystem;
-        this.shooterSystem = shooterSystem;
 
     }
-
+    @Override
     public void initialize() {
 
     }
-
+    @Override
     public void execute() {
         intakeSystem.IntakeRun(intakeRunSpeed);
         
     }
-
+    @Override
+    //Ends when interrupted
     public void end(boolean interrupted) {
         intakeSystem.IntakeStop();
         
-    }
-    
-    public boolean isFinished() {
-        return false;
-
     }
     
 }

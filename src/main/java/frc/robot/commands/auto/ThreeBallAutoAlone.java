@@ -8,10 +8,7 @@ public class ThreeBallAutoAlone extends SequentialCommandGroup{
         addCommands(
             //Copy TwoBallAutoSimpleAlone up until RotateToAngle back to goal
             //and figure out what distanceToBall is set to in RobotContainer
-            new ParallelCommandGroup(
-                new AutoIntakeDownBackward(driveSystem, positioningSystem),
-                new AutoShoot(intakeSystem, shooterSystem)
-            ),
+            new ShootFromStart(driveSystem, positioningSystem, intakeSystem, shooterSystem),
             new RotateToAngle(driveSystem, positioningSystem, 164, .6),
             new ParallelRaceGroup(
                 new SequentialCommandGroup(
@@ -20,7 +17,7 @@ public class ThreeBallAutoAlone extends SequentialCommandGroup{
                     new MoveXInchesBackwards(driveSystem, positioningSystem, 10, 0.7),
                     new RotateToAngle(driveSystem, positioningSystem, 164, .6)
                 ),
-                new AutoIntake(intakeSystem, shooterSystem)
+                new AutoIntake(intakeSystem)
             ),
             new Wait(.25),
             //Rotate about 100 degrees to the right
@@ -29,7 +26,7 @@ public class ThreeBallAutoAlone extends SequentialCommandGroup{
             //Copy moving forward and intaking from two ball auto (might be a different distance)
             new ParallelRaceGroup(
                 new MoveXInchesForward(driveSystem, positioningSystem, 65, .5), //second link
-                new AutoIntake(intakeSystem, shooterSystem)
+                new AutoIntake(intakeSystem)
             ),
             new Wait(.25),
             //Move backward same amount as moving forward

@@ -17,6 +17,7 @@ public class MoveXInchesBackwards extends CommandBase {
         
         this.desiredDistance = desiredDistance;
         this.velocity = velocity;
+
     }
 
     /**
@@ -30,7 +31,6 @@ public class MoveXInchesBackwards extends CommandBase {
         oldLeftPosition = fieldPositioningSystem.rotationsToDistance(driveSystem.getLeftDistance());
         oldRightPosition = fieldPositioningSystem.rotationsToDistance(driveSystem.getRightDistance());
 
-        RobotUtils.sendToShuffleboard("desiredDistance", desiredDistance);
     }
 
     /**
@@ -52,6 +52,7 @@ public class MoveXInchesBackwards extends CommandBase {
         }
         oldLeftPosition = fieldPositioningSystem.rotationsToDistance(driveSystem.getLeftDistance());
         oldRightPosition = fieldPositioningSystem.rotationsToDistance(driveSystem.getRightDistance());
+
     }
 
     /**
@@ -61,6 +62,7 @@ public class MoveXInchesBackwards extends CommandBase {
         driveSystem.setRampRate(1.5);
         driveSystem.tankDrive(0, 0);
         driveSystem.setRampRate(0);
+        
     }
 
     /**

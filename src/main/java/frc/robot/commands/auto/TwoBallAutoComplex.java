@@ -11,13 +11,12 @@ import frc.robot.subsystems.ShooterSystem;
 public class TwoBallAutoComplex extends SequentialCommandGroup {
     public TwoBallAutoComplex (BallTrackingSystem ballSystem, DriveSystem driveSystem, FieldPositioningSystem positioningSystem, IntakeSystem intakeSystem, ShooterSystem shooterSystem, double[] almostBallPosition, double[] almostStartPosition) {
         addCommands(
-            new AutoIntakeDownBackward(driveSystem, positioningSystem),
-            new AutoShoot(intakeSystem, shooterSystem),
+            new ShootFromStart(driveSystem, positioningSystem, intakeSystem, shooterSystem),
             new MoveToPosition(driveSystem, positioningSystem, almostBallPosition),
             new RotateToBall(ballSystem, positioningSystem, driveSystem),
             new ParallelRaceGroup(
                 new MoveXInchesForward(driveSystem, positioningSystem, 20, .3),
-                new AutoIntake(intakeSystem, shooterSystem)
+                new AutoIntake(intakeSystem)
 
             ),
             new MoveToPosition(driveSystem, positioningSystem, almostBallPosition),

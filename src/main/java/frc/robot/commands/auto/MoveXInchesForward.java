@@ -17,6 +17,7 @@ public class MoveXInchesForward extends CommandBase {
         
         this.desiredDistance = desiredDistance;
         this.velocity = velocity;
+
     }
 
     /**
@@ -30,7 +31,6 @@ public class MoveXInchesForward extends CommandBase {
         oldLeftPosition = fieldPositioningSystem.rotationsToDistance(driveSystem.getLeftDistance());
         oldRightPosition = fieldPositioningSystem.rotationsToDistance(driveSystem.getRightDistance());
 
-        RobotUtils.sendToShuffleboard("desiredDistance", desiredDistance);
     }
 
     /**

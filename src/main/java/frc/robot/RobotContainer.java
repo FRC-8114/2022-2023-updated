@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.ControlConstants;
 import frc.robot.commands.auto.*;
 import frc.robot.commands.shooter.*;
+import frc.robot.Constants.ControlConstants.TeleOp;
 import frc.robot.subsystems.*;
 
 public class RobotContainer {
@@ -25,17 +25,21 @@ public class RobotContainer {
 
   private int oldLeftTriggerAxis, oldRightTriggerAxis, oldPOV;
 
-  public double lowerKickerRunSpeed, lowerKickerReverseSpeed;
-  public double upperKickerRunSpeed, upperKickerReverseSpeed;
-  public double shooterRunSpeed, shooterReverseSpeed;
-  public double intakeRunSpeed, intakeReverseSpeed;
-  public double autoRotateSpeed;
-  public double climberRunnerRunSpeed, climberRunnerReverseSpeed;
-  public double climberDeployerRunSpeed, climberDeployerReverseSpeed;
-  public double teleopShootSpeed;
+  public final double lowerKickerRunSpeed = TeleOp.LOWER_KICKER_INITIAL_RUN_SPEED;
+  public final double lowerKickerReverseSpeed = TeleOp.LOWER_KICKER_INITIAL_REVERSE_SPEED;
+  public final double upperKickerRunSpeed = TeleOp.UPPER_KICKER_INITIAL_RUN_SPEED;
+  public final double upperKickerReverseSpeed = TeleOp.UPPER_KICKER_INITIAL_REVERSE_SPEED;
+  public final double intakeRunSpeed = TeleOp.INTAKE_INITIAL_RUN_SPEED;
+  public final double intakeReverseSpeed = TeleOp.INTAKE_INITIAL_REVERSE_SPEED;
+  public final double climberRunnerRunSpeed = TeleOp.CLIMBER_RUNNER_INITIAL_RUN_SPEED;
+  public final double climberRunnerReverseSpeed = TeleOp.CLIMBER_RUNNER_INITIAL_REVERSE_SPEED;
+  public final double climberDeployerRunSpeed = TeleOp.CLIMBER_DEPLOYER_INITIAL_RUN_SPEED;
+  public final double climberDeployerReverseSpeed = TeleOp.CLIMBER_DEPLOYER_INITIAL_REVERSE_SPEED;
 
   private boolean oldRightStickButton;
 
+  //CURRENTLY OBSOLETE
+  /*
   private double[] startPosition;
   private double[] almostStartPosition;
   private double[] ballPosition;
@@ -43,14 +47,17 @@ public class RobotContainer {
   
   private final int startLocation = 1;
   private final boolean complexAuto = false;
+  */
 
   // The container for the robot. Contains subsystems, OI devices, and commands.
   public RobotContainer() {
     configureButtonBindings();
 
-    initializeControlVariables();
+    initializeInstanceVariables();
     sendControlVariableSettersToShuffleboard();
 
+    //CURRENTLY OBSOLETE
+    /*
     //Initializes field positioning system with the correct start position and angle
     almostStartPosition = new double[2];
     almostBallPosition = new double[2];
@@ -89,31 +96,18 @@ public class RobotContainer {
     }
     else
       positioningSystem = new FieldPositioningSystem(m_driveSystem);
+    */
 
   }
 
   /**
    * Initializes the control variables using the constants in ControlConstants
    */
-  public void initializeControlVariables() {
-    lowerKickerRunSpeed = Constants.ControlConstants.LOWER_KICKER_INITIAL_RUN_SPEED;
-    lowerKickerReverseSpeed = Constants.ControlConstants.LOWER_KICKER_INITIAL_REVERSE_SPEED;
-    upperKickerRunSpeed = Constants.ControlConstants.UPPER_KICKER_INITIAL_RUN_SPEED;
-    upperKickerReverseSpeed = Constants.ControlConstants.UPPER_KICKER_INITIAL_REVERSE_SPEED;
-    shooterRunSpeed = Constants.ControlConstants.SHOOTER_INITIAL_RUN_SPEED;
-    shooterReverseSpeed = Constants.ControlConstants.SHOOTER_INITIAL_REVERSE_SPEED;
-    intakeRunSpeed = Constants.ControlConstants.INTAKE_INITIAL_RUN_SPEED;
-    intakeReverseSpeed = Constants.ControlConstants.INTAKE_INITIAL_REVERSE_SPEED;
-
-    autoRotateSpeed = Constants.AutoConstants.AUTO_ROTATE_SPEED;
-    climberRunnerRunSpeed = Constants.ControlConstants.CLIMBER_RUNNER_INITIAL_RUN_SPEED;
-    climberRunnerReverseSpeed = Constants.ControlConstants.CLIMBER_RUNNER_INITIAL_REVERSE_SPEED;
-    climberDeployerRunSpeed = Constants.ControlConstants.CLIMBER_DEPLOYER_INITIAL_RUN_SPEED;
-    climberDeployerReverseSpeed = Constants.ControlConstants.CLIMBER_DEPLOYER_INITIAL_REVERSE_SPEED;
+  public void initializeInstanceVariables() {
     oldLeftTriggerAxis = oldRightTriggerAxis = 0;
     oldPOV = -1;
     oldRightStickButton = false;
-    teleopShootSpeed = 2700;
+    
   }
 
   public void sendControlVariableSettersToShuffleboard() {
@@ -124,13 +118,9 @@ public class RobotContainer {
       Method lowerKickerReverseSpeedSetter = RobotContainer.class.getMethod("setLowerKickerReverseSpeed", Double.class);
       Method upperKickerRunSpeedSetter = RobotContainer.class.getMethod("setUpperKickerRunSpeed", Double.class);
       Method upperKickerReverseSpeedSetter = RobotContainer.class.getMethod("setUpperKickerReverseSpeed", Double.class);
-      Method shooterRunSpeedSetter = RobotContainer.class.getMethod("setShooterRunSpeed", Double.class);
-      Method shooterReverseSpeedSetter = RobotContainer.class.getMethod("setShooterReverseSpeed", Double.class);
       Method intakeRunSpeedSetter = RobotContainer.class.getMethod("setIntakeRunSpeed", Double.class);
       Method intakeReverseSpeedSetter = RobotContainer.class.getMethod("setIntakeReverseSpeed", Double.class);
       Method maxDriveInputSetter = DriveSystem.class.getMethod("setMaxInput", Double.class);
-      Method autoRotateSpeedSetter = RobotContainer.class.getMethod("setAutoRotateSpeed", Double.class);
-      Method teleopShootSpeedSetter = RobotContainer.class.getMethod("setTeleopShootSpeed", Double.class);
       Method climberDeployerRunSpeedSetter = RobotContainer.class.getMethod("setClimberDeployerRunSpeed", Double.class);
       Method climberDeployerReverseSpeedSetter = RobotContainer.class.getMethod("setClimberDeployerReverseSpeed", Double.class);
 
@@ -138,18 +128,15 @@ public class RobotContainer {
       RobotUtils.sendSetterToShuffleboard(robotContainer, lowerKickerReverseSpeedSetter, "Control Variables", "lowerKickerReverseSpeed", lowerKickerReverseSpeed);
       RobotUtils.sendSetterToShuffleboard(robotContainer, upperKickerRunSpeedSetter, "Control Variables", "upperKickerRunSpeed", upperKickerRunSpeed);
       RobotUtils.sendSetterToShuffleboard(robotContainer, upperKickerReverseSpeedSetter, "Control Variables", "upperKickerReverseSpeed", upperKickerReverseSpeed);
-      RobotUtils.sendSetterToShuffleboard(robotContainer, shooterRunSpeedSetter, "Control Variables", "shooterRunSpeed", shooterRunSpeed);
-      RobotUtils.sendSetterToShuffleboard(robotContainer, shooterReverseSpeedSetter, "Control Variables", "shooterReverseSpeed", shooterReverseSpeed);
       RobotUtils.sendSetterToShuffleboard(robotContainer, intakeRunSpeedSetter, "Control Variables", "intakeRunSpeed", intakeRunSpeed);
       RobotUtils.sendSetterToShuffleboard(robotContainer, intakeReverseSpeedSetter, "Control Variables", "intakeReverseSpeed", intakeReverseSpeed);
       RobotUtils.sendSetterToShuffleboard(m_driveSystem, maxDriveInputSetter, "Control Variables", "maxDriveInput", Constants.DriveConstants.INITIAL_MAX_INPUT);
-      RobotUtils.sendSetterToShuffleboard(robotContainer, autoRotateSpeedSetter, "Control Variables", "autoRotateSpeed", autoRotateSpeed);
-      RobotUtils.sendSetterToShuffleboard(robotContainer, teleopShootSpeedSetter, "Control Variables", "teleopShootSpeed", teleopShootSpeed);
       RobotUtils.sendSetterToShuffleboard(robotContainer, climberDeployerRunSpeedSetter, "Control Variables", "setClimberDeployerRunSpeed", climberDeployerRunSpeed);
       RobotUtils.sendSetterToShuffleboard(robotContainer, climberDeployerReverseSpeedSetter, "Control Variables", "setClimberDeployerReverseSpeed", climberDeployerReverseSpeed);
     } catch (NoSuchMethodException | SecurityException e) {
       SmartDashboard.putString("Number Setter Sender Error", e.toString());
     }
+
   }
 
   public void sendMotorInversionsToShuffleboard() {
@@ -170,6 +157,7 @@ public class RobotContainer {
     } catch (NoSuchMethodException | SecurityException e) {
       SmartDashboard.putString("Boolean Setter Sender Error", e.toString());
     }
+
   }
 
   /**
@@ -194,7 +182,7 @@ public class RobotContainer {
       .whenReleased(() -> shooterSystem.ShooterStop());
     // Run Kickers forward
     new JoystickButton(controller, Button.kY.value)
-      .whenPressed(() -> new AllKickerRun(ControlConstants.UPPER_KICKER_INITIAL_RUN_SPEED, ControlConstants.LOWER_KICKER_INITIAL_RUN_SPEED, shooterSystem).schedule())
+      .whenPressed(() -> new AllKickerRun(TeleOp.UPPER_KICKER_INITIAL_RUN_SPEED, TeleOp.LOWER_KICKER_INITIAL_RUN_SPEED, shooterSystem).schedule())
       .whenReleased(() -> new AllKickerStop(shooterSystem).schedule());
 
     //bumpers
@@ -202,6 +190,7 @@ public class RobotContainer {
     new JoystickButton(controller, Button.kLeftBumper.value)
       .whileHeld(() -> intakeSystem.IntakeReverse(intakeReverseSpeed))
       .whenReleased(() -> intakeSystem.IntakeStop());
+
   }
 
   public XboxController getXboxController() {
@@ -291,57 +280,7 @@ public class RobotContainer {
     //return new TwoBallAutoSimpleMiddle(m_driveSystem, intakeSystem, positioningSystem, shooterSystem, 35);
     //return new TwoBallAutoSimpleHangar(m_driveSystem, intakeSystem, positioningSystem, shooterSystem, 35);
     //return new RotateToAngle(m_driveSystem, positioningSystem, 165, .6); 
+
   }
 
-  /**
-   * Setters
-   */
-
-  public void setLowerKickerRunSpeed(Double speed) {
-    lowerKickerRunSpeed = speed;
-  }
-
-  public void setLowerKickerReverseSpeed(Double speed) {
-    lowerKickerReverseSpeed = speed;
-  }
-
-  public void setUpperKickerRunSpeed(Double speed) {
-    upperKickerRunSpeed = speed;
-  }
-
-  public void setUpperKickerReverseSpeed(Double speed) {
-    upperKickerReverseSpeed = speed;
-  }
-
-  public void setShooterRunSpeed(Double speed) {
-    shooterRunSpeed = speed;
-  }
-
-  public void setShooterReverseSpeed(Double speed) {
-    shooterReverseSpeed = speed;
-  }
-
-  public void setIntakeRunSpeed(Double speed) {
-    intakeRunSpeed = speed;
-  }
-
-  public void setIntakeReverseSpeed(Double speed) {
-    intakeReverseSpeed = speed;
-  }
-
-  public void setAutoRotateSpeed(Double speed) {
-    autoRotateSpeed = speed;
-  }
-
-  public void setTeleopShootSpeed (Double speed) {
-    teleopShootSpeed = speed;
-  }
-
-  public void setClimberDeployerRunSpeed(Double speed) {
-    climberDeployerRunSpeed = speed;
-  }
-
-  public void setClimberDeployerReverseSpeed(Double speed) {
-    climberDeployerReverseSpeed = speed;
-  }
 }

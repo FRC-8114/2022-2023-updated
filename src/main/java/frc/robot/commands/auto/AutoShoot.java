@@ -3,7 +3,6 @@ package frc.robot.commands.auto;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ControlConstants;
-import frc.robot.Constants.ShooterConstants;
 import frc.robot.subsystems.IntakeSystem;
 import frc.robot.subsystems.ShooterSystem;
 
@@ -18,17 +17,19 @@ public class AutoShoot extends CommandBase {
         this.shooterSystem = shooterSystem;
 
         timer = new Timer();
+        
     }
-
+    @Override
     public void initialize() {
         timer.start();
-    }
-    
-    public void execute() {
-        shooterSystem.runShooterAt(2351);
 
-        if (shooterSystem.ShooterRPM > 2350) {
-            intakeSystem.IntakeRun(ControlConstants.INTAKE_INITIAL_RUN_SPEED);
+    }
+    @Override
+    public void execute() {
+        shooterSystem.runShooterAt(ControlConstants.Auto.SHOOTER_DESIRED_RPM);
+
+        if (shooterSystem.ShooterRPM > ControlConstants.Auto.SHOOTER_DESIRED_RPM - 1) {
+            intakeSystem.IntakeRun(ControlConstants.Auto.INTAKE_INITIAL_RUN_SPEED);
             shooterSystem.UpperKickerRun(1);
             shooterSystem.LowerKickerRun(1);
             new Wait(.25);
@@ -39,19 +40,22 @@ public class AutoShoot extends CommandBase {
             shooterSystem.UpperKickerStop();
             shooterSystem.LowerKickerStop(); 
         }
-    }
 
+    }
+    @Override
     public void end(boolean interrupted) {
         intakeSystem.IntakeStop();
         shooterSystem.ShooterStop();
         shooterSystem.UpperKickerStop();
         shooterSystem.LowerKickerStop();
-    }
 
+    }
+    @Override
     public boolean isFinished() {
         if (ballCount >= 1)
             return true;
         return false;
+
     }
 
 }
