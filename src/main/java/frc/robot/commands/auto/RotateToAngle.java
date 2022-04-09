@@ -35,11 +35,11 @@ public class RotateToAngle extends CommandBase {
 
         driveSystem.setRampRate(rampRate);
 
-    
-        if (fieldPositioningSystem.angle < 0)
+        if (desiredAngle > 180)
             directionConstant = -1;
         else
             directionConstant = 1;
+
     }
 
     public void execute() {
@@ -47,15 +47,14 @@ public class RotateToAngle extends CommandBase {
 
         angleDifference = Math.abs(desiredAngle - angle); // Current angle discrepancy
         
-        if (angleDifference < desiredAngle / 1.5) {
-        
-            double proportion = angleDifference / (startingError / 1.5);
+        if (angleDifference < desiredAngle / 1.75) {
+            double proportion = angleDifference / (startingError / 1.75);
 
             // Determine the drive power to use
             double minPower = .325;
             double power = proportion * (velocity - minPower) + minPower;
 
-            driveSystem.tankDrive((-1 * directionConstant) * power, directionConstant * power);
+            driveSystem.tankDrive(directionConstant * power, -directionConstant * power);
         }
         else {
             driveSystem.tankDrive(velocity, -velocity);
