@@ -11,6 +11,7 @@ public class AutoShoot extends CommandBase {
     private IntakeSystem intakeSystem;
     private ShooterSystem shooterSystem;
     private Timer timer;
+    private int ballCount;
 
     public AutoShoot(IntakeSystem intakeSystem, ShooterSystem shooterSystem) {
         this.intakeSystem = intakeSystem;
@@ -24,12 +25,14 @@ public class AutoShoot extends CommandBase {
     }
     
     public void execute() {
-        shooterSystem.ShooterRunVoltage(ShooterConstants.AUTO_DESIRED_VOLTAGE);
+        shooterSystem.runShooterAt(2351);
 
         if (shooterSystem.ShooterRPM > 2350) {
             intakeSystem.IntakeRun(ControlConstants.INTAKE_INITIAL_RUN_SPEED);
             shooterSystem.UpperKickerRun(1);
             shooterSystem.LowerKickerRun(1);
+            new Wait(.25);
+            ballCount++;
         }
         else {
             intakeSystem.IntakeStop();
@@ -46,7 +49,7 @@ public class AutoShoot extends CommandBase {
     }
 
     public boolean isFinished() {
-        if (timer.get() > 2)
+        if (ballCount >= 1)
             return true;
         return false;
     }
