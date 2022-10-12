@@ -7,10 +7,10 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANPIDController;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 /**
@@ -42,9 +42,9 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
  * effect of the GUI layout.
  */
 public class AdjustablePID {
-  public CANPIDController pidController;
+  public SparkMaxPIDController pidController;
   public CANSparkMax motor;
-  public CANEncoder encoder;
+  public RelativeEncoder encoder;
   public String pidName;
   public NetworkTableEntry processVariableEntry, outputEntry, actualP;
 
