@@ -180,11 +180,15 @@ public class RobotContainer {
     new JoystickButton(controller, Button.kX.value)
       .whileHeld(() -> shooterSystem.ShooterReverseVoltage(7))
       .whenReleased(() -> shooterSystem.ShooterStop());
-    // Run Kickers forward
+    // Run Kickers forward (Y)
     new JoystickButton(controller, Button.kY.value)
       .whenPressed(() -> new AllKickerRun(TeleOp.UPPER_KICKER_INITIAL_RUN_SPEED, TeleOp.LOWER_KICKER_INITIAL_RUN_SPEED, shooterSystem).schedule())
       .whenReleased(() -> new AllKickerStop(shooterSystem).schedule());
-
+    /*/ Spin button (Y)
+    new JoystickButton(controller, Button.kY.value)
+      .whenPressed(() -> getDriveSystem().arcadeDrive(0, 90))
+      .whenReleased(() -> getDriveSystem().arcadeDrive(0, 0));
+    */
     //bumpers
     //intake reverse (LB)
     new JoystickButton(controller, Button.kLeftBumper.value)
